@@ -1,3 +1,161 @@
+==========================================
+FILE: device_control.cpp
+==========================================
+#include "device_control.h"
+
+static DeviceState devices[4];
+
+void device_control_init() {
+  for (int i = 0; i < 4; i++) {
+    devices[i].type = DEVICE_LIGHT;
+    devices[i].power = false;
+    devices[i].speed = 0;
+  }
+}
+
+void device_control_set(uint8_t id, bool power, uint8_t speed) {
+  if (id >= 4) return;
+
+  devices[id].power = power;
+
+  if (devices[id].type == DEVICE_FAN) {
+    devices[id].speed = power ? speed : 0;
+  }
+}
+
+DeviceState device_control_get(uint8_t id) {
+  if (id >= 4) {
+    DeviceState dummy = { DEVICE_LIGHT, false, 0 };
+    return dummy;
+  }
+  return devices[id];
+}
+
+
+
+==========================================
+FILE: device_control.h
+==========================================
+#ifndef DEVICE_CONTROL_H
+#define DEVICE_CONTROL_H
+
+#include <Arduino.h>
+
+enum DeviceType {
+  DEVICE_LIGHT,
+  DEVICE_FAN
+};
+
+struct DeviceState {
+  DeviceType type;
+  bool power;
+  uint8_t speed; // 0–5
+};
+
+void device_control_init();
+void device_control_set(uint8_t id, bool power, uint8_t speed = 0);
+DeviceState device_control_get(uint8_t id);
+
+#endif // DEVICE_CONTROL_H
+
+
+
+==========================================
+FILE: main.ino
+==========================================
+#include <Arduino.h>
+#include "wifi_manager.h"
+#include "device_control.h"
+#include "webserver.h"
+
+
+void setup() {
+  Serial.begin(115200);
+  delay(100);
+
+  wifi_manager_init();
+  device_control_init();
+  webserver_init();
+
+}
+
+void loop() {
+  wifi_manager_loop();
+  webserver_loop();
+  // more tasks later
+}
+
+
+
+==========================================
+FILE: webserver.cpp
+==========================================
+#include <Arduino.h>
+#include <WiFi.h>
+#include <WebServer.h>
+#include "webserver.h"
+#include "device_control.h"
+
+static WebServer server(80);
+
+static void handle_status() {
+  String json = "{ \"devices\":[";
+  for (int i = 0; i < 4; i++) {
+    DeviceState st = device_control_get(i);
+    json += "{";
+    json += "\"id\":" + String(i) + ",";
+    json += "\"power\":" + String(st.power ? "true" : "false") + ",";
+    json += "\"speed\":" + String(st.speed);
+    json += "}";
+    if (i < 3) json += ",";
+  }
+  json += "] }";
+
+  server.send(200, "application/json", json);
+}
+
+static void handle_control() {
+  if (!server.hasArg("id") || !server.hasArg("power")) {
+    server.send(400, "text/plain", "Missing params");
+    return;
+  }
+
+  int id = server.arg("id").toInt();
+  bool p = server.arg("power") == "1";
+  int speed = server.hasArg("speed") ? server.arg("speed").toInt() : 0;
+
+  device_control_set(id, p, speed);
+  server.send(200, "application/json", "{\"ok\":true}");
+}
+
+void webserver_init() {
+  server.on("/status", HTTP_GET, handle_status);
+  server.on("/control", HTTP_GET, handle_control);
+  server.begin();
+}
+
+void webserver_loop() {
+  server.handleClient();
+}
+
+
+
+==========================================
+FILE: webserver.h
+==========================================
+#ifndef WEBSERVER_H
+#define WEBSERVER_H
+
+void webserver_init();
+void webserver_loop();
+
+#endif
+
+
+
+==========================================
+FILE: wifi_manager.cpp
+==========================================
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
@@ -166,3 +324,29 @@ void wifi_manager_clear_credentials() {
   prefs.remove(PREF_PWD);
   prefs.end();
 }
+
+
+
+==========================================
+FILE: wifi_manager.h
+==========================================
+#ifndef WIFI_MANAGER_H
+#define WIFI_MANAGER_H
+
+#include <Arduino.h>
+
+void wifi_manager_init();
+void wifi_manager_loop();
+void wifi_manager_clear_credentials();
+
+#endif
+
+
+
+==========================================
+FILE: README.md
+==========================================
+"# SmartHome Controller" 
+
+
+

@@ -3,3 +3,4 @@ build/
 env/
 *.bin
 *.log
+!firmware/main/bin/*.bin
