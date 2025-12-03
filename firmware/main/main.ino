@@ -35,7 +35,8 @@
 #include "api.h"
 #include "voice.h"
 
-// Implementation files
+// Implementation files - Note: Included as .h for Arduino IDE compatibility
+// In Arduino ecosystem, implementation headers are commonly used for modular code
 #include "api_impl.h"
 #include "voice_impl.h"
 

@@ -90,9 +90,8 @@ bool onPowerLevel(const String &deviceId, int &powerLevel) {
     int devIdx = getDeviceIdFromSinricId(deviceId);
     if (devIdx < 0) return false;
     
-    // Map power level to brightness
-    int brightness = map(powerLevel, 0, 100, 0, 100);
-    setDeviceState(devIdx, true, brightness, true);
+    // Power level is already 0-100, use directly
+    setDeviceState(devIdx, true, powerLevel, true);
     
     logMessage(LOG_INFO, "Google Assistant: Device %d power level -> %d%%", 
                devIdx, powerLevel);

@@ -7,8 +7,11 @@
 #define VOICE_H
 
 #include <Espalexa.h>
-#include <SinricPro.h>
-#include <SinricProSwitch.h>
+
+// SinricPro includes - Comment out if library not installed
+// #include <SinricPro.h>
+// #include <SinricProSwitch.h>
+
 #include "config.h"
 
 // ================================================================

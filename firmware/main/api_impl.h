@@ -493,6 +493,22 @@ void handleFactoryReset() {
 // WEBSOCKET IMPLEMENTATION
 // ================================================================
 
+/**
+ * Handle WebSocket events
+ * 
+ * @param num - Client number (0-n for connected clients)
+ * @param type - Event type (connected, disconnected, text, binary, etc.)
+ * @param payload - Message payload (for text/binary messages)
+ * @param length - Payload length in bytes
+ * 
+ * Event types:
+ * - WStype_DISCONNECTED: Client disconnected
+ * - WStype_CONNECTED: New client connected
+ * - WStype_TEXT: Text message received
+ * - WStype_BIN: Binary message received
+ * - WStype_ERROR: Error occurred
+ * - WStype_PING/PONG: Ping/pong frames
+ */
 void handleWebSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
     switch(type) {
         case WStype_DISCONNECTED:
