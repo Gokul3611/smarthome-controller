@@ -33,7 +33,22 @@
 // Project headers
 #include "config.h"
 #include "api.h"
-#include "voice.h" 
+#include "voice.h"
+
+// Implementation files
+#include "api_impl.h"
+#include "voice_impl.h"
+
+// Forward declarations
+void setDeviceState(int deviceId, bool state, int brightness, bool fade = false);
+void saveDeviceConfig();
+void saveSchedules();
+void saveScenes();
+void activateScene(int sceneId);
+unsigned long getUptimeSeconds();
+const char* getSignalStrength(int rssi);
+void logMessage(LogLevel level, const char* format, ...);
+void broadcastDeviceState(int deviceId); 
 
 // ================================================================
 // 📝 USER CONFIGURATION
@@ -670,8 +685,7 @@ void taskConnectivity(void * parameter) {
         
         // Handle web servers
         redirectServer.handleClient();
-        localServer.handleClient();
-        webSocket.loop();
+        handleLocalAPIRequests();  // Handles both localServer and webSocket
         
         // Handle voice assistants
         alexaManager.loop();
@@ -1156,13 +1170,7 @@ void setup() {
         logMessage(LOG_INFO, "Redirect server started on port 80");
         
         // Setup local API server (port 8080)
-        // API endpoint handlers would be registered here
-        localServer.begin();
-        logMessage(LOG_INFO, "Local API server started on port 8080");
-        
-        // Initialize WebSocket
-        webSocket.begin();
-        logMessage(LOG_INFO, "WebSocket server started on port 81");
+        initLocalAPI();
     }
     
     // Initialize voice assistants
@@ -1220,5 +1228,4 @@ void loop() {
     
     // Minimal delay to prevent watchdog triggers
     delay(1);
-} 
 }
