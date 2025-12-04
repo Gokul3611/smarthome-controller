@@ -19,6 +19,32 @@ Production-ready firmware for ESP32-based 4-channel TRIAC smart home controller 
 - 🛡️ **Safety Features**: Watchdog timers, zero-cross monitoring, auto-shutoff
 - 💾 **Persistent Storage**: Configuration and state retention across reboots
 
+## Repository Structure
+
+```
+smarthome-controller/
+├── firmware/              # ESP32 firmware code
+│   └── main/             # Main firmware application
+├── software_Team/         # Software development files
+│   └── flutter project/  # Flutter mobile app source code
+│       └── demo/         # Main Flutter application
+├── app/                  # 📱 Android APK builds folder
+│   ├── release/          # Release APK builds
+│   ├── debug/            # Debug APK builds
+│   └── README.md         # App build & installation guide
+├── README.md             # This file
+├── INSTALL.md            # Installation instructions
+└── CHANGELOG.md          # Version history
+```
+
+### 📱 Mobile App
+
+The Android mobile app APK files are located in the [`app/`](./app/) directory. See the [App README](./app/README.md) for:
+- Download instructions
+- Build instructions from source
+- Installation guide
+- Troubleshooting
+
 ## Hardware Requirements
 
 ### ESP32 Module
