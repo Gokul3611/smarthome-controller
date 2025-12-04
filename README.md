@@ -1,23 +1,126 @@
-"# Smart Home Controller - Production Firmware v3.0
+"# Smart Home Controller - Complete IoT System
 
 ![Version](https://img.shields.io/badge/version-3.0-blue)
 ![Platform](https://img.shields.io/badge/platform-ESP32-green)
+![Status](https://img.shields.io/badge/status-production--ready-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-orange)
 
-## Overview
+> **Production-ready IoT smart home automation system** with ESP32 hardware, cloud backend, web dashboard, and cross-platform mobile application.
 
-Production-ready firmware for ESP32-based 4-channel TRIAC smart home controller with cloud integration, voice assistant support, and local control capabilities.
+---
 
-### Key Features
+## 🎯 Project Overview
+
+A complete, professional-grade smart home automation solution for controlling 4-channel AC loads with multiple control interfaces, cloud synchronization, and voice assistant integration. Built as a comprehensive internship project demonstrating full-stack IoT development.
+
+### 🏆 Key Achievements
+
+- ✅ **Full-Stack Development**: Hardware, firmware, backend, web, and mobile
+- ✅ **Production-Ready**: Complete with documentation, testing, and deployment guides
+- ✅ **100+ Features**: Comprehensive feature set documented
+- ✅ **Professional Documentation**: 50,000+ words of technical documentation
+- ✅ **Security-First**: Built with security best practices
+- ✅ **Scalable Architecture**: Designed for growth from prototype to production
+
+---
+
+## 📚 Quick Navigation
+
+### For Developers
+- 🚀 [Quick Start Guide](./DEPLOYMENT.md) - 30-minute setup
+- 📋 [Features List](./FEATURES.md) - Complete feature documentation
+- 🔧 [Hardware Guide](./hardware/README.md) - Circuit diagrams and assembly
+- 📡 [OTA Updates](./OTA_GUIDE.md) - Firmware update procedures
+
+### For Production
+- 🏭 [Production Guide](./PRODUCTION_GUIDE.md) - Production deployment
+- 📦 [Handover Document](./HANDOVER.md) - Company transfer guide
+- 💰 [Cost Analysis](./hardware/bom/BOM.md) - Bill of materials
+
+### For Users
+- 📱 [Mobile App](./app/README.md) - Download and install
+- 🌐 [Web Dashboard](./backend/google-apps-script/README.md) - Access guide
+- ❓ [FAQ](./INSTALL.md) - Common questions
+
+---
+
+## 🏗️ System Architecture
+
+### Components
 
 - ⚡ **Multi-core Architecture**: Time-critical TRIAC control on Core 1, network operations on Core 0
 - 🎙️ **Voice Assistants**: Amazon Alexa + Google Assistant (via SinricPro) + future Gemini AI
 - ☁️ **Cloud Integration**: Google Apps Script backend for remote control and configuration
+- 🌐 **Web Dashboard**: Full-featured control panel accessible from anywhere
+- 📱 **Flutter App Integration**: Cross-platform mobile app with real-time control
 - 🔄 **OTA Updates**: Over-the-air firmware updates with rollback protection
-- 📱 **Flutter App Integration**: REST API + WebSocket for real-time control
 - 🎬 **Scenes & Schedules**: Automation and preset device combinations
 - 🛡️ **Safety Features**: Watchdog timers, zero-cross monitoring, auto-shutoff
 - 💾 **Persistent Storage**: Configuration and state retention across reboots
+- 🎨 **Premium UI**: Glassmorphism design with minimal aesthetics
+
+## Repository Structure
+
+```
+smarthome-controller/
+├── firmware/                      # ESP32 firmware code
+│   └── main/                     # Main firmware application
+├── backend/                       # Backend services
+│   └── google-apps-script/       # ☁️ Google Apps Script backend
+│       ├── Code.gs              # Main API logic
+│       ├── Database.gs          # Database helpers
+│       ├── Dashboard.html       # Web dashboard UI
+│       └── README.md            # Backend deployment guide
+├── software_Team/                 # Software development files
+│   └── flutter project/          # Flutter mobile app source code
+│       └── demo/                 # Main Flutter application
+│           ├── lib/
+│           │   ├── config/      # API configuration
+│           │   ├── models/      # Data models
+│           │   ├── services/    # API service layer
+│           │   └── pages/       # UI pages
+│           └── pubspec.yaml
+├── app/                          # 📱 Android APK builds folder
+│   ├── release/                  # Release APK builds
+│   ├── debug/                    # Debug APK builds
+│   └── README.md                 # App build & installation guide
+├── README.md                     # This file (overview)
+├── FEATURES.md                   # 🎯 Complete feature list
+├── DEPLOYMENT.md                 # 🚀 Deployment guide
+├── INSTALL.md                    # Installation instructions
+└── CHANGELOG.md                  # Version history
+```
+
+### 📱 Mobile App
+
+The Android mobile app APK files are located in the [`app/`](./app/) directory. See the [App README](./app/README.md) for:
+- Download instructions
+- Build instructions from source
+- Installation guide
+- Troubleshooting
+
+### ☁️ Backend & Web Dashboard
+
+The system uses **Google Apps Script** as the backend with **Google Sheets** as the database. See the [Backend README](./backend/google-apps-script/README.md) for:
+- Backend deployment steps
+- API documentation
+- Database schema
+- Web dashboard access
+
+**Features:**
+- RESTful API for devices and apps
+- Real-time device control
+- User authentication
+- Scheduling & scenes management
+- Web dashboard with premium UI
+- Global access (works from anywhere)
+
+### 📚 Documentation
+
+- **[FEATURES.md](./FEATURES.md)** - Complete list of all 100+ features
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Step-by-step deployment guide (30 min setup)
+- **[Backend README](./backend/google-apps-script/README.md)** - Backend API and deployment
+- **[App README](./app/README.md)** - Mobile app build and distribution
 
 ## Hardware Requirements
 
