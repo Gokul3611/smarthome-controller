@@ -82,8 +82,11 @@ To build the APK from source:
    flutter build apk --debug
    ```
 
-5. **Copy APK to this folder**
+5. **Copy APK to this folder** (from repository root)
    ```bash
+   # Return to repository root first
+   cd ../../..
+   
    # For release build
    cp "software_Team/flutter project/demo/build/app/outputs/flutter-apk/app-release.apk" \
       app/release/smart-home-controller-v1.0.0-release.apk
@@ -91,6 +94,17 @@ To build the APK from source:
    # For debug build
    cp "software_Team/flutter project/demo/build/app/outputs/flutter-apk/app-debug.apk" \
       app/debug/smart-home-controller-v1.0.0-debug.apk
+   ```
+   
+   Or from Flutter project directory:
+   ```bash
+   # For release build (from demo/ directory)
+   cp build/app/outputs/flutter-apk/app-release.apk \
+      ../../../app/release/smart-home-controller-v1.0.0-release.apk
+   
+   # For debug build (from demo/ directory)
+   cp build/app/outputs/flutter-apk/app-debug.apk \
+      ../../../app/debug/smart-home-controller-v1.0.0-debug.apk
    ```
 
 ### Build Variants
