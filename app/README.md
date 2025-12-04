@@ -215,7 +215,7 @@ For production releases, APKs should be signed with a release keystore:
 
 ## 🔗 Related Documentation
 
-- [Flutter Project](../software_Team/flutter%20project/demo/README.md)
+- Flutter Project: `software_Team/flutter project/demo/`
 - [Firmware Documentation](../firmware/README.md)
 - [Installation Guide](../INSTALL.md)
 - [Main README](../README.md)
