@@ -1042,7 +1042,7 @@
 </head>
 <body>
   <!-- Toast Notification Container -->
-  <div class="toast-container" id="toastContainer" role="alert" aria-live="polite"></div>
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <div class="container">
     <div class="header">
@@ -1104,25 +1104,25 @@
     </div>
 
     <div class="tabs" role="tablist" aria-label="Dashboard sections">
-      <div class="tab active" role="tab" tabindex="0" aria-selected="true" aria-controls="devicesTab" onclick="switchTab('devices', event)" onkeypress="if(event.key==='Enter') switchTab('devices', event)">Devices</div>
-      <div class="tab" role="tab" tabindex="0" aria-selected="false" aria-controls="schedulesTab" onclick="switchTab('schedules', event)" onkeypress="if(event.key==='Enter') switchTab('schedules', event)">Schedules</div>
-      <div class="tab" role="tab" tabindex="0" aria-selected="false" aria-controls="scenesTab" onclick="switchTab('scenes', event)" onkeypress="if(event.key==='Enter') switchTab('scenes', event)">Scenes</div>
+      <div id="tab-devices" class="tab active" role="tab" tabindex="0" aria-selected="true" aria-controls="devicesTab" onclick="switchTab('devices', event)" onkeypress="if(event.key==='Enter') switchTab('devices', event)">Devices</div>
+      <div id="tab-schedules" class="tab" role="tab" tabindex="0" aria-selected="false" aria-controls="schedulesTab" onclick="switchTab('schedules', event)" onkeypress="if(event.key==='Enter') switchTab('schedules', event)">Schedules</div>
+      <div id="tab-scenes" class="tab" role="tab" tabindex="0" aria-selected="false" aria-controls="scenesTab" onclick="switchTab('scenes', event)" onkeypress="if(event.key==='Enter') switchTab('scenes', event)">Scenes</div>
     </div>
 
-    <div id="devicesTab" class="tab-content active" role="tabpanel" aria-labelledby="devices-tab">
+    <div id="devicesTab" class="tab-content active" role="tabpanel" aria-labelledby="tab-devices">
       <div class="devices-grid" id="devicesContainer">
         <!-- Devices will be loaded here -->
       </div>
     </div>
 
-    <div id="schedulesTab" class="tab-content" role="tabpanel" aria-labelledby="schedules-tab">
+    <div id="schedulesTab" class="tab-content" role="tabpanel" aria-labelledby="tab-schedules">
       <div id="schedulesContainer">
         <!-- Schedules will be loaded here -->
       </div>
       <button class="btn btn-primary" onclick="openScheduleModal()" aria-label="Add new schedule">+ Add Schedule</button>
     </div>
 
-    <div id="scenesTab" class="tab-content" role="tabpanel" aria-labelledby="scenes-tab">
+    <div id="scenesTab" class="tab-content" role="tabpanel" aria-labelledby="tab-scenes">
       <div id="scenesContainer">
         <!-- Scenes will be loaded here -->
       </div>
@@ -1270,6 +1270,7 @@
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
+      toast.setAttribute('role', 'alert');
       
       const icons = {
         success: '✓',
