@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../config/app_theme.dart';
 import 'fan_page.dart';
 import 'light_page.dart';
 
@@ -11,14 +12,10 @@ class DevicesPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background same theme as login/home
+          // Background matching web dashboard
           Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF1C1C1E), Color(0xFF2C2C2E)],
-              ),
+            decoration: BoxDecoration(
+              gradient: AppTheme.backgroundGradient,
             ),
           ),
 
@@ -27,7 +24,7 @@ class DevicesPage extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  // Glass header
+                  // Glass header with gradient accent
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: BackdropFilter(
@@ -35,22 +32,29 @@ class DevicesPage extends StatelessWidget {
                       child: Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.08),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.2),
-                            width: 1.5,
-                          ),
-                        ),
-                        child: const Text(
-                          "Devices",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                        decoration: AppTheme.glassContainer(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.primaryGradient,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(
+                                Icons.devices,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            const Text(
+                              "Devices",
+                              textAlign: TextAlign.center,
+                              style: AppTheme.headingMedium,
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -119,45 +123,56 @@ class DevicesPage extends StatelessWidget {
           onTap: onTap,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.2),
-                width: 1.5,
-              ),
-            ),
-            child: Row(
+            decoration: AppTheme.cardDecoration(),
+            child: Stack(
               children: [
-                Icon(icon, size: 32, color: Colors.white),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.7),
-                        ),
-                      ),
-                    ],
+                // Gradient top border
+                Positioned(
+                  top: -14,
+                  left: -16,
+                  right: -16,
+                  child: Container(
+                    height: 4,
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.primaryGradient,
+                    ),
                   ),
                 ),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 18,
-                  color: Colors.white70,
+                // Content
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        gradient: AppTheme.primaryGradient,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(icon, size: 24, color: Colors.white),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: AppTheme.bodyLarge,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            subtitle,
+                            style: AppTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 18,
+                      color: AppTheme.textSecondary,
+                    ),
+                  ],
                 ),
               ],
             ),
