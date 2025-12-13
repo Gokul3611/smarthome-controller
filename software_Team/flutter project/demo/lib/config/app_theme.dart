@@ -15,7 +15,7 @@ class AppTheme {
   
   // Status colors
   static const Color statusOnline = Color(0xFF10B981);
-  static const Color statusOffline = Color(0xEF4444);
+  static const Color statusOffline = Color(0xFFEF4444);
   static const Color statusWarning = Color(0xFFF59E0B);
   
   // Text colors
