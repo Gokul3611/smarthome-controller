@@ -1033,9 +1033,8 @@
       *,
       *::before,
       *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+        animation: none !important;
+        transition-duration: 0.001s !important;
       }
     }
   </style>
@@ -1282,7 +1281,7 @@
       toast.innerHTML = `
         <span class="toast-icon">${icons[type] || icons.info}</span>
         <span class="toast-message">${escapeHtml(message)}</span>
-        <span class="toast-close" onclick="this.parentElement.remove()">×</span>
+        <span class="toast-close" tabindex="0" onclick="this.parentElement.remove()" onkeypress="if(event.key==='Enter'||event.key===' ') this.parentElement.remove()" aria-label="Close notification">×</span>
       `;
       
       container.appendChild(toast);

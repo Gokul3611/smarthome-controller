@@ -512,7 +512,7 @@ lighthouse http://localhost:8080/Dashboard.html --only-categories=performance
 
 4. **Real-time Updates (WebSocket)**
    ```javascript
-   const ws = new WebSocket('wss://api.smarthome.com');
+   const ws = new WebSocket('wss://your-backend-domain.com/ws');
    ws.onmessage = (event) => {
      updateDeviceState(JSON.parse(event.data));
    };
