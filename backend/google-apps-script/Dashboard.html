@@ -710,11 +710,48 @@
       width: auto;
     }
 
+    /* Day Selection Container */
+    .day-selection-container {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     /* Modal Helper Text */
     .modal-help {
       font-size: 13px;
       color: #64748B;
       margin-bottom: 20px;
+    }
+
+    /* Dynamic HTML Helpers */
+    .device-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .schedule-info {
+      color: #94A3B8;
+      font-size: 14px;
+    }
+
+    .scene-info {
+      color: #94A3B8;
+      font-size: 14px;
+    }
+
+    .empty-state-full-width {
+      grid-column: 1 / -1;
+    }
+
+    .edit-icon {
+      font-size: 12px;
+      opacity: 0.5;
+    }
+
+    .control-row-slider {
+      border: none;
+      padding-top: 0;
     }
 
     /* Responsive Design */
@@ -824,9 +861,9 @@
     </div>
 
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('devices')">Devices</div>
-      <div class="tab" onclick="switchTab('schedules')">Schedules</div>
-      <div class="tab" onclick="switchTab('scenes')">Scenes</div>
+      <div class="tab active" onclick="switchTab('devices', event)">Devices</div>
+      <div class="tab" onclick="switchTab('schedules', event)">Schedules</div>
+      <div class="tab" onclick="switchTab('scenes', event)">Scenes</div>
     </div>
 
     <div id="devicesTab" class="tab-content active">
@@ -897,7 +934,7 @@
       </div>
       <div class="form-group">
         <label>Days of Week</label>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <div class="day-selection-container">
           <label class="day-checkbox">
             <input type="checkbox" value="1"> Mon
           </label>
@@ -976,7 +1013,7 @@
       setInterval(loadDevices, 3000); // Refresh every 3 seconds
     });
 
-    function switchTab(tabName) {
+    function switchTab(tabName, event) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
       
@@ -1009,7 +1046,7 @@
       
       if (devicesList.length === 0) {
         container.innerHTML = `
-          <div class="empty-state" style="grid-column: 1/-1;">
+          <div class="empty-state empty-state-full-width">
             <div class="empty-state-icon">📱</div>
             <h3>No Devices Found</h3>
             <p>Connect your ESP32 devices to get started</p>
@@ -1037,7 +1074,7 @@
             <div class="device-info">
               <div class="device-name" onclick="openRenameModal('${device.uid}')">
                 ${device.name}
-                <span style="font-size: 12px; opacity: 0.5;">✏️</span>
+                <span class="edit-icon">✏️</span>
               </div>
               <div class="device-uid">${device.uid}</div>
             </div>
@@ -1068,7 +1105,7 @@
               </span>
               <span class="slider-value" id="value-${device.uid}">${brightness}%</span>
             </div>
-            <div class="control-row" style="border: none; padding-top: 0;">
+            <div class="control-row control-row-slider">
               <input type="range" min="0" max="100" value="${brightness}" 
                      class="speed-slider" 
                      oninput="updateSliderValue('${device.uid}', this.value)"
@@ -1243,9 +1280,9 @@
             <div class="schedule-item">
               <div>
                 <strong>${schedule.name}</strong><br>
-                <small style="color: #94A3B8;">${schedule.start_time} - ${schedule.end_time}</small>
+                <small class="schedule-info">${schedule.start_time} - ${schedule.end_time}</small>
               </div>
-              <button class="btn" onclick="deleteSchedule('${schedule.id}')" style="padding: 8px 16px;">Delete</button>
+              <button class="btn" onclick="deleteSchedule('${schedule.id}')">Delete</button>
             </div>
           `).join('');
           document.getElementById('totalSchedules').textContent = data.schedules.length;
@@ -1332,9 +1369,9 @@
             <div class="schedule-item">
               <div>
                 <strong>${scene.name}</strong><br>
-                <small style="color: #94A3B8;">${scene.description || 'No description'}</small>
+                <small class="scene-info">${scene.description || 'No description'}</small>
               </div>
-              <div style="display: flex; gap: 8px;">
+              <div class="device-actions">
                 <button class="btn btn-success" onclick="activateScene('${scene.id}')">Activate</button>
                 <button class="btn" onclick="deleteScene('${scene.id}')">Delete</button>
               </div>
