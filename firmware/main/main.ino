@@ -35,34 +35,6 @@
 #include "api.h"
 #include "voice.h"
 
-// Implementation files - Note: Included as .h for Arduino IDE compatibility
-// In Arduino ecosystem, implementation headers are commonly used for modular code
-#include "api_impl.h"
-#include "voice_impl.h"
-
-// Forward declarations
-void setDeviceState(int deviceId, bool state, int brightness, bool fade = false);
-void saveDeviceConfig();
-void saveSchedules();
-void saveScenes();
-void activateScene(int sceneId);
-unsigned long getUptimeSeconds();
-const char* getSignalStrength(int rssi);
-void logMessage(LogLevel level, const char* format, ...);
-void broadcastDeviceState(int deviceId); 
-
-// ================================================================
-// 📝 USER CONFIGURATION
-// ================================================================
-// 👇 Configure via Google Apps Script or web interface
-String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJP31g9LhRulRHTbTd6KidEiBXlxCKfKcXkiUGe961IfNZDgHuoWAIif91PrPUQnHrIQ/exec";
-String systemName = "Smart_Home_Hub";
-
-// SinricPro credentials (loaded from cloud)
-String sinricAppKey = "";
-String sinricAppSecret = "";
-String sinricDeviceIds[4] = {"", "", "", ""};
-
 // ================================================================
 // 📊 DATA STRUCTURES
 // ================================================================
@@ -100,6 +72,41 @@ struct Scene {
     } devices[4];
 };
 
+// ================================================================
+// 📝 USER CONFIGURATION
+// ================================================================
+// 👇 Configure via Google Apps Script or web interface
+String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJP31g9LhRulRHTbTd6KidEiBXlxCKfKcXkiUGe961IfNZDgHuoWAIif91PrPUQnHrIQ/exec";
+String systemName = "Smart_Home_Hub";
+
+// SinricPro credentials (loaded from cloud)
+String sinricAppKey = "";
+String sinricAppSecret = "";
+String sinricDeviceIds[4] = {"", "", "", ""};
+
+// ================================================================
+// 🌐 GLOBAL OBJECTS
+// ================================================================
+Espalexa alexaManager;
+Preferences preferences;
+WebServer redirectServer(80);
+WebServer localServer(8080);
+WebSocketsServer webSocket = WebSocketsServer(81);
+hw_timer_t *timer = NULL;
+portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
+QueueHandle_t deviceControlQueue;
+
+// Queue message structure
+struct DeviceControlMsg {
+    int deviceId;
+    bool state;
+    int brightness;
+    bool fade;
+};
+
+// ================================================================
+// 📦 GLOBAL VARIABLES
+// ================================================================
 // Global device state
 Device devices[4];
 Schedule schedules[SCHEDULE_MAX_COUNT];
@@ -124,24 +131,26 @@ struct FadeState {
 } fadeStates[4]; 
 
 // ================================================================
-// 🤖 GLOBAL OBJECTS
+// 🔧 FORWARD DECLARATIONS
 // ================================================================
-Espalexa alexaManager;
-Preferences preferences;
-WebServer redirectServer(80);
-WebServer localServer(8080);
-WebSocketsServer webSocket = WebSocketsServer(81);
-hw_timer_t *timer = NULL;
-portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
-QueueHandle_t deviceControlQueue;
+void setDeviceState(int deviceId, bool state, int brightness, bool fade = false);
+void saveDeviceConfig();
+void saveSchedules();
+void saveScenes();
+void activateScene(int sceneId);
+unsigned long getUptimeSeconds();
+const char* getSignalStrength(int rssi);
+void logMessage(LogLevel level, const char* format, ...);
+void broadcastDeviceState(int deviceId); 
 
-// Queue message structure
-struct DeviceControlMsg {
-    int deviceId;
-    bool state;
-    int brightness;
-    bool fade;
-};
+// ================================================================
+// 📥 IMPLEMENTATION INCLUDES
+// ================================================================
+// Implementation files - Note: Included as .h for Arduino IDE compatibility
+// In Arduino ecosystem, implementation headers are commonly used for modular code
+// These are included AFTER data structures and forward declarations are defined
+#include "api_impl.h"
+#include "voice_impl.h"
 
 // ================================================================
 // 🛠️ UTILITY FUNCTIONS
@@ -403,7 +412,7 @@ void loadScenes() {
 // 🎛️ DEVICE CONTROL
 // ================================================================
 
-void setDeviceState(int deviceId, bool state, int brightness, bool fade = false) {
+void setDeviceState(int deviceId, bool state, int brightness, bool fade) {
     if (deviceId < 0 || deviceId >= 4) return;
     
     logMessage(LOG_DEBUG, "Setting device %d: state=%d, brightness=%d, fade=%d", 
@@ -539,6 +548,8 @@ void checkAutoOff() {
             }
         }
     }
+}
+
 // ================================================================
 // 🔄 OTA UPDATE SYSTEM
 // ================================================================
