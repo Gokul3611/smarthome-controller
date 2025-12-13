@@ -24,6 +24,18 @@ A complete, professional-grade smart home automation solution for controlling 4-
 
 ---
 
+## 🖼️ UI Preview
+
+### 📸 See the Dashboard in Action
+
+**[View Complete UI Gallery →](./UI_PREVIEW.md)**
+
+![Smart Home Controller Dashboard](https://github.com/user-attachments/assets/d744726f-4be5-4d46-ad67-1705a11d3b0f)
+
+*Modern glassmorphism design with real-time device control, system statistics, and professional aesthetics*
+
+---
+
 ## 📚 Quick Navigation
 
 ### For Developers
@@ -40,6 +52,7 @@ A complete, professional-grade smart home automation solution for controlling 4-
 ### For Users
 - 📱 [Mobile App](./app/README.md) - Download and install
 - 🌐 [Web Dashboard](./backend/google-apps-script/README.md) - Access guide
+- 🖼️ [UI Preview Gallery](./UI_PREVIEW.md) - Screenshot gallery
 - ❓ [FAQ](./INSTALL.md) - Common questions
 
 ---
