@@ -43,6 +43,7 @@ A complete, professional-grade smart home automation solution for controlling 4-
 - 📋 [Features List](./FEATURES.md) - Complete feature documentation
 - 🔧 [Hardware Guide](./hardware/README.md) - Circuit diagrams and assembly
 - 📡 [OTA Updates](./OTA_GUIDE.md) - Firmware update procedures
+- 🔗 [System Integration](./SYSTEM_INTEGRATION.md) - How everything works together
 
 ### For Production
 - 🏭 [Production Guide](./PRODUCTION_GUIDE.md) - Production deployment
