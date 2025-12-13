@@ -1067,10 +1067,78 @@
       return String(text).replace(/[&<>"']/g, m => map[m]);
     }
 
-    // Load devices on page load
+    // PREVIEW MODE - Show sample UI immediately
     document.addEventListener('DOMContentLoaded', function() {
-      loadDevices();
-      setInterval(loadDevices, 3000); // Refresh every 3 seconds
+      // Set sample stats
+      document.getElementById('totalDevices').textContent = '4';
+      document.getElementById('activeDevices').textContent = '2';
+      document.getElementById('totalSchedules').textContent = '3';
+      document.getElementById('totalScenes').textContent = '2';
+      
+      // Show sample devices
+      const devicesHTML = `
+        <div class="device-card">
+          <div class="gradient-border"></div>
+          <div class="device-header">
+            <div class="device-info">
+              <div class="device-status online"><span class="status-dot"></span><span>Online</span></div>
+              <h3>Living Room Fan</h3>
+              <div class="device-badge fan">🌀 Fan</div>
+              <div class="device-uid">AA:BB:CC:DD:EE:01</div>
+            </div>
+          </div>
+          <div class="device-controls">
+            <div class="control-row"><span>Power</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="control-row"><span>Speed: <span class="slider-value">75%</span></span><input type="range" class="slider" value="75" min="0" max="100"></div>
+          </div>
+        </div>
+        <div class="device-card">
+          <div class="gradient-border"></div>
+          <div class="device-header">
+            <div class="device-info">
+              <div class="device-status online"><span class="status-dot"></span><span>Online</span></div>
+              <h3>Bedroom Light</h3>
+              <div class="device-badge light">💡 Light</div>
+              <div class="device-uid">AA:BB:CC:DD:EE:02</div>
+            </div>
+          </div>
+          <div class="device-controls">
+            <div class="control-row"><span>Power</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="control-row"><span>Brightness: <span class="slider-value">60%</span></span><input type="range" class="slider" value="60" min="0" max="100"></div>
+          </div>
+        </div>
+        <div class="device-card">
+          <div class="gradient-border"></div>
+          <div class="device-header">
+            <div class="device-info">
+              <div class="device-status online"><span class="status-dot"></span><span>Online</span></div>
+              <h3>Kitchen Light</h3>
+              <div class="device-badge light">💡 Light</div>
+              <div class="device-uid">AA:BB:CC:DD:EE:03</div>
+            </div>
+          </div>
+          <div class="device-controls">
+            <div class="control-row"><span>Power</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div class="control-row"><span>Brightness: <span class="slider-value">0%</span></span><input type="range" class="slider" value="0" min="0" max="100" disabled></div>
+          </div>
+        </div>
+        <div class="device-card">
+          <div class="gradient-border"></div>
+          <div class="device-header">
+            <div class="device-info">
+              <div class="device-status online"><span class="status-dot"></span><span>Online</span></div>
+              <h3>Bathroom Fan</h3>
+              <div class="device-badge fan">🌀 Fan</div>
+              <div class="device-uid">AA:BB:CC:DD:EE:04</div>
+            </div>
+          </div>
+          <div class="device-controls">
+            <div class="control-row"><span>Power</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div class="control-row"><span>Speed: <span class="slider-value">0%</span></span><input type="range" class="slider" value="0" min="0" max="100" disabled></div>
+          </div>
+        </div>
+      `;
+      document.getElementById('devicesContainer').innerHTML = devicesHTML;
     });
 
     function switchTab(tabName, event) {
