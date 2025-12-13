@@ -83,6 +83,8 @@ function handleApiRequest(e) {
         return handleGetScenes(data);
       case 'save_scene':
         return handleSaveScene(data);
+      case 'activate_scene':
+        return handleActivateScene(data);
       case 'delete_scene':
         return handleDeleteScene(data);
       case 'reset_wifi':
@@ -270,6 +272,31 @@ function handleSaveScene(data) {
   saveScene(sheet, data.scene);
   
   return jsonResponse({ success: true, message: 'Scene saved' });
+}
+
+/**
+ * Handle activate scene
+ */
+function handleActivateScene(data) {
+  const sheet = getSheet('Scenes');
+  const scene = getScene(sheet, data.scene_id);
+  
+  if (!scene) {
+    return jsonResponse({ success: false, error: 'Scene not found' }, 404);
+  }
+  
+  // Apply scene to all devices
+  const devices = JSON.parse(scene.devices || '[]');
+  devices.forEach(device => {
+    queueCommand(device.uid, {
+      action: 'set_state',
+      channel: device.channel || 0,
+      state: device.state,
+      value: device.value || 100
+    });
+  });
+  
+  return jsonResponse({ success: true, message: 'Scene activated' });
 }
 
 /**
