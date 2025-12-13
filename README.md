@@ -24,6 +24,20 @@ A complete, professional-grade smart home automation solution for controlling 4-
 
 ---
 
+## 🖼️ UI Preview
+
+### 📸 See the Dashboard in Action
+
+**[View Complete UI Gallery →](./UI_PREVIEW.md)** | **[How to View UI →](./HOW_TO_VIEW_UI.md)**
+
+![Smart Home Controller Dashboard](https://github.com/user-attachments/assets/d744726f-4be5-4d46-ad67-1705a11d3b0f)
+
+*Modern glassmorphism design with real-time device control, system statistics, and professional aesthetics*
+
+**Quick Start:** Open `backend/google-apps-script/Dashboard.html` in your browser to see the UI immediately!
+
+---
+
 ## 📚 Quick Navigation
 
 ### For Developers
@@ -31,6 +45,7 @@ A complete, professional-grade smart home automation solution for controlling 4-
 - 📋 [Features List](./FEATURES.md) - Complete feature documentation
 - 🔧 [Hardware Guide](./hardware/README.md) - Circuit diagrams and assembly
 - 📡 [OTA Updates](./OTA_GUIDE.md) - Firmware update procedures
+- 🔗 [System Integration](./SYSTEM_INTEGRATION.md) - How everything works together
 
 ### For Production
 - 🏭 [Production Guide](./PRODUCTION_GUIDE.md) - Production deployment
@@ -40,6 +55,8 @@ A complete, professional-grade smart home automation solution for controlling 4-
 ### For Users
 - 📱 [Mobile App](./app/README.md) - Download and install
 - 🌐 [Web Dashboard](./backend/google-apps-script/README.md) - Access guide
+- 🖼️ [UI Preview Gallery](./UI_PREVIEW.md) - Screenshot gallery
+- 👁️ [How to View UI](./HOW_TO_VIEW_UI.md) - See the app interfaces
 - ❓ [FAQ](./INSTALL.md) - Common questions
 
 ---

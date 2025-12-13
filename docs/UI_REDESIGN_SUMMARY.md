@@ -348,14 +348,22 @@ The dashboard now provides a premium user experience that matches the quality of
 
 ## Screenshots
 
-See `docs/ui-redesign-preview.png` for the complete dashboard preview.
+### Complete UI Gallery
+
+For detailed screenshots and comprehensive visual documentation, see **[UI_PREVIEW.md](../UI_PREVIEW.md)** in the repository root.
+
+### Featured Screenshot
+
+![Smart Home Controller Dashboard](https://github.com/user-attachments/assets/d744726f-4be5-4d46-ad67-1705a11d3b0f)
 
 Key areas shown:
-- Header with system statistics
-- Device grid with various states
-- Interactive controls
-- Professional color scheme
-- Modern UI components
+- Header with system statistics dashboard
+- Device grid with various states (4 devices: 2 active, 2 inactive)
+- Interactive controls (toggles and sliders)
+- Professional color scheme with glassmorphism
+- Modern UI components with gradient accents
+- Online status indicators and device type badges
+- Real-time value display (75% speed, 60% brightness)
 
 ---
 
