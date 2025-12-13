@@ -2,7 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="Professional IoT Smart Home Controller Dashboard - Manage your ESP32 devices, create schedules and scenes">
+  <meta name="keywords" content="smart home, IoT, ESP32, home automation, dashboard">
+  <meta name="author" content="Smart Home Controller">
+  <meta name="theme-color" content="#6366F1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Smart Home">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+  
   <title>Smart Home Controller - Dashboard</title>
   <style>
     * {
@@ -843,9 +855,195 @@
         padding: 24px;
       }
     }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+    }
+
+    .toast {
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideInRight 0.3s ease-out;
+      min-width: 300px;
+    }
+
+    .toast.success {
+      border-left: 4px solid #10B981;
+    }
+
+    .toast.error {
+      border-left: 4px solid #EF4444;
+    }
+
+    .toast.warning {
+      border-left: 4px solid #F59E0B;
+    }
+
+    .toast.info {
+      border-left: 4px solid #3B82F6;
+    }
+
+    .toast-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .toast-message {
+      flex: 1;
+      color: #F8FAFC;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .toast-close {
+      color: #94A3B8;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      padding: 0 4px;
+      transition: color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .toast-close:hover {
+      color: #F8FAFC;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+
+    /* Skeleton Loading */
+    .skeleton {
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.05) 25%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0.05) 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+
+    .skeleton-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .skeleton-line {
+      height: 16px;
+      border-radius: 4px;
+    }
+
+    .skeleton-line.short {
+      width: 60%;
+    }
+
+    .skeleton-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+
+      .modal, .btn, .controls, .toast-container {
+        display: none !important;
+      }
+
+      .header {
+        background: none;
+        border: 1px solid #ccc;
+      }
+
+      .device-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
+
+    /* Focus Styles for Accessibility */
+    *:focus-visible {
+      outline: 2px solid #6366F1;
+      outline-offset: 2px;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 2px solid #6366F1;
+      outline-offset: 2px;
+    }
+
+    /* Reduced Motion Support */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer" role="alert" aria-live="polite"></div>
+
   <div class="container">
     <div class="header">
       <div class="header-top">
@@ -864,118 +1062,118 @@
         </div>
         <div class="controls">
           <a href="https://github.com/Gokul3611/smarthome-controller/releases/download/v1.0.0/smart-home-controller.apk" 
-             class="btn btn-primary" download>
+             class="btn btn-primary" download aria-label="Download mobile app">
             📱 Download App
           </a>
-          <button class="btn" onclick="openScheduleModal()">⏰ Schedules</button>
-          <button class="btn" onclick="openSceneModal()">🎬 Scenes</button>
-          <button class="btn" onclick="openSettingsModal()">⚙️ Settings</button>
+          <button class="btn" onclick="openScheduleModal()" aria-label="Manage schedules">⏰ Schedules</button>
+          <button class="btn" onclick="openSceneModal()" aria-label="Manage scenes">🎬 Scenes</button>
+          <button class="btn" onclick="openSettingsModal()" aria-label="Open settings">⚙️ Settings</button>
         </div>
       </div>
 
       <div class="system-stats">
-        <div class="stat-card">
+        <div class="stat-card" role="region" aria-label="Total devices statistic">
           <div class="stat-icon green">📱</div>
           <div class="stat-info">
             <div class="stat-label">Total Devices</div>
-            <div class="stat-value" id="totalDevices">0</div>
+            <div class="stat-value" id="totalDevices" aria-live="polite">0</div>
           </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" role="region" aria-label="Active devices statistic">
           <div class="stat-icon blue">⚡</div>
           <div class="stat-info">
             <div class="stat-label">Active Devices</div>
-            <div class="stat-value" id="activeDevices">0</div>
+            <div class="stat-value" id="activeDevices" aria-live="polite">0</div>
           </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" role="region" aria-label="Schedules statistic">
           <div class="stat-icon purple">⏰</div>
           <div class="stat-info">
             <div class="stat-label">Schedules</div>
-            <div class="stat-value" id="totalSchedules">0</div>
+            <div class="stat-value" id="totalSchedules" aria-live="polite">0</div>
           </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" role="region" aria-label="Scenes statistic">
           <div class="stat-icon orange">🎬</div>
           <div class="stat-info">
             <div class="stat-label">Scenes</div>
-            <div class="stat-value" id="totalScenes">0</div>
+            <div class="stat-value" id="totalScenes" aria-live="polite">0</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="tabs">
-      <div class="tab active" onclick="switchTab('devices', event)">Devices</div>
-      <div class="tab" onclick="switchTab('schedules', event)">Schedules</div>
-      <div class="tab" onclick="switchTab('scenes', event)">Scenes</div>
+    <div class="tabs" role="tablist" aria-label="Dashboard sections">
+      <div class="tab active" role="tab" tabindex="0" aria-selected="true" aria-controls="devicesTab" onclick="switchTab('devices', event)" onkeypress="if(event.key==='Enter') switchTab('devices', event)">Devices</div>
+      <div class="tab" role="tab" tabindex="0" aria-selected="false" aria-controls="schedulesTab" onclick="switchTab('schedules', event)" onkeypress="if(event.key==='Enter') switchTab('schedules', event)">Schedules</div>
+      <div class="tab" role="tab" tabindex="0" aria-selected="false" aria-controls="scenesTab" onclick="switchTab('scenes', event)" onkeypress="if(event.key==='Enter') switchTab('scenes', event)">Scenes</div>
     </div>
 
-    <div id="devicesTab" class="tab-content active">
+    <div id="devicesTab" class="tab-content active" role="tabpanel" aria-labelledby="devices-tab">
       <div class="devices-grid" id="devicesContainer">
         <!-- Devices will be loaded here -->
       </div>
     </div>
 
-    <div id="schedulesTab" class="tab-content">
+    <div id="schedulesTab" class="tab-content" role="tabpanel" aria-labelledby="schedules-tab">
       <div id="schedulesContainer">
         <!-- Schedules will be loaded here -->
       </div>
-      <button class="btn btn-primary" onclick="openScheduleModal()">+ Add Schedule</button>
+      <button class="btn btn-primary" onclick="openScheduleModal()" aria-label="Add new schedule">+ Add Schedule</button>
     </div>
 
-    <div id="scenesTab" class="tab-content">
+    <div id="scenesTab" class="tab-content" role="tabpanel" aria-labelledby="scenes-tab">
       <div id="scenesContainer">
         <!-- Scenes will be loaded here -->
       </div>
-      <button class="btn btn-primary" onclick="openSceneModal()">+ Add Scene</button>
+      <button class="btn btn-primary" onclick="openSceneModal()" aria-label="Add new scene">+ Add Scene</button>
     </div>
   </div>
 
   <!-- Rename Device Modal -->
-  <div id="renameModal" class="modal">
+  <div id="renameModal" class="modal" role="dialog" aria-labelledby="renameModalTitle" aria-modal="true">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>✏️ Edit Device</h2>
-        <span class="close" onclick="closeRenameModal()">×</span>
+        <h2 id="renameModalTitle">✏️ Edit Device</h2>
+        <span class="close" onclick="closeRenameModal()" aria-label="Close modal">×</span>
       </div>
       <div class="form-group">
-        <label>Device Name</label>
-        <input type="text" id="newDeviceName" placeholder="Enter device name">
+        <label for="newDeviceName">Device Name</label>
+        <input type="text" id="newDeviceName" placeholder="Enter device name" aria-label="Device name" maxlength="30" required>
       </div>
       <div class="form-group">
-        <label>Device Type</label>
-        <select id="deviceType">
+        <label for="deviceType">Device Type</label>
+        <select id="deviceType" aria-label="Device type">
           <option value="light">💡 Light</option>
           <option value="fan">🌀 Fan</option>
         </select>
       </div>
-      <button class="btn btn-primary btn-full-width" onclick="saveDeviceName()">Save Changes</button>
+      <button class="btn btn-primary btn-full-width" onclick="saveDeviceName()" aria-label="Save device changes">Save Changes</button>
     </div>
   </div>
 
   <!-- Schedule Modal -->
-  <div id="scheduleModal" class="modal">
+  <div id="scheduleModal" class="modal" role="dialog" aria-labelledby="scheduleModalTitle" aria-modal="true">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>⏰ Add Schedule</h2>
-        <span class="close" onclick="closeScheduleModal()">×</span>
+        <h2 id="scheduleModalTitle">⏰ Add Schedule</h2>
+        <span class="close" onclick="closeScheduleModal()" aria-label="Close modal">×</span>
       </div>
       <div class="form-group">
-        <label>Schedule Name</label>
-        <input type="text" id="scheduleName" placeholder="e.g., Morning Light">
+        <label for="scheduleName">Schedule Name</label>
+        <input type="text" id="scheduleName" placeholder="e.g., Morning Light" aria-label="Schedule name" maxlength="50" required>
       </div>
       <div class="form-group">
-        <label>Device</label>
-        <select id="scheduleDevice"></select>
+        <label for="scheduleDevice">Device</label>
+        <select id="scheduleDevice" aria-label="Select device for schedule" required></select>
       </div>
       <div class="form-group">
-        <label>Start Time</label>
-        <input type="time" id="scheduleStart">
+        <label for="scheduleStart">Start Time</label>
+        <input type="time" id="scheduleStart" aria-label="Schedule start time" required>
       </div>
       <div class="form-group">
-        <label>End Time</label>
-        <input type="time" id="scheduleEnd">
+        <label for="scheduleEnd">End Time</label>
+        <input type="time" id="scheduleEnd" aria-label="Schedule end time" required>
       </div>
       <div class="form-group">
         <label>Days of Week</label>
@@ -1003,44 +1201,44 @@
           </label>
         </div>
       </div>
-      <button class="btn btn-primary btn-full-width" onclick="saveSchedule()">Create Schedule</button>
+      <button class="btn btn-primary btn-full-width" onclick="saveSchedule()" aria-label="Create schedule">Create Schedule</button>
     </div>
   </div>
 
   <!-- Scene Modal -->
-  <div id="sceneModal" class="modal">
+  <div id="sceneModal" class="modal" role="dialog" aria-labelledby="sceneModalTitle" aria-modal="true">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>🎬 Create Scene</h2>
-        <span class="close" onclick="closeSceneModal()">×</span>
+        <h2 id="sceneModalTitle">🎬 Create Scene</h2>
+        <span class="close" onclick="closeSceneModal()" aria-label="Close modal">×</span>
       </div>
       <div class="form-group">
-        <label>Scene Name</label>
-        <input type="text" id="sceneName" placeholder="e.g., Movie Time">
+        <label for="sceneName">Scene Name</label>
+        <input type="text" id="sceneName" placeholder="e.g., Movie Time" aria-label="Scene name" maxlength="50" required>
       </div>
       <div class="form-group">
-        <label>Scene Description</label>
-        <input type="text" id="sceneDescription" placeholder="Brief description (optional)">
+        <label for="sceneDescription">Scene Description</label>
+        <input type="text" id="sceneDescription" placeholder="Brief description (optional)" aria-label="Scene description" maxlength="200">
       </div>
-      <button class="btn btn-primary btn-full-width" onclick="saveScene()">Create Scene</button>
+      <button class="btn btn-primary btn-full-width" onclick="saveScene()" aria-label="Create scene">Create Scene</button>
     </div>
   </div>
 
   <!-- Settings Modal -->
-  <div id="settingsModal" class="modal">
+  <div id="settingsModal" class="modal" role="dialog" aria-labelledby="settingsModalTitle" aria-modal="true">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>⚙️ Settings</h2>
-        <span class="close" onclick="closeSettingsModal()">×</span>
+        <h2 id="settingsModalTitle">⚙️ Settings</h2>
+        <span class="close" onclick="closeSettingsModal()" aria-label="Close modal">×</span>
       </div>
       <div class="form-group">
-        <label>WiFi Reset</label>
-        <select id="resetDevice"></select>
+        <label for="resetDevice">WiFi Reset</label>
+        <select id="resetDevice" aria-label="Select device to reset WiFi"></select>
       </div>
       <p class="modal-help">
         Resetting WiFi will restart the device in AP mode. You'll need to reconfigure the network.
       </p>
-      <button class="btn btn-danger btn-full-width" onclick="resetWifi()">
+      <button class="btn btn-danger btn-full-width" onclick="resetWifi()" aria-label="Reset WiFi configuration">
         Reset WiFi Configuration
       </button>
     </div>
@@ -1065,6 +1263,76 @@
         "'": '&#039;'
       };
       return String(text).replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // Toast Notification System
+    function showToast(message, type = 'info', duration = 4000) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ'
+      };
+      
+      toast.innerHTML = `
+        <span class="toast-icon">${icons[type] || icons.info}</span>
+        <span class="toast-message">${escapeHtml(message)}</span>
+        <span class="toast-close" onclick="this.parentElement.remove()">×</span>
+      `;
+      
+      container.appendChild(toast);
+      
+      // Auto remove after duration
+      setTimeout(() => {
+        toast.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
+    // Debounce function for performance optimization
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // Throttle function for performance optimization
+    function throttle(func, limit) {
+      let inThrottle;
+      return function(...args) {
+        if (!inThrottle) {
+          func.apply(this, args);
+          inThrottle = true;
+          setTimeout(() => inThrottle = false, limit);
+        }
+      };
+    }
+
+    // Show skeleton loading
+    function showSkeletonLoading() {
+      const container = document.getElementById('devicesContainer');
+      container.innerHTML = `
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-circle"></div>
+          <div class="skeleton skeleton-line"></div>
+          <div class="skeleton skeleton-line short"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-circle"></div>
+          <div class="skeleton skeleton-line"></div>
+          <div class="skeleton skeleton-line short"></div>
+        </div>
+      `.repeat(2);
     }
 
     // Load devices on page load
@@ -1120,8 +1388,7 @@
     }
 
     function showErrorMessage(message) {
-      // Show error in a non-intrusive way (could be enhanced with a toast notification)
-      console.warn(message);
+      showToast(message, 'error', 5000);
       updateConnectionStatus(false);
     }
 
@@ -1252,7 +1519,8 @@
       }
     }
 
-    async function setSpeed(uid, value) {
+    // Debounced speed setter for better performance
+    const debouncedSetSpeed = debounce(async function(uid, value) {
       try {
         const response = await fetch(API_URL, {
           method: 'POST',
@@ -1264,10 +1532,18 @@
             states: [{ channel: 0, state: true, value: parseInt(value) }]
           })
         });
-        await response.json();
+        const data = await response.json();
+        if (!data.success) {
+          showToast('Failed to update device', 'error');
+        }
       } catch (error) {
         console.error('Error setting speed:', error);
+        showToast('Network error. Please check connection.', 'error');
       }
+    }, 500);
+
+    async function setSpeed(uid, value) {
+      debouncedSetSpeed(uid, value);
     }
 
     function openRenameModal(uid) {
@@ -1290,12 +1566,12 @@
       
       // Validate inputs
       if (!newName) {
-        alert('Please enter a device name');
+        showToast('Please enter a device name', 'warning');
         return;
       }
       
       if (newName.length > 30) {
-        alert('Device name is too long (max 30 characters)');
+        showToast('Device name is too long (max 30 characters)', 'warning');
         return;
       }
       
@@ -1321,12 +1597,13 @@
         if (data.success) {
           closeRenameModal();
           loadDevices();
+          showToast('Device updated successfully', 'success');
         } else {
-          alert('Failed to update device: ' + (data.error || 'Unknown error'));
+          showToast('Failed to update device: ' + (data.error || 'Unknown error'), 'error');
         }
       } catch (error) {
         console.error('Error saving device name:', error);
-        alert('Failed to update device. Please try again.');
+        showToast('Failed to update device. Please try again.', 'error');
       }
     }
 
@@ -1387,7 +1664,7 @@
           const data = await response.json();
           
           if (data.success) {
-            alert('WiFi reset command sent. Device will restart in AP mode.');
+            showToast('WiFi reset command sent. Device will restart in AP mode.', 'success');
             closeSettingsModal();
           }
         } catch (error) {
@@ -1443,12 +1720,12 @@
       
       // Validate inputs
       if (!name || !deviceUid || !startTime || !endTime) {
-        alert('Please fill all fields');
+        showToast('Please fill all fields', 'warning');
         return;
       }
       
       if (name.length > 50) {
-        alert('Schedule name is too long (max 50 characters)');
+        showToast('Schedule name is too long (max 50 characters)', 'warning');
         return;
       }
       
@@ -1477,16 +1754,17 @@
         if (data.success) {
           closeScheduleModal();
           loadSchedules();
+          showToast('Schedule created successfully', 'success');
           // Clear form
           document.getElementById('scheduleName').value = '';
           document.getElementById('scheduleStart').value = '';
           document.getElementById('scheduleEnd').value = '';
         } else {
-          alert('Failed to save schedule: ' + (data.error || 'Unknown error'));
+          showToast('Failed to save schedule: ' + (data.error || 'Unknown error'), 'error');
         }
       } catch (error) {
         console.error('Error saving schedule:', error);
-        alert('Failed to save schedule. Please try again.');
+        showToast('Failed to save schedule. Please try again.', 'error');
       }
     }
 
@@ -1557,17 +1835,17 @@
       
       // Validate inputs
       if (!name) {
-        alert('Please enter a scene name');
+        showToast('Please enter a scene name', 'warning');
         return;
       }
       
       if (name.length > 50) {
-        alert('Scene name is too long (max 50 characters)');
+        showToast('Scene name is too long (max 50 characters)', 'warning');
         return;
       }
       
       if (description.length > 200) {
-        alert('Description is too long (max 200 characters)');
+        showToast('Description is too long (max 200 characters)', 'warning');
         return;
       }
       
@@ -1594,15 +1872,16 @@
         if (data.success) {
           closeSceneModal();
           loadScenes();
+          showToast('Scene created successfully', 'success');
           // Clear form
           document.getElementById('sceneName').value = '';
           document.getElementById('sceneDescription').value = '';
         } else {
-          alert('Failed to save scene: ' + (data.error || 'Unknown error'));
+          showToast('Failed to save scene: ' + (data.error || 'Unknown error'), 'error');
         }
       } catch (error) {
         console.error('Error saving scene:', error);
-        alert('Failed to save scene. Please try again.');
+        showToast('Failed to save scene. Please try again.', 'error');
       }
     }
 
