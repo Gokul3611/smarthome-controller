@@ -75,6 +75,45 @@
       font-size: 14px;
       color: #94A3B8;
       margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .connection-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .connection-status.connected {
+      color: #10B981;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .connection-status.disconnected {
+      color: #EF4444;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .connection-status .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .connection-status.connected .status-dot {
+      background: #10B981;
+      animation: pulse 2s infinite;
+    }
+
+    .connection-status.disconnected .status-dot {
+      background: #EF4444;
     }
 
     .header .controls {
@@ -814,7 +853,13 @@
           <div class="header-icon">🏠</div>
           <div>
             <h1>Smart Home Controller</h1>
-            <div class="header-subtitle">Professional IoT Management System</div>
+            <div class="header-subtitle">
+              Professional IoT Management System
+              <span class="connection-status connected" id="connectionStatus">
+                <span class="status-dot"></span>
+                <span id="connectionText">Connected</span>
+              </span>
+            </div>
           </div>
         </div>
         <div class="controls">
@@ -1006,6 +1051,21 @@
     const API_KEY = 'smarthome-2024';
     let devices = [];
     let currentDeviceUid = null;
+    let isLoading = false;
+    let lastLoadTime = 0;
+
+    // Security: HTML escape function to prevent XSS
+    function escapeHtml(text) {
+      if (text == null) return '';
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return String(text).replace(/[&<>"']/g, m => map[m]);
+    }
 
     // Load devices on page load
     document.addEventListener('DOMContentLoaded', function() {
@@ -1030,16 +1090,51 @@
     }
 
     async function loadDevices() {
+      if (isLoading) return;
+      
       try {
+        isLoading = true;
         const response = await fetch(API_URL + '?action=get_devices&api_key=' + API_KEY);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
         
         if (data.success) {
-          devices = data.devices;
+          devices = data.devices || [];
           renderDevices(devices);
+          lastLoadTime = Date.now();
+          updateConnectionStatus(true);
+        } else {
+          console.error('Failed to load devices:', data.error || 'Unknown error');
+          showErrorMessage('Failed to load devices. Please check your connection.');
         }
       } catch (error) {
         console.error('Error loading devices:', error);
+        showErrorMessage('Network error. Retrying...');
+      } finally {
+        isLoading = false;
+      }
+    }
+
+    function showErrorMessage(message) {
+      // Show error in a non-intrusive way (could be enhanced with a toast notification)
+      console.warn(message);
+      updateConnectionStatus(false);
+    }
+
+    function updateConnectionStatus(isConnected) {
+      const statusElement = document.getElementById('connectionStatus');
+      const textElement = document.getElementById('connectionText');
+      
+      if (isConnected) {
+        statusElement.className = 'connection-status connected';
+        textElement.textContent = 'Connected';
+      } else {
+        statusElement.className = 'connection-status disconnected';
+        textElement.textContent = 'Disconnected';
       }
     }
 
@@ -1071,21 +1166,26 @@
         if (isOn) activeCount++;
         const brightness = device.value || device.brightness || 100;
         
+        // Escape user-provided data to prevent XSS
+        const safeName = escapeHtml(device.name);
+        const safeUid = escapeHtml(device.uid);
+        const safeType = device.type === 'fan' ? 'fan' : 'light';
+        
         card.innerHTML = `
           <div class="device-header">
             <div class="device-info">
-              <div class="device-name" onclick="openRenameModal('${device.uid}')">
-                ${device.name}
+              <div class="device-name" onclick="openRenameModal('${safeUid}')">
+                ${safeName}
                 <span class="edit-icon">✏️</span>
               </div>
-              <div class="device-uid">${device.uid}</div>
+              <div class="device-uid">${safeUid}</div>
             </div>
             <div class="device-status-badge ${device.online ? 'online' : 'offline'}">
               <span class="status-dot ${device.online ? 'online' : 'offline'}"></span>
               ${device.online ? 'Online' : 'Offline'}
             </div>
           </div>
-          <div class="device-type">${device.type === 'fan' ? '🌀 Fan' : '💡 Light'}</div>
+          <div class="device-type">${safeType === 'fan' ? '🌀 Fan' : '💡 Light'}</div>
           <div class="device-controls">
             <div class="control-row">
               <span class="control-label">
@@ -1094,25 +1194,27 @@
               </span>
               <label class="switch">
                 <input type="checkbox" ${isOn ? 'checked' : ''} 
-                       onchange="toggleDevice('${device.uid}', this.checked)"
-                       ${!device.online ? 'disabled' : ''}>
+                       onchange="toggleDevice('${safeUid}', this.checked)"
+                       ${!device.online ? 'disabled' : ''}
+                       aria-label="Toggle ${safeName}">
                 <span class="slider"></span>
               </label>
             </div>
-            ${device.type === 'fan' || device.type === 'light' ? `
+            ${safeType === 'fan' || safeType === 'light' ? `
             <div class="control-row">
               <span class="control-label">
-                <span>${device.type === 'fan' ? '💨' : '💡'}</span>
-                ${device.type === 'fan' ? 'Speed' : 'Brightness'}
+                <span>${safeType === 'fan' ? '💨' : '💡'}</span>
+                ${safeType === 'fan' ? 'Speed' : 'Brightness'}
               </span>
-              <span class="slider-value" id="value-${device.uid}">${brightness}%</span>
+              <span class="slider-value" id="value-${safeUid}">${brightness}%</span>
             </div>
             <div class="control-row control-row-slider">
               <input type="range" min="0" max="100" value="${brightness}" 
                      class="speed-slider" 
-                     oninput="updateSliderValue('${device.uid}', this.value)"
-                     onchange="setSpeed('${device.uid}', this.value)"
-                     ${!device.online || !isOn ? 'disabled' : ''}>
+                     oninput="updateSliderValue('${safeUid}', this.value)"
+                     onchange="setSpeed('${safeUid}', this.value)"
+                     ${!device.online || !isOn ? 'disabled' : ''}
+                     aria-label="${safeType === 'fan' ? 'Speed' : 'Brightness'} control for ${safeName}">
             </div>
             ` : ''}
           </div>
@@ -1183,8 +1285,19 @@
     }
 
     async function saveDeviceName() {
-      const newName = document.getElementById('newDeviceName').value;
+      const newName = document.getElementById('newDeviceName').value.trim();
       const newType = document.getElementById('deviceType').value;
+      
+      // Validate inputs
+      if (!newName) {
+        alert('Please enter a device name');
+        return;
+      }
+      
+      if (newName.length > 30) {
+        alert('Device name is too long (max 30 characters)');
+        return;
+      }
       
       try {
         const response = await fetch(API_URL, {
@@ -1198,23 +1311,33 @@
             type: newType
           })
         });
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        
         const data = await response.json();
         
         if (data.success) {
           closeRenameModal();
           loadDevices();
+        } else {
+          alert('Failed to update device: ' + (data.error || 'Unknown error'));
         }
       } catch (error) {
         console.error('Error saving device name:', error);
+        alert('Failed to update device. Please try again.');
       }
     }
 
     function openScheduleModal() {
-      // Populate device dropdown
+      // Populate device dropdown with XSS protection
       const select = document.getElementById('scheduleDevice');
-      select.innerHTML = devices.map(d => 
-        `<option value="${d.uid}">${d.name}</option>`
-      ).join('');
+      select.innerHTML = devices.map(d => {
+        const safeUid = escapeHtml(d.uid);
+        const safeName = escapeHtml(d.name);
+        return `<option value="${safeUid}">${safeName}</option>`;
+      }).join('');
       
       document.getElementById('scheduleModal').style.display = 'block';
     }
@@ -1232,11 +1355,13 @@
     }
 
     function openSettingsModal() {
-      // Populate device dropdown
+      // Populate device dropdown with XSS protection
       const select = document.getElementById('resetDevice');
-      select.innerHTML = devices.map(d => 
-        `<option value="${d.uid}">${d.name}</option>`
-      ).join('');
+      select.innerHTML = devices.map(d => {
+        const safeUid = escapeHtml(d.uid);
+        const safeName = escapeHtml(d.name);
+        return `<option value="${safeUid}">${safeName}</option>`;
+      }).join('');
       
       document.getElementById('settingsModal').style.display = 'block';
     }
@@ -1278,15 +1403,22 @@
         
         const container = document.getElementById('schedulesContainer');
         if (data.success && data.schedules && data.schedules.length > 0) {
-          container.innerHTML = data.schedules.map(schedule => `
-            <div class="schedule-item">
-              <div>
-                <strong>${schedule.name}</strong><br>
-                <small class="schedule-info">${schedule.start_time} - ${schedule.end_time}</small>
+          container.innerHTML = data.schedules.map(schedule => {
+            const safeName = escapeHtml(schedule.name);
+            const safeStartTime = escapeHtml(schedule.start_time);
+            const safeEndTime = escapeHtml(schedule.end_time);
+            const safeId = escapeHtml(schedule.id);
+            
+            return `
+              <div class="schedule-item">
+                <div>
+                  <strong>${safeName}</strong><br>
+                  <small class="schedule-info">${safeStartTime} - ${safeEndTime}</small>
+                </div>
+                <button class="btn" onclick="deleteSchedule('${safeId}')" aria-label="Delete schedule ${safeName}">Delete</button>
               </div>
-              <button class="btn" onclick="deleteSchedule('${schedule.id}')">Delete</button>
-            </div>
-          `).join('');
+            `;
+          }).join('');
           document.getElementById('totalSchedules').textContent = data.schedules.length;
         } else {
           container.innerHTML = `
@@ -1304,13 +1436,19 @@
     }
 
     async function saveSchedule() {
-      const name = document.getElementById('scheduleName').value;
+      const name = document.getElementById('scheduleName').value.trim();
       const deviceUid = document.getElementById('scheduleDevice').value;
       const startTime = document.getElementById('scheduleStart').value;
       const endTime = document.getElementById('scheduleEnd').value;
       
+      // Validate inputs
       if (!name || !deviceUid || !startTime || !endTime) {
         alert('Please fill all fields');
+        return;
+      }
+      
+      if (name.length > 50) {
+        alert('Schedule name is too long (max 50 characters)');
         return;
       }
       
@@ -1329,14 +1467,26 @@
             }
           })
         });
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        
         const data = await response.json();
         
         if (data.success) {
           closeScheduleModal();
           loadSchedules();
+          // Clear form
+          document.getElementById('scheduleName').value = '';
+          document.getElementById('scheduleStart').value = '';
+          document.getElementById('scheduleEnd').value = '';
+        } else {
+          alert('Failed to save schedule: ' + (data.error || 'Unknown error'));
         }
       } catch (error) {
         console.error('Error saving schedule:', error);
+        alert('Failed to save schedule. Please try again.');
       }
     }
 
@@ -1367,18 +1517,24 @@
         
         const container = document.getElementById('scenesContainer');
         if (data.success && data.scenes && data.scenes.length > 0) {
-          container.innerHTML = data.scenes.map(scene => `
-            <div class="schedule-item">
-              <div>
-                <strong>${scene.name}</strong><br>
-                <small class="scene-info">${scene.description || 'No description'}</small>
+          container.innerHTML = data.scenes.map(scene => {
+            const safeName = escapeHtml(scene.name);
+            const safeDescription = escapeHtml(scene.description || 'No description');
+            const safeId = escapeHtml(scene.id);
+            
+            return `
+              <div class="schedule-item">
+                <div>
+                  <strong>${safeName}</strong><br>
+                  <small class="scene-info">${safeDescription}</small>
+                </div>
+                <div class="device-actions">
+                  <button class="btn btn-success" onclick="activateScene('${safeId}')" aria-label="Activate scene ${safeName}">Activate</button>
+                  <button class="btn" onclick="deleteScene('${safeId}')" aria-label="Delete scene ${safeName}">Delete</button>
+                </div>
               </div>
-              <div class="device-actions">
-                <button class="btn btn-success" onclick="activateScene('${scene.id}')">Activate</button>
-                <button class="btn" onclick="deleteScene('${scene.id}')">Delete</button>
-              </div>
-            </div>
-          `).join('');
+            `;
+          }).join('');
           document.getElementById('totalScenes').textContent = data.scenes.length;
         } else {
           container.innerHTML = `
@@ -1396,11 +1552,22 @@
     }
 
     async function saveScene() {
-      const name = document.getElementById('sceneName').value;
-      const description = document.getElementById('sceneDescription').value;
+      const name = document.getElementById('sceneName').value.trim();
+      const description = document.getElementById('sceneDescription').value.trim();
       
+      // Validate inputs
       if (!name) {
         alert('Please enter a scene name');
+        return;
+      }
+      
+      if (name.length > 50) {
+        alert('Scene name is too long (max 50 characters)');
+        return;
+      }
+      
+      if (description.length > 200) {
+        alert('Description is too long (max 200 characters)');
         return;
       }
       
@@ -1417,14 +1584,25 @@
             }
           })
         });
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        
         const data = await response.json();
         
         if (data.success) {
           closeSceneModal();
           loadScenes();
+          // Clear form
+          document.getElementById('sceneName').value = '';
+          document.getElementById('sceneDescription').value = '';
+        } else {
+          alert('Failed to save scene: ' + (data.error || 'Unknown error'));
         }
       } catch (error) {
         console.error('Error saving scene:', error);
+        alert('Failed to save scene. Please try again.');
       }
     }
 

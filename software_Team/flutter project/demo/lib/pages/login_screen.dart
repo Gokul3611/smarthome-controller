@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../config/app_theme.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 import 'home_page.dart';
@@ -98,12 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF1C1C1E), Color(0xFF2C2C2E)],
-              ),
+            decoration: BoxDecoration(
+              gradient: AppTheme.backgroundGradient,
             ),
           ),
           Center(
@@ -114,24 +111,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Container(
                   width: 330,
                   padding: const EdgeInsets.all(25),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.08),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
-                      width: 1.5,
-                    ),
-                  ),
+                  decoration: AppTheme.glassContainer(opacity: 0.1),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
-                        "Login",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
+                      // Logo with gradient
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          gradient: AppTheme.primaryGradient,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Icon(
+                          Icons.home,
+                          size: 40,
                           color: Colors.white,
                         ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Smart Home",
+                        style: AppTheme.headingMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        "Login to continue",
+                        style: AppTheme.bodyMedium,
                       ),
                       const SizedBox(height: 25),
                       _field(emailController, "Email", false),
