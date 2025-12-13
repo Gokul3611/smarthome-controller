@@ -680,6 +680,43 @@
       margin-bottom: 24px;
     }
 
+    /* Button Variants */
+    .btn-full-width {
+      width: 100%;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+      border: none;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Day Checkbox */
+    .day-checkbox {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .day-checkbox input[type="checkbox"] {
+      width: auto;
+    }
+
+    /* Modal Helper Text */
+    .modal-help {
+      font-size: 13px;
+      color: #64748B;
+      margin-bottom: 20px;
+    }
+
     /* Responsive Design */
     @media (max-width: 1024px) {
       .system-stats {
@@ -831,7 +868,7 @@
           <option value="fan">🌀 Fan</option>
         </select>
       </div>
-      <button class="btn btn-primary" style="width: 100%;" onclick="saveDeviceName()">Save Changes</button>
+      <button class="btn btn-primary btn-full-width" onclick="saveDeviceName()">Save Changes</button>
     </div>
   </div>
 
@@ -861,30 +898,30 @@
       <div class="form-group">
         <label>Days of Week</label>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <label style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer;">
-            <input type="checkbox" value="1" style="width: auto;"> Mon
+          <label class="day-checkbox">
+            <input type="checkbox" value="1"> Mon
           </label>
-          <label style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer;">
-            <input type="checkbox" value="2" style="width: auto;"> Tue
+          <label class="day-checkbox">
+            <input type="checkbox" value="2"> Tue
           </label>
-          <label style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer;">
-            <input type="checkbox" value="3" style="width: auto;"> Wed
+          <label class="day-checkbox">
+            <input type="checkbox" value="3"> Wed
           </label>
-          <label style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer;">
-            <input type="checkbox" value="4" style="width: auto;"> Thu
+          <label class="day-checkbox">
+            <input type="checkbox" value="4"> Thu
           </label>
-          <label style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer;">
-            <input type="checkbox" value="5" style="width: auto;"> Fri
+          <label class="day-checkbox">
+            <input type="checkbox" value="5"> Fri
           </label>
-          <label style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer;">
-            <input type="checkbox" value="6" style="width: auto;"> Sat
+          <label class="day-checkbox">
+            <input type="checkbox" value="6"> Sat
           </label>
-          <label style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer;">
-            <input type="checkbox" value="0" style="width: auto;"> Sun
+          <label class="day-checkbox">
+            <input type="checkbox" value="0"> Sun
           </label>
         </div>
       </div>
-      <button class="btn btn-primary" style="width: 100%;" onclick="saveSchedule()">Create Schedule</button>
+      <button class="btn btn-primary btn-full-width" onclick="saveSchedule()">Create Schedule</button>
     </div>
   </div>
 
@@ -903,7 +940,7 @@
         <label>Scene Description</label>
         <input type="text" id="sceneDescription" placeholder="Brief description (optional)">
       </div>
-      <button class="btn btn-primary" style="width: 100%;" onclick="saveScene()">Create Scene</button>
+      <button class="btn btn-primary btn-full-width" onclick="saveScene()">Create Scene</button>
     </div>
   </div>
 
@@ -918,10 +955,10 @@
         <label>WiFi Reset</label>
         <select id="resetDevice"></select>
       </div>
-      <p style="font-size: 13px; color: #64748B; margin-bottom: 20px;">
+      <p class="modal-help">
         Resetting WiFi will restart the device in AP mode. You'll need to reconfigure the network.
       </p>
-      <button class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);" onclick="resetWifi()">
+      <button class="btn btn-danger btn-full-width" onclick="resetWifi()">
         Reset WiFi Configuration
       </button>
     </div>
