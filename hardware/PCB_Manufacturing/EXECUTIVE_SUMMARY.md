@@ -183,11 +183,31 @@ Silkscreen: White
 Surface Finish: HASL (Lead Free)
 Outer Copper Weight: 2oz
 Via Covering: Tented
+Via Process: Tented vias (recommended for thermal vias)
+Plating Thickness: 1oz (25µm) minimum on via walls
 Gold Fingers: No
 Castellated Holes: No
 Material: FR-4 TG150
-Remove Order Number: Yes (specify location)
+Dielectric Constant: 4.5 @ 1MHz
+Remove Order Number: Yes (specify location on back silkscreen)
+Controlled Impedance: No (not required for this design)
 ```
+
+### Stackup Configuration
+
+```
+Layer 1 (Top):    0.07mm copper (2oz) - F.Cu - Signal/Power layer
+Dielectric:       1.46mm FR-4 core (εr = 4.5)
+Layer 2 (Bottom): 0.07mm copper (2oz) - B.Cu - Ground plane
+```
+
+### Via Specifications for Thermal Management
+
+- **Thermal Via Fill**: Tented (covered with solder mask)
+- **Via Plating**: Standard through-hole plating (1oz min)
+- **Thermal Via Pattern**: 3×3 grid under each TRIAC
+- **Via Spacing**: 2mm center-to-center
+- **Via Function**: Heat transfer from TRIAC to bottom ground plane
 
 ### Gerber Files Required
 
