@@ -742,7 +742,7 @@ Failure mode: Contact wear, spring fatigue
 Verification Matrix:
 
 config.h Pin | Hardware Connection | Test Result
-
+-------------|---------------------|-------------
 GPIO 13      | Zero-cross detect   | [ ]
 GPIO 16      | MOC3041 U2 (Ch1)   | [ ]
 GPIO 17      | MOC3041 U3 (Ch2)   | [ ]
