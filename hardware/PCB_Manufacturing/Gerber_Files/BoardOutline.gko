@@ -1,0 +1,70 @@
+G04 #@! TF.GenerationSoftware,KiCad,Pcbnew,6.0*
+G04 #@! TF.CreationDate,2024-12-16T04:50:00+00:00*
+G04 #@! TF.ProjectId,SmartHomeController,736D617274686F6D6520636F6E74726F,3.1*
+G04 #@! TF.SameCoordinates,Original*
+G04 #@! TF.FileFunction,Profile,NP*
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Board outline - routing/milling path*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+%ADD10C,0.100000*%
+G04 APERTURE END LIST*
+D10*
+G04 PCB Outline: 70mm × 50mm with rounded corners*
+G04 Board edge routing path (0.1mm line width)*
+G04 Start at bottom-left, go clockwise*
+X0Y1000000D02*
+G01*
+G04 Left edge*
+X0Y49000000D01*
+G04 Top-left corner (1mm radius)*
+G75*
+X1000000Y50000000I1000000J0D01*
+G01*
+G04 Top edge*
+X69000000Y50000000D01*
+G04 Top-right corner*
+G75*
+X70000000Y49000000I0J-1000000D01*
+G01*
+G04 Right edge*
+X70000000Y1000000D01*
+G04 Bottom-right corner*
+G75*
+X69000000Y0I-1000000J0D01*
+G01*
+G04 Bottom edge*
+X1000000Y0D01*
+G04 Bottom-left corner*
+G75*
+X0Y1000000I0J1000000D01*
+G01*
+G04 Mounting holes cutouts (2.7mm diameter for M2.5)*
+G04 Bottom-left*
+X3500000Y3500000D02*
+G75*
+X3500000Y3500000I1350000J0D01*
+G01*
+G04 Bottom-right*
+X66500000Y3500000D02*
+G75*
+X66500000Y3500000I1350000J0D01*
+G01*
+G04 Top-left*
+X3500000Y46500000D02*
+G75*
+X3500000Y46500000I1350000J0D01*
+G01*
+G04 Top-right*
+X66500000Y46500000D02*
+G75*
+X66500000Y46500000I1350000J0D01*
+G01*
+G04 Optional V-score lines for panelization*
+G04 Horizontal V-score (commented out for single board)*
+G04 X0Y25000000D02*
+G04 X70000000Y25000000D01*
+M02*

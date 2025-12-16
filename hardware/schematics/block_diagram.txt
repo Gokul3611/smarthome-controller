@@ -1,0 +1,487 @@
+================================================================================
+SYSTEM BLOCK DIAGRAM - COMPACT SNUBBERLESS SMART HOME CONTROLLER
+================================================================================
+Version 3.1 - Ultra Compact Design for Switch Box Installation
+70mm × 50mm PCB - Fits Inside Standard AC Switch Board
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                    COMPLETE SYSTEM ARCHITECTURE                              │
+│                    Firmware + Hardware + Backend + Frontend                  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+LEVEL 1: PHYSICAL HARDWARE LAYER
+================================================================================
+
+                           AC MAINS (230V/110V)
+                                   │
+                    ┌──────────────┴──────────────┐
+                    │                              │
+            ┌───────▼────────┐          ┌─────────▼────────┐
+            │  ZERO-CROSS    │          │   POWER SUPPLY   │
+            │   DETECTION    │          │    HLK-PM01      │
+            │                │          │   AC → 5V DC     │
+            │ 470kΩ + 470kΩ  │          │   600mA Output   │
+            │  BR1 + PC817   │          │   Isolated       │
+            └───────┬────────┘          └─────────┬────────┘
+                    │ 100Hz Pulses               │ 5V DC
+                    │ (3.3V logic)               │
+                    │                             │
+        ┌───────────┴─────────────────────────────┴──────────────┐
+        │                                                          │
+        │              ESP32-WROOM-32 MCU                         │
+        │          Dual-Core @ 240MHz, 4MB Flash                  │
+        │                                                          │
+        │  ┌──────────────────────┬──────────────────────┐       │
+        │  │  CORE 1 (PRO_CPU)    │  CORE 0 (APP_CPU)    │       │
+        │  │  Time-Critical       │  Network Operations   │       │
+        │  ├──────────────────────┼──────────────────────┤       │
+        │  │ • Zero-cross ISR     │ • WiFi Management    │       │
+        │  │ • Timer ISR (100µs)  │ • Cloud Polling      │       │
+        │  │ • TRIAC Firing       │ • WebSocket Server   │       │
+        │  │ • Phase Control      │ • REST API Server    │       │
+        │  │ • Watchdog (5s)      │ • Voice Assistants   │       │
+        │  │                      │ • Switch Handling    │       │
+        │  │                      │ • Watchdog (15s)     │       │
+        │  └──────────────────────┴──────────────────────┘       │
+        │                                                          │
+        │  GPIO Assignments:                                       │
+        │  • GPIO 13 ← Zero-cross detect (input, pull-down)       │
+        │  • GPIO 16 → TRIAC 1 control (output)                   │
+        │  • GPIO 17 → TRIAC 2 control (output)                   │
+        │  • GPIO 18 → TRIAC 3 control (output)                   │
+        │  • GPIO 19 → TRIAC 4 control (output)                   │
+        │  • GPIO 32 ← Physical Switch 1 (input, pull-up)         │
+        │  • GPIO 33 ← Physical Switch 2 (input, pull-up)         │
+        │  • GPIO 25 ← Physical Switch 3 (input, pull-up)         │
+        │  • GPIO 26 ← Physical Switch 4 (input, pull-up)         │
+        │                                                          │
+        └────┬──────┬──────┬──────┬──────┬────────────────────────┘
+             │      │      │      │      │
+     GPIO16  │  GPIO17 GPIO18 GPIO19  WiFi Antenna
+             │      │      │      │
+    ┌────────▼──────▼──────▼──────▼────────┐
+    │      TRIAC DRIVER CIRCUITS            │
+    │    (4× MOC3041 + BT136/BTA16)        │
+    │      SNUBBERLESS DESIGN               │
+    │                                        │
+    │  MOC3041 = Zero-Cross Optocoupler     │
+    │  • Inherent zero-cross detection      │
+    │  • No R-C snubber needed              │
+    │  • Clean switching at zero voltage    │
+    │  • Reduced EMI                        │
+    │                                        │
+    │  ┌────────┐  ┌────────┐               │
+    │  │MOC3041 │  │MOC3041 │               │
+    │  │   +    │  │   +    │               │
+    │  │ BT136  │  │ BT136  │               │
+    │  │  Ch1   │  │  Ch2   │  ... Ch3, Ch4│
+    │  └───┬────┘  └───┬────┘               │
+    └──────┼───────────┼────────────────────┘
+           │           │
+       ┌───▼───────────▼───────────────┐
+       │     AC LOAD DISTRIBUTION      │
+       │                                │
+       │  Live ─┬─ TRIAC1 ─ Load 1    │
+       │        ├─ TRIAC2 ─ Load 2    │
+       │        ├─ TRIAC3 ─ Load 3    │
+       │        └─ TRIAC4 ─ Load 4    │
+       │                    │           │
+       │  Neutral ──────────┴───────   │
+       └────────────────────────────────┘
+
+
+LEVEL 2: NETWORK LAYER
+================================================================================
+
+                       ESP32 WiFi Radio (2.4GHz)
+                              │
+                    ┌─────────┴─────────┐
+                    │                    │
+            ┌───────▼────────┐   ┌──────▼──────────┐
+            │  LOCAL NETWORK │   │  INTERNET CLOUD  │
+            │                │   │                  │
+            │ • WebSocket    │   │ • Google Apps    │
+            │   Port 81      │   │   Script API     │
+            │ • REST API     │   │ • OTA Updates    │
+            │   Port 8080    │   │ • Voice Services │
+            │ • mDNS         │   │   - Alexa        │
+            │   Discovery    │   │   - Google Home  │
+            └───────┬────────┘   └──────┬──────────┘
+                    │                    │
+        ┌───────────┴────────────────────┴───────────┐
+        │                                             │
+        │         CLIENT APPLICATIONS                 │
+        │                                             │
+        │  ┌──────────────┐      ┌─────────────────┐ │
+        │  │   Dashboard  │      │  Flutter Mobile │ │
+        │  │   (Browser)  │      │      App        │ │
+        │  │              │      │                 │ │
+        │  │ • HTML/CSS/JS│      │ • Android/iOS   │ │
+        │  │ • WebSocket  │      │ • REST API      │ │
+        │  │ • Real-time  │      │ • Local/Cloud   │ │
+        │  └──────────────┘      └─────────────────┘ │
+        │                                             │
+        │  ┌──────────────────────────────────────┐  │
+        │  │      Voice Assistants                │  │
+        │  │                                      │  │
+        │  │  "Alexa, turn on bedroom light"     │  │
+        │  │  "Hey Google, set fan to 50%"       │  │
+        │  └──────────────────────────────────────┘  │
+        └─────────────────────────────────────────────┘
+
+
+LEVEL 3: SOFTWARE LAYER
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────┐
+│                    FIRMWARE (ESP32)                               │
+│                    firmware/main/main.ino                         │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Core Libraries & Dependencies                              │ │
+│  │  • WiFi.h        - WiFi connectivity                        │ │
+│  │  • WebServer.h   - REST API (port 8080)                    │ │
+│  │  • WebSockets.h  - Real-time updates (port 81)             │ │
+│  │  • HTTPClient.h  - Cloud polling                            │ │
+│  │  • Espalexa.h    - Amazon Alexa integration                │ │
+│  │  • SinricPro.h   - Google Assistant integration            │ │
+│  │  • ArduinoJson.h - JSON parsing/serialization              │ │
+│  │  • Preferences.h - NVS persistent storage                  │ │
+│  │  • esp_task_wdt.h- Watchdog timers                         │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Configuration (config.h)                                   │ │
+│  │  #define ZCD_PIN 13              // Zero-cross input       │ │
+│  │  TRIAC_PINS[4] = {16,17,18,19}   // TRIAC outputs         │ │
+│  │  SWITCH_PINS[4] = {32,33,25,26}  // Switch inputs          │ │
+│  │  TIMER_INTERVAL_US = 100          // 100µs timer           │ │
+│  │  PHASE_STEPS = 100                // 10ms half-cycle       │ │
+│  │  CLOUD_POLL_INTERVAL_MS = 2500   // 2.5s polling          │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Data Structures                                            │ │
+│  │  • Device[4]     - State, brightness, type, runtime        │ │
+│  │  • Schedule[10]  - Time-based automation                   │ │
+│  │  • Scene[10]     - Preset device combinations              │ │
+│  │  • FadeState[4]  - Smooth transitions                      │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Interrupt Service Routines (ISR)                          │ │
+│  │  • onZeroCross()    - Triggered on GPIO 13 rising edge    │ │
+│  │                       Resets all TRIACs at zero voltage    │ │
+│  │  • onTimerFire()    - Hardware timer, every 100µs         │ │
+│  │                       Fires TRIACs at phase angle          │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  API Endpoints (api_impl.h)                                │ │
+│  │  • GET  /status      - Device states                       │ │
+│  │  • POST /control     - Device control                      │ │
+│  │  • GET  /info        - System info                         │ │
+│  │  • POST /scene       - Activate scene                      │ │
+│  │  • POST /schedule    - Manage schedules                    │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Voice Integration (voice_impl.h)                          │ │
+│  │  • Espalexa callbacks  - Alexa device discovery & control │ │
+│  │  • SinricPro handlers  - Google Home integration          │ │
+│  └────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────┐
+│                    BACKEND (Cloud)                                │
+│            backend/google-apps-script/Code.gs                    │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Google Apps Script API                                     │ │
+│  │  • doPost() - Main API endpoint                            │ │
+│  │  • Handles: poll, control, config, ota, stats             │ │
+│  │  • Database: Google Sheets                                 │ │
+│  │  • Authentication: API key validation                      │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Device Management                                          │ │
+│  │  • Register new devices (by MAC/UID)                       │ │
+│  │  • Store device state                                       │ │
+│  │  • Configuration management                                 │ │
+│  │  • Firmware version tracking                                │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Dashboard Hosting (Dashboard.html)                        │ │
+│  │  • Served via doGet()                                       │ │
+│  │  • Glassmorphism UI                                        │ │
+│  │  • Real-time device control                                │ │
+│  │  • System statistics                                       │ │
+│  └────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────┐
+│                    FRONTEND (User Interface)                      │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Web Dashboard (Dashboard.html)                            │ │
+│  │  • Modern glassmorphism design                             │ │
+│  │  • Toggle switches for on/off                              │ │
+│  │  • Sliders for brightness control                          │ │
+│  │  • Scene activation buttons                                │ │
+│  │  • Schedule management                                      │ │
+│  │  • System statistics                                        │ │
+│  │  • Responsive design (mobile-friendly)                     │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  Flutter Mobile App (software_Team/flutter project/demo)  │ │
+│  │  • Cross-platform (Android/iOS)                            │ │
+│  │  • Native mobile UI                                         │ │
+│  │  • Local network discovery                                 │ │
+│  │  • Cloud control via backend                               │ │
+│  │  • Push notifications                                       │ │
+│  │  • Offline mode support                                     │ │
+│  └────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────┘
+
+
+DATA FLOW DIAGRAM
+================================================================================
+
+1. USER INITIATES CONTROL
+──────────────────────────────────────────────────────────────────────────────
+
+   Dashboard          Flutter App       Voice Command      Physical Switch
+   Button Click       Toggle Tap        "Alexa..."        Wall Switch Press
+        │                 │                  │                    │
+        └─────────────────┴──────────────────┴────────────────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │   ESP32 Receives    │
+                         │   Control Command   │
+                         └──────────┬──────────┘
+                                    │
+                  ┌─────────────────┴─────────────────┐
+                  │                                    │
+           Via WebSocket                        Via REST API
+           (Real-time)                          (HTTP POST)
+                  │                                    │
+                  └─────────────────┬──────────────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │  Firmware Processes │
+                         │  • Validate command │
+                         │  • Check child lock │
+                         │  • Update state     │
+                         │  • Calculate phase  │
+                         └──────────┬──────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │   Hardware Control  │
+                         │  • Zero-cross ISR   │
+                         │  • Timer ISR        │
+                         │  • TRIAC fires      │
+                         │  • Load powered     │
+                         └──────────┬──────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │   State Feedback    │
+                         │  • WebSocket bcast  │
+                         │  • Cloud polling    │
+                         │  • NVS persist      │
+                         └─────────────────────┘
+
+
+2. ZERO-CROSS TIMING SEQUENCE
+──────────────────────────────────────────────────────────────────────────────
+
+AC Waveform (50Hz example):
+                                    
+     +Ve ┐     ┌─────┐     ┌─────┐     ┌─────
+         │     │     │     │     │     │
+    0V ──┴─────┴─────┴─────┴─────┴─────┴─────
+         │     │     │     │     │     │
+     -Ve └─────┘     └─────┘     └─────┘
+         
+         ↑     ↑     ↑     ↑     ↑     ↑
+       ZC    10ms  ZC    10ms  ZC    10ms
+       ISR   later ISR   later ISR   later
+       
+       
+Zero-Cross Interrupt (GPIO 13):
+         
+         ┌─┐   ┌─┐   ┌─┐   ┌─┐   ┌─┐   ┌─┐
+    3.3V │ │   │ │   │ │   │ │   │ │   │ │
+      0V ┴─┴───┴─┴───┴─┴───┴─┴───┴─┴───┴─┴───
+         ↑     ↑     ↑     ↑     ↑     ↑
+       100Hz (50Hz mains × 2 zero-crossings per cycle)
+
+
+TRIAC Firing Sequence (Example: 75% brightness):
+
+    fireTick = 100 - 75 = 25
+    Delay = 25 × 100µs = 2.5ms after zero-cross
+    
+         0ms   2.5ms      10ms
+    ZC ───┬─────┬───────────┬── Next ZC
+          │     │           │
+          ↓     ↓           ↓
+    GPIO  ──────┌───────────┐──
+    16-19   LOW │   HIGH    │ LOW
+                │ TRIAC ON  │
+                └───────────┘
+                
+    Power delivered: 75% (7.5ms out of 10ms)
+    
+
+3. CLOUD SYNCHRONIZATION
+──────────────────────────────────────────────────────────────────────────────
+
+    Every 2.5 seconds:
+    
+    ESP32 Firmware
+         │
+         │ HTTP POST to GOOGLE_SCRIPT_URL
+         │ 
+         ├──→ Request JSON:
+         │    {
+         │      "action": "poll",
+         │      "uid": "AA:BB:CC:DD:EE:FF",
+         │      "ver": 3.0,
+         │      "uptime": 3600,
+         │      "rssi": -45,
+         │      "d1": {"s": 1, "v": 75, "t": 1, "runtime": 1800},
+         │      "d2": {"s": 0, "v": 100, "t": 0, "runtime": 0}
+         │    }
+         │
+         ▼
+    Google Apps Script Backend
+         │
+         │ Process request
+         │ Update database
+         │ Check for pending commands
+         │
+         ├──→ Response JSON:
+         │    {
+         │      "sys_name": "Living Room Hub",
+         │      "ota_update": false,
+         │      "d1": {
+         │        "type": "FAN",
+         │        "name": "Ceiling Fan",
+         │        "update": false
+         │      },
+         │      "schedules": [...],
+         │      "scenes": [...]
+         │    }
+         │
+         ▼
+    ESP32 Processes Response
+         │
+         ├─ Update device names
+         ├─ Apply configuration changes
+         ├─ Execute schedules if time matches
+         └─ Trigger OTA if available
+
+
+PHYSICAL INSTALLATION IN SWITCH BOX
+================================================================================
+
+    FRONT VIEW (Wall surface):          SIDE VIEW (Cross-section):
+    
+    ┌────────────────────┐             ┌────────────────────┐
+    │  Switch Plate      │             │  Wall Surface      │
+    │  ┌──┐  ┌──┐       │             ├────────────────────┤
+    │  │SW│  │SW│       │             │  [SW] [SW] [SW]    │◄── Switches
+    │  └──┘  └──┘       │             │    │    │    │      │
+    │  ┌──┐  ┌──┐       │             │  ┌─▼────▼────▼───┐ │
+    │  │SW│  │SW│       │             │  │  Wiring       │ │
+    │  └──┘  └──┘       │             │  └───────────────┘ │
+    └────────────────────┘             │                    │
+                                       │  ╔═══════════════╗ │
+                                       │  ║  PCB          ║ │◄── Controller
+                                       │  ║  70×50×38mm   ║ │
+                                       │  ╚═══════════════╝ │
+                                       │                    │
+                                       │  AC Wiring (In/Out)│
+                                       │  ══════════════    │
+                                       │  Switch Box Depth  │
+                                       │  45mm standard     │
+                                       └────────────────────┘
+
+
+COMPLETE SYSTEM INTEGRATION
+================================================================================
+
+Physical Layer:        AC Mains → Zero-Cross → ESP32 → TRIACs → Loads
+                                                ↕
+                                             Switches
+
+Firmware Layer:        ISRs → Device Control → State Management → APIs
+                                                ↕
+                                           Persistence
+
+Network Layer:         WiFi → WebSocket + REST API + Cloud Polling
+                                                ↕
+                                        Voice Services
+
+Application Layer:     Dashboard + Flutter App + Voice Assistants
+                                                ↕
+                                            Users
+
+Backend Layer:         Google Apps Script → Database → Configuration
+                                                ↕
+                                          All Devices
+
+
+RELIABILITY FEATURES
+================================================================================
+
+Hardware:
+✓ Snubberless MOC3041 design - Inherently reliable
+✓ Zero-cross switching - No stress on TRIACs
+✓ Compact PCB - Fewer connection points
+✓ SMD components - Better solder joint reliability
+✓ Fuse protection - Overcurrent safety
+✓ MOV surge suppression - Voltage spike protection
+✓ Thermal vias - Heat dissipation
+✓ Isolation barriers - Safety
+
+Firmware:
+✓ Dual-core architecture - Separation of concerns
+✓ Watchdog timers - Auto-recovery
+✓ Zero-cross health check - Safety shutdown
+✓ NVS persistence - State survives reboot
+✓ OTA with rollback - Safe updates
+✓ WiFi auto-reconnect - Network resilience
+✓ Error handling - Graceful degradation
+
+System:
+✓ Multiple control methods - Redundancy
+✓ Local + Cloud - Works without internet
+✓ Physical switches - Manual override
+✓ WebSocket + Polling - Real-time + resilience
+✓ State synchronization - Consistency
+
+================================================================================
+END OF BLOCK DIAGRAM
+================================================================================
+
+This complete system provides:
+• Firmware + Hardware + Backend + Frontend integration
+• Compact 70mm × 50mm design fits in switch boxes
+• Snubberless MOC3041 for reliable switching
+• 100% compatible with existing codebase
+• Professional installation appearance
+• Production-ready reliability
+
+Document Version: 3.1
+Date: December 2024
+Status: Production Ready
+
+================================================================================
