@@ -1,384 +1,139 @@
-# Smart Home Controller - Google Apps Script Backend
+# Cloud Backend Services Specification
+**Google Apps Script Implementation**
 
-This directory contains the Google Apps Script backend that provides:
-- RESTful API for ESP32 devices and mobile apps
-- Google Sheets as a database
-- Web dashboard for device control
-- User authentication
-- Scheduling and scenes management
+## Document Information
+- **Module:** Backend Services
+- **Platform:** Google Apps Script
+- **API Version:** 3.0
+- **Document Number:** BE-SPEC-001
 
-## 📁 Files
+## 1. System Overview
 
-- **Code.gs** - Main backend logic and API handlers
-- **Database.gs** - Google Sheets database helper functions
-- **Dashboard.html** - Web dashboard UI
-- **appsscript.json** - Apps Script manifest
+The backend subsystem provides cloud-based services for device management, state synchronization, and user interface delivery. Implementation leverages Google Apps Script for serverless deployment with Google Sheets as the persistence layer.
 
-## 🚀 Deployment Steps
+## 2. Architecture
 
-### 1. Create Google Sheets Database
+### 2.1 Service Components
+- RESTful API endpoints (HTTP POST)
+- Data persistence (Google Sheets)
+- Web application serving (Dashboard.html)
+- Authentication and session management
 
-1. Go to [Google Sheets](https://sheets.google.com)
-2. Create a new spreadsheet named "Smart Home Controller DB"
-3. Note the Spreadsheet ID from the URL: 
-   ```
-   https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID]/edit
-   ```
+### 2.2 Data Model
+- Device state records
+- Schedule definitions  
+- Scene configurations
+- System settings
 
-### 2. Create Apps Script Project
+## 3. API Specification
 
-1. Go to [Google Apps Script](https://script.google.com)
-2. Click "New Project"
-3. Name it "Smart Home Controller Backend"
+### 3.1 Polling Endpoint
+**URL:** `<deployment-url>?action=poll`  
+**Method:** POST  
+**Content-Type:** application/json
 
-### 3. Add the Code Files
-
-1. Delete the default `Code.gs` content
-2. Copy the content from each `.gs` file in this directory to the script editor
-3. Create new files using File → New → HTML file for `Dashboard.html`
-4. Create `appsscript.json` using File → Project Settings → Show "appsscript.json"
-
-### 4. Set Script Properties
-
-1. Click Project Settings (gear icon)
-2. Scroll to Script Properties
-3. Add the following properties:
-   - **SHEET_ID**: Your spreadsheet ID from step 1
-   - **API_KEY**: Create a secure key (e.g., `smarthome-2024-RANDOM`)
-
-### 5. Deploy as Web App
-
-1. Click Deploy → New deployment
-2. Select type: **Web app**
-3. Configuration:
-   - Description: "Smart Home Controller v1.0"
-   - Execute as: **Me**
-   - Who has access: **Anyone** (for public access) or **Anyone with Google account**
-4. Click Deploy
-5. Authorize the app (review permissions)
-6. Copy the **Web app URL** - this is your API endpoint!
-
-### 6. Set Up Custom Domain (Optional)
-
-To get a memorable URL like `home.yourname.com`:
-
-1. Go to your domain registrar (e.g., GoDaddy, Namecheap)
-2. Add a CNAME record:
-   ```
-   Type: CNAME
-   Name: home (or smarthome)
-   Value: script.google.com
-   ```
-3. In Apps Script deployment, note your deployment ID
-4. Access via: `https://script.google.com/macros/s/[DEPLOYMENT_ID]/exec`
-
-**Note**: Apps Script URLs cannot be fully customized, but you can use URL shorteners or domain forwards.
-
-## 📊 Database Schema
-
-The backend automatically creates these sheets in your Google Sheets:
-
-### Devices Sheet
-| Column | Description |
-|--------|-------------|
-| UID | Unique device identifier (MAC address) |
-| Name | Device display name |
-| Type | Device type (light/fan) |
-| IP | Current IP address |
-| Version | Firmware version |
-| Uptime | Device uptime in seconds |
-| RSSI | WiFi signal strength |
-| Heap | Free heap memory |
-| Last Seen | Last communication timestamp |
-| User ID | Owner user ID |
-| Created | Registration timestamp |
-
-### DeviceStates Sheet
-| Column | Description |
-|--------|-------------|
-| UID | Device UID |
-| Channel | Channel number (0-3) |
-| State | Power state (true/false) |
-| Value | Brightness/speed value (0-100) |
-| Type | Device type |
-| Timestamp | Last update time |
-
-### Schedules Sheet
-| Column | Description |
-|--------|-------------|
-| ID | Schedule UUID |
-| User ID | Owner user ID |
-| Device UID | Target device |
-| Channel | Target channel |
-| Name | Schedule name |
-| Start Time | Start time (HH:MM) |
-| End Time | End time (HH:MM) |
-| Days | Days of week (bitmask) |
-| Action | Action to perform |
-| Value | Value for action |
-| Enabled | Schedule enabled status |
-| Created | Creation timestamp |
-
-### Scenes Sheet
-| Column | Description |
-|--------|-------------|
-| ID | Scene UUID |
-| User ID | Owner user ID |
-| Name | Scene name |
-| Devices | JSON array of device states |
-| Created | Creation timestamp |
-
-### Users Sheet
-| Column | Description |
-|--------|-------------|
-| ID | User UUID |
-| Name | User name |
-| Email | User email |
-| Password | Hashed password |
-| Created | Registration timestamp |
-
-### Commands Sheet
-| Column | Description |
-|--------|-------------|
-| UID | Target device UID |
-| Command | JSON command object |
-| Timestamp | Queue timestamp |
-| Executed | Execution status |
-
-## 🔌 API Endpoints
-
-All endpoints use the web app URL as base: `https://script.google.com/macros/s/[YOUR_DEPLOYMENT_ID]/exec`
-
-### Device Endpoints
-
-#### Poll for Commands
-```
-GET/POST ?action=poll&uid=AA:BB:CC:DD:EE:FF&api_key=YOUR_KEY
-```
-
-Response:
+**Request Format:**
 ```json
 {
-  "success": true,
-  "config": {
-    "name": "Living Room",
-    "type": "fan"
-  },
-  "commands": [],
-  "ota_update": false
+  "action": "poll",
+  "uid": "device-mac-address",
+  "ver": 3.0,
+  "uptime": 3600,
+  "rssi": -45,
+  "d1": {"s": 1, "v": 75, "t": 1},
+  "d2": {"s": 0, "v": 100, "t": 0},
+  "d3": {"s": 1, "v": 50, "t": 2},
+  "d4": {"s": 0, "v": 100, "t": 0}
 }
 ```
 
-#### Update Device State
-```
-POST ?action=update_state
-Body: {
-  "api_key": "YOUR_KEY",
-  "uid": "AA:BB:CC:DD:EE:FF",
-  "states": [
-    {"channel": 0, "state": true, "value": 75}
-  ]
+**Response Format:**
+```json
+{
+  "sys_name": "Living Room Hub",
+  "ota_update": false,
+  "d1": {"type": "FAN", "name": "Ceiling Fan", "update": true, "state": 1, "val": 80},
+  "schedules": [...],
+  "scenes": [...]
 }
 ```
 
-### User Endpoints
+### 3.2 Control Endpoint
+Bi-directional state synchronization via polling mechanism (2.5s interval).
 
-#### Login
-```
-POST ?action=login
-Body: {
-  "api_key": "YOUR_KEY",
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
+## 4. Deployment
 
-#### Signup
-```
-POST ?action=signup
-Body: {
-  "api_key": "YOUR_KEY",
-  "name": "John Doe",
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
+### 4.1 Prerequisites
+- Google account with Apps Script access
+- Google Sheets for data storage
 
-### Device Management
+### 4.2 Installation Steps
+1. Create new Google Apps Script project
+2. Import Code.gs and Dashboard.html
+3. Deploy as web application
+4. Configure permissions (anyone with link)
+5. Copy deployment URL for firmware configuration
 
-#### Get Devices
-```
-GET/POST ?action=get_devices&api_key=YOUR_KEY&user_id=USER_ID
-```
-
-#### Update Device
-```
-POST ?action=update_device
-Body: {
-  "api_key": "YOUR_KEY",
-  "uid": "AA:BB:CC:DD:EE:FF",
-  "name": "Bedroom Fan",
-  "type": "fan"
-}
-```
-
-#### Reset WiFi
-```
-POST ?action=reset_wifi
-Body: {
-  "api_key": "YOUR_KEY",
-  "uid": "AA:BB:CC:DD:EE:FF"
-}
-```
-
-### Schedule Management
-
-#### Get Schedules
-```
-GET/POST ?action=get_schedules&api_key=YOUR_KEY&user_id=USER_ID
-```
-
-#### Save Schedule
-```
-POST ?action=save_schedule
-Body: {
-  "api_key": "YOUR_KEY",
-  "schedule": {
-    "user_id": "USER_ID",
-    "device_uid": "AA:BB:CC:DD:EE:FF",
-    "channel": 0,
-    "name": "Morning Light",
-    "start_time": "06:00",
-    "end_time": "08:00",
-    "days": "1111100",
-    "action": "on",
-    "value": 100,
-    "enabled": true
-  }
-}
-```
-
-#### Delete Schedule
-```
-POST ?action=delete_schedule
-Body: {
-  "api_key": "YOUR_KEY",
-  "schedule_id": "SCHEDULE_UUID"
-}
-```
-
-### Scene Management
-
-Similar endpoints for scenes (get_scenes, save_scene, delete_scene)
-
-## 🌐 Web Dashboard
-
-Access the web dashboard at:
-```
-https://script.google.com/macros/s/[YOUR_DEPLOYMENT_ID]/exec?page=dashboard
-```
-
-### Dashboard Features
-
-- **Real-time Device Control**: Toggle devices on/off, adjust speed/brightness
-- **Device Management**: Rename devices, change device types
-- **Scheduling**: Create time-based automations
-- **Scenes**: Save and activate device combinations
-- **WiFi Reset**: Reset device WiFi credentials remotely
-- **Download App**: Direct link to download the mobile app
-- **Responsive Design**: Works on desktop, tablet, and mobile
-
-## 🔒 Security Considerations
-
-1. **API Key**: Change the default API key in Script Properties
-2. **HTTPS**: Apps Script uses HTTPS by default
-3. **Password Hashing**: Passwords are hashed using SHA-256
-4. **Rate Limiting**: Consider implementing rate limiting for production
-5. **CORS**: Apps Script allows cross-origin requests
-6. **Authentication**: Implement token-based auth for production
-
-## 🔧 ESP32 Integration
-
-Configure your ESP32 to use this backend:
-
+### 4.3 Configuration
+Update firmware config.h with deployment URL:
 ```cpp
-// In your ESP32 code
-String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
-String API_KEY = "smarthome-2024-YOUR_KEY";
-
-void pollServer() {
-  String url = GOOGLE_SCRIPT_URL + "?action=poll&uid=" + WiFi.macAddress() + "&api_key=" + API_KEY;
-  HTTPClient http;
-  http.begin(url);
-  int httpCode = http.GET();
-  
-  if (httpCode == 200) {
-    String payload = http.getString();
-    // Parse JSON and execute commands
-  }
-  
-  http.end();
-}
+const char* cloudURL = "your-deployment-url";
 ```
 
-## 📱 Flutter App Integration
+## 5. Data Persistence
 
-Configure the Flutter app to use this backend:
+### 5.1 Google Sheets Schema
+- Sheet 1: Device states
+- Sheet 2: User configurations  
+- Sheet 3: Schedule definitions
+- Sheet 4: System logs (optional)
 
-```dart
-// In lib/config/api_config.dart
-class ApiConfig {
-  static const String baseUrl = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
-  static const String apiKey = 'smarthome-2024-YOUR_KEY';
-}
-```
+### 5.2 Data Retention
+- Real-time data: Immediate persistence
+- Historical data: Configurable retention policy
 
-## 🐛 Troubleshooting
+## 6. Security Considerations
 
-### Issue: "Script function not found"
-- Make sure all `.gs` files are added to the project
-- Verify function names match exactly
+### 6.1 Authentication
+- Apps Script deployment authentication
+- URL-based access control
+- HTTPS encryption (enforced by Google)
 
-### Issue: "Unauthorized"
-- Check API key is set correctly in Script Properties
-- Verify API key is passed in requests
+### 6.2 Best Practices
+- Limit deployment access scope
+- Implement rate limiting (if required)
+- Validate all input data
+- Sanitize HTML output
 
-### Issue: "Spreadsheet not found"
-- Verify SHEET_ID in Script Properties
-- Make sure the script has access to the spreadsheet
+## 7. Performance
 
-### Issue: "Rate limit exceeded"
-- Apps Script has quotas (URL Fetch calls: 20,000/day)
-- Implement caching and reduce polling frequency
+### 7.1 Specifications
+- Polling interval: 2.5 seconds
+- Response time: <500ms (typical)
+- Concurrent connections: Google Apps Script quotas apply
 
-## 📈 Performance Tips
+### 7.2 Scalability
+- Single deployment supports multiple devices
+- Google Sheets row limit: 10 million cells
 
-1. **Caching**: Use Apps Script CacheService for frequently accessed data
-2. **Batch Operations**: Group database operations to reduce execution time
-3. **Async Processing**: Use time-driven triggers for background tasks
-4. **Optimize Queries**: Minimize sheet reads/writes
-5. **CDN**: Host static assets (images, CSS) on a CDN
+## 8. Monitoring and Diagnostics
 
-## 📝 License
+### 8.1 Logging
+- Apps Script execution logs
+- Device connection history
+- Error tracking
 
-MIT License - Same as the main project
+### 8.2 Debugging
+- Apps Script debugger
+- Network traffic analysis (browser dev tools)
 
-## 🆘 Support
+## References
 
-For issues or questions:
-- GitHub Issues: [smarthome-controller/issues](https://github.com/Gokul3611/smarthome-controller/issues)
-- Documentation: Check the main README.md
+1. Google Apps Script Documentation, Google LLC
+2. RESTful API Design Guidelines, various
+3. JSON Data Interchange Standard, ECMA-404
 
 ---
 
-**Deployment Checklist:**
-- [ ] Create Google Sheets database
-- [ ] Create Apps Script project
-- [ ] Copy all code files
-- [ ] Set Script Properties (SHEET_ID, API_KEY)
-- [ ] Deploy as web app
-- [ ] Test API endpoints
-- [ ] Configure ESP32 with deployment URL
-- [ ] Configure Flutter app with deployment URL
-- [ ] Test dashboard access
-- [ ] Set up custom domain (optional)
+**Document Control:** BE-SPEC-001  
+**Status:** Production

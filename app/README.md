@@ -1,231 +1,138 @@
-# Smart Home Controller - Android APK
+# Mobile Application Specification
+**Flutter Cross-Platform Implementation**
 
-This folder contains the Android APK builds for the Smart Home Controller mobile application.
+## Document Information
+- **Application:** Smart Home Controller Mobile Client
+- **Framework:** Flutter 3.x
+- **Platforms:** Android, iOS
+- **Document Number:** APP-SPEC-001
 
-## 📱 About the App
+## 1. Application Overview
 
-The Smart Home Controller app is a Flutter-based mobile application that allows you to:
-- Control your ESP32-based 4-channel TRIAC smart home controller
-- Monitor device states in real-time
-- Configure WiFi settings for your controller
-- Manage scenes and schedules
-- View system information and statistics
+Cross-platform mobile client application providing local and cloud-based control of smart home devices. Implementation uses Flutter framework for unified codebase deployment to Android and iOS platforms.
 
-## 📦 APK Files
+## 2. System Requirements
 
-APK files for different versions and build variants will be stored in this directory:
+### 2.1 Development Environment
+- Flutter SDK 3.0 or later
+- Android Studio or Xcode
+- Dart 2.17 or later
 
-```
-app/
-├── README.md (this file)
-├── release/
-│   └── smart-home-controller-v{version}-release.apk
-└── debug/
-    └── smart-home-controller-v{version}-debug.apk
-```
+### 2.2 Target Platforms
+- **Android:** API level 21+ (Android 5.0 Lollipop)
+- **iOS:** iOS 11.0 or later
 
-### Current Release
+### 2.3 Runtime Requirements
+- WiFi or cellular network connectivity
+- Location services (for network discovery)
+- Internet access (for cloud features)
 
-**Latest Version:** 1.0.0
+## 3. Features
 
-- **Release APK:** Not yet built
-- **Debug APK:** Not yet built
+### 3.1 Device Control
+- Individual device on/off switching
+- Brightness/speed adjustment (0-100%)
+- Scene activation
+- Schedule management
 
-## 🛠️ Building the APK
+### 3.2 Discovery and Connection
+- Local network device discovery (mDNS/SSDP)
+- Cloud-based device access
+- Automatic connection management
 
-To build the APK from source:
+### 3.3 User Interface
+- Material Design (Android)
+- Cupertino widgets (iOS)
+- Responsive layouts
+- Dark mode support
 
-### Prerequisites
+## 4. Architecture
 
-1. **Install Flutter SDK**
-   ```bash
-   # Download from https://flutter.dev/docs/get-started/install
-   # Or use a package manager:
-   # macOS: brew install flutter
-   # Linux: snap install flutter --classic
-   ```
+### 4.1 Application Layers
+1. **Presentation:** Flutter widgets and screens
+2. **Business Logic:** State management (Provider/Bloc)
+3. **Data:** REST API client, local storage
+4. **Platform:** Native integrations
 
-2. **Verify Flutter installation**
-   ```bash
-   flutter doctor
-   ```
+### 4.2 Communication Protocols
+- **Local Control:** HTTP REST API (port 8080)
+- **Cloud Control:** HTTPS to backend services
+- **Real-time Updates:** WebSocket (port 81)
 
-3. **Install Android SDK and accept licenses**
-   ```bash
-   flutter doctor --android-licenses
-   ```
+## 5. Installation
 
-### Build Steps
+### 5.1 Pre-Built Applications
+**Android:** Download APK from `release/` directory  
+**iOS:** Install via TestFlight or Xcode
 
-1. **Navigate to the Flutter project directory**
-   ```bash
-   cd "software_Team/flutter project/demo"
-   ```
-
-2. **Get dependencies**
-   ```bash
-   flutter pub get
-   ```
-
-3. **Build Release APK**
-   ```bash
-   flutter build apk --release
-   ```
-   
-   The APK will be generated at:
-   ```
-   software_Team/flutter project/demo/build/app/outputs/flutter-apk/app-release.apk
-   ```
-
-4. **Build Debug APK (for testing)**
-   ```bash
-   flutter build apk --debug
-   ```
-
-5. **Copy APK to this folder** (from repository root)
-   ```bash
-   # Return to repository root first
-   cd ../../..
-   
-   # For release build
-   cp "software_Team/flutter project/demo/build/app/outputs/flutter-apk/app-release.apk" \
-      app/release/smart-home-controller-v1.0.0-release.apk
-   
-   # For debug build
-   cp "software_Team/flutter project/demo/build/app/outputs/flutter-apk/app-debug.apk" \
-      app/debug/smart-home-controller-v1.0.0-debug.apk
-   ```
-   
-   Or from Flutter project directory:
-   ```bash
-   # For release build (from demo/ directory)
-   cp build/app/outputs/flutter-apk/app-release.apk \
-      ../../../app/release/smart-home-controller-v1.0.0-release.apk
-   
-   # For debug build (from demo/ directory)
-   cp build/app/outputs/flutter-apk/app-debug.apk \
-      ../../../app/debug/smart-home-controller-v1.0.0-debug.apk
-   ```
-
-### Build Variants
-
-- **Release APK**: Optimized for production use, smaller size, no debug symbols
-  ```bash
-  flutter build apk --release
-  ```
-
-- **Debug APK**: Includes debug symbols, useful for development
-  ```bash
-  flutter build apk --debug
-  ```
-
-- **Profile APK**: For performance profiling
-  ```bash
-  flutter build apk --profile
-  ```
-
-- **Split APKs by ABI** (reduces size for specific architectures):
-  ```bash
-  flutter build apk --split-per-abi
-  ```
-  This generates separate APKs for:
-  - `app-armeabi-v7a-release.apk` (32-bit ARM)
-  - `app-arm64-v8a-release.apk` (64-bit ARM)
-  - `app-x86_64-release.apk` (64-bit Intel)
-
-## 📲 Installing the APK
-
-### On Android Device
-
-1. **Enable Installation from Unknown Sources**
-   - Go to Settings → Security
-   - Enable "Unknown Sources" or "Install Unknown Apps"
-
-2. **Transfer and Install**
-   - Transfer the APK to your device via USB, email, or cloud storage
-   - Tap the APK file to install
-   - Follow the on-screen prompts
-
-### Using ADB (Android Debug Bridge)
+### 5.2 Building from Source
 
 ```bash
-# Install via ADB
-adb install app/release/smart-home-controller-v1.0.0-release.apk
+# Clone repository
+git clone <repository-url>
+cd app
 
-# Install and replace existing version
-adb install -r app/release/smart-home-controller-v1.0.0-release.apk
+# Install dependencies
+flutter pub get
 
-# Uninstall
-adb uninstall com.example.demo
+# Build for Android
+flutter build apk --release
+
+# Build for iOS (macOS only)
+flutter build ios --release
 ```
 
-## 🔐 App Signing
+## 6. Configuration
 
-For production releases, APKs should be signed with a release keystore:
+### 6.1 Network Settings
+Configure backend URL in application settings or during initial setup wizard.
 
-1. **Create a keystore** (one-time setup):
-   ```bash
-   keytool -genkey -v -keystore ~/smarthome-release-key.jks \
-           -keyalg RSA -keysize 2048 -validity 10000 \
-           -alias smarthome
-   ```
+### 6.2 Device Management
+Add devices via:
+- Automatic discovery (local network)
+- Manual entry (IP address or cloud ID)
+- QR code scanning
 
-2. **Configure signing in Android Studio or create `key.properties`**:
-   ```properties
-   storePassword=<password>
-   keyPassword=<password>
-   keyAlias=smarthome
-   storeFile=<path-to-keystore>
-   ```
+## 7. Testing
 
-3. **Build signed release APK**:
-   ```bash
-   flutter build apk --release
-   ```
+### 7.1 Unit Tests
+```bash
+flutter test
+```
 
-## 📝 Version History
+### 7.2 Integration Tests
+```bash
+flutter drive --target=test_driver/app.dart
+```
 
-### Version 1.0.0 (Initial Release)
-- Initial release of Smart Home Controller app
-- WiFi configuration interface
-- Device control functionality
-- Real-time status monitoring
-- HTTP and WebSocket communication
+## 8. Distribution
 
-## 🐛 Troubleshooting
+### 8.1 Android
+- Google Play Store (production)
+- Direct APK installation (development/testing)
 
-### Build Issues
+### 8.2 iOS
+- Apple App Store (production)
+- TestFlight (beta testing)
+- Direct installation via Xcode (development)
 
-**Problem:** `flutter: command not found`
-- **Solution:** Install Flutter SDK and add it to your PATH
+## 9. Troubleshooting
 
-**Problem:** Android SDK not found
-- **Solution:** Run `flutter doctor` and follow instructions to install Android SDK
+### 9.1 Common Issues
+- **Connection failures:** Check network connectivity and firewall rules
+- **Discovery not working:** Verify mDNS/SSDP support on network
+- **Build errors:** Run `flutter clean && flutter pub get`
 
-**Problem:** License errors
-- **Solution:** Run `flutter doctor --android-licenses` and accept all licenses
+### 9.2 Support
+Refer to main project documentation or submit issues via GitHub.
 
-### Installation Issues
+## References
 
-**Problem:** "App not installed"
-- **Solution:** Uninstall any existing version first, or use `adb install -r`
-
-**Problem:** "Parse error"
-- **Solution:** Ensure APK is not corrupted and is compatible with your Android version
-
-## 🔗 Related Documentation
-
-- Flutter Project: `software_Team/flutter project/demo/`
-- [Firmware Documentation](../firmware/README.md)
-- [Installation Guide](../INSTALL.md)
-- [Main README](../README.md)
-
-## 📧 Support
-
-For issues or questions:
-- Open an issue on [GitHub](https://github.com/Gokul3611/smarthome-controller/issues)
-- Check the [project wiki](https://github.com/Gokul3611/smarthome-controller/wiki)
+1. Flutter Documentation, Google LLC
+2. Material Design Guidelines, Google LLC
+3. Human Interface Guidelines, Apple Inc.
 
 ---
 
-**Note:** APK files are typically not committed to Git repositories due to their size. Consider using GitHub Releases or a separate distribution channel for sharing built APKs.
+**Document Control:** APP-SPEC-001  
+**Status:** Beta Release
