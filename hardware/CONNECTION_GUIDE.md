@@ -1,31 +1,36 @@
-# Connection Guide - Smart Home Controller
+# Hardware Connection Specification
+
+**Document Number:** HW-CONN-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Technical Specification
 
 Complete step-by-step guide for hardware connections and setup.
 
----
 
-## ⚠️ SAFETY FIRST
+
+## 1.0 SAFETY FIRST
 
 **DANGER: HIGH VOLTAGE**
 
 This project involves mains AC voltage which can be **LETHAL**. Follow these safety rules:
 
-1. ✅ **Always disconnect power** before making connections
-2. ✅ **Use insulated tools** and work on non-conductive surface
-3. ✅ **Double-check all connections** before applying power
-4. ✅ **Use proper gauge wires** (minimum 18 AWG for loads)
-5. ✅ **Never touch live circuits** - wait 5 minutes after power off
-6. ✅ **Have someone nearby** when testing with mains voltage
-7. ✅ **Use GFCI/RCD protection** on the AC supply
-8. ✅ **Wear safety glasses** when working
+1.  **Always disconnect power** before making connections
+2.  **Use insulated tools** and work on non-conductive surface
+3.  **Double-check all connections** before applying power
+4.  **Use proper gauge wires** (minimum 18 AWG for loads)
+5.  **Never touch live circuits** - wait 5 minutes after power off
+6.  **Have someone nearby** when testing with mains voltage
+7.  **Use GFCI/RCD protection** on the AC supply
+8.  **Wear safety glasses** when working
 
 **If unsure, consult a licensed electrician.**
 
----
 
-## 📦 Required Materials
 
-### Components (per channel)
+## 2.0 Required Materials
+
+### 2.1 Components (per channel)
 
 - [ ] ESP32-WROOM-32 development board
 - [ ] BT136 TRIAC (or equivalent 4A/600V)
@@ -38,20 +43,20 @@ This project involves mains AC voltage which can be **LETHAL**. Follow these saf
 - [ ] Screw terminal blocks
 - [ ] Enclosure (non-conductive)
 
-### Zero-Cross Detection
+### 2.2 Zero-Cross Detection
 
 - [ ] 230V to 12V AC transformer (or voltage divider)
 - [ ] 1N4007 diodes (x4) - bridge rectifier
 - [ ] 4N25 optocoupler
 - [ ] 1kΩ and 10kΩ resistors
 
-### Power Supply
+### 2.3 Power Supply
 
 - [ ] 5V 2A power supply (isolated)
 - [ ] AMS1117-3.3 regulator (if not on ESP32 board)
 - [ ] Electrolytic capacitors (100µF, 10µF)
 
-### Tools
+### 2.4 Tools
 
 - [ ] Soldering iron and solder
 - [ ] Wire strippers
@@ -60,11 +65,11 @@ This project involves mains AC voltage which can be **LETHAL**. Follow these saf
 - [ ] Heat shrink tubing
 - [ ] Cable ties
 
----
 
-## 🔧 Step 1: Zero-Cross Detection Circuit
 
-### Circuit Diagram
+## 3.0 Step 1: Zero-Cross Detection Circuit
+
+### 3.1 Circuit Diagram
 
 ```
 AC Mains → [Fuse 1A] → Step-down Transformer (230V to 12V AC)
@@ -80,7 +85,7 @@ AC Mains → [Fuse 1A] → Step-down Transformer (230V to 12V AC)
                     4N25 Output (pins 4,5) → ESP32 GPIO13
 ```
 
-### Connections
+### 3.2 Connections
 
 1. **AC Input**:
    ```
@@ -102,18 +107,18 @@ AC Mains → [Fuse 1A] → Step-down Transformer (230V to 12V AC)
    10kΩ resistor → GPIO13 to GND (pull-down)
    ```
 
-### Testing Zero-Cross
+### 3.3 Testing Zero-Cross
 
 1. Power the circuit (no ESP32 yet)
 2. Use oscilloscope on 4N25 pin 4
 3. Should see pulses at 100Hz (50Hz mains) or 120Hz (60Hz mains)
 4. Pulse width: ~1-2ms
 
----
 
-## 🔧 Step 2: TRIAC Driver Circuit (Per Channel)
 
-### Circuit Diagram (for one channel)
+## 4.0 Step 2: TRIAC Driver Circuit (Per Channel)
+
+### 4.1 Circuit Diagram (for one channel)
 
 ```
 ESP32 GPIO16 → [330Ω] → MOC3021 pin 1 (anode)
@@ -126,7 +131,7 @@ TRIAC MT2 → Load → AC Neutral
 AC Live → TRIAC MT1
 ```
 
-### Detailed Connections
+### 4.2 Detailed Connections
 
 #### For Channel 1 (Repeat for channels 2-4)
 
@@ -155,11 +160,11 @@ AC Live → TRIAC MT1
    - 100Ω resistor (2W) in series with 0.1µF (400V) capacitor
    ```
 
-### Pin Numbering
+### 4.3 Pin Numbering
 
 **MOC3021 (DIP-6)**:
 ```
-  1 [●]   6  ← Pin 1 has dot/notch
+  1 []   6  ← Pin 1 has dot/notch
   2       5
   3       4
 ```
@@ -172,9 +177,9 @@ Center: MT2 (to heatsink)
 Right: Gate
 ```
 
----
 
-## 🔧 Step 3: Physical Switches
+
+## 5.0 Step 3: Physical Switches
 
 Connect tactile switches to ESP32:
 
@@ -185,23 +190,23 @@ Switch 3: GPIO25 to GND (internal pull-up enabled)
 Switch 4: GPIO26 to GND (internal pull-up enabled)
 ```
 
-### Optional: Add debounce capacitors
+### 5.1 Optional: Add debounce capacitors
 
 ```
 Each switch pin: 0.1µF capacitor to GND
 ```
 
----
 
-## 🔧 Step 4: Power Supply
 
-### Using External 5V Supply
+## 6.0 Step 4: Power Supply
+
+### 6.1 Using External 5V Supply
 
 1. Connect 5V supply positive to ESP32 VIN (or 5V pin)
 2. Connect 5V supply ground to ESP32 GND
 3. **IMPORTANT**: Ensure power supply is isolated from AC mains
 
-### Using On-Board Regulation
+### 6.2 Using On-Board Regulation
 
 If using transformer:
 ```
@@ -210,43 +215,43 @@ If using transformer:
                     Capacitors (100µF input, 10µF output)
 ```
 
----
 
-## 🔧 Step 5: Complete Wiring Diagram
 
-### Low Voltage Side (ESP32)
+## 7.0 Step 5: Complete Wiring Diagram
+
+### 7.1 Low Voltage Side (ESP32)
 
 ```
 ESP32 Pin Connections:
-├── GPIO13 ← Zero-Cross Detection (from 4N25 pin 4)
-├── GPIO16 → Channel 1 Optocoupler (MOC3021 pin 1)
-├── GPIO17 → Channel 2 Optocoupler (MOC3021 pin 1)
-├── GPIO18 → Channel 3 Optocoupler (MOC3021 pin 1)
-├── GPIO19 → Channel 4 Optocoupler (MOC3021 pin 1)
-├── GPIO32 ← Physical Switch 1
-├── GPIO33 ← Physical Switch 2
-├── GPIO25 ← Physical Switch 3
-├── GPIO26 ← Physical Switch 4
-├── 5V ← Power Supply (+)
-└── GND → All grounds (common)
+ GPIO13 ← Zero-Cross Detection (from 4N25 pin 4)
+ GPIO16 → Channel 1 Optocoupler (MOC3021 pin 1)
+ GPIO17 → Channel 2 Optocoupler (MOC3021 pin 1)
+ GPIO18 → Channel 3 Optocoupler (MOC3021 pin 1)
+ GPIO19 → Channel 4 Optocoupler (MOC3021 pin 1)
+ GPIO32 ← Physical Switch 1
+ GPIO33 ← Physical Switch 2
+ GPIO25 ← Physical Switch 3
+ GPIO26 ← Physical Switch 4
+ 5V ← Power Supply (+)
+ GND → All grounds (common)
 ```
 
-### High Voltage Side (AC)
+### 7.2 High Voltage Side (AC)
 
 ```
 AC Live Wire:
-├── Fuse (10A) → Common connection
-    ├── TRIAC1 MT1 → Load1 → Neutral
-    ├── TRIAC2 MT1 → Load2 → Neutral
-    ├── TRIAC3 MT1 → Load3 → Neutral
-    └── TRIAC4 MT1 → Load4 → Neutral
+ Fuse (10A) → Common connection
+     TRIAC1 MT1 → Load1 → Neutral
+     TRIAC2 MT1 → Load2 → Neutral
+     TRIAC3 MT1 → Load3 → Neutral
+     TRIAC4 MT1 → Load4 → Neutral
 ```
 
----
 
-## 🧪 Testing Procedure
 
-### Step 1: Visual Inspection
+## 8.0 🧪 Testing Procedure
+
+### 8.1 Step 1: Visual Inspection
 
 - [ ] Check all solder joints
 - [ ] Verify no shorts between high and low voltage
@@ -254,20 +259,20 @@ AC Live Wire:
 - [ ] Check polarity of electrolytic capacitors
 - [ ] Verify TRIAC orientation
 
-### Step 2: Continuity Tests (Power OFF)
+### 8.2 Step 2: Continuity Tests (Power OFF)
 
 - [ ] Test ground continuity
 - [ ] Verify isolation between AC and DC (should be infinite)
 - [ ] Check switch continuity
 
-### Step 3: Low Voltage Testing
+### 8.3 Step 3: Low Voltage Testing
 
 1. Power ESP32 with 5V USB (no AC connected)
 2. Flash test firmware
 3. Verify GPIO outputs toggle
 4. Check zero-cross detection with function generator (simulate AC)
 
-### Step 4: AC Testing (CAREFUL!)
+### 8.4 Step 4: AC Testing (CAREFUL!)
 
 **Use isolation transformer and current limiter for first test**
 
@@ -278,7 +283,7 @@ AC Live Wire:
 5. Test dimming (for compatible loads)
 6. Repeat for all channels
 
-### Step 5: Integration Testing
+### 8.5 Step 5: Integration Testing
 
 - [ ] WiFi connectivity
 - [ ] Cloud communication
@@ -286,35 +291,35 @@ AC Live Wire:
 - [ ] Voice control (Alexa/Google)
 - [ ] Mobile app control
 
----
 
-## 📐 PCB Layout Tips
 
-### Isolation Requirements
+## 9.0 PCB Layout Tips
+
+### 9.1 Isolation Requirements
 
 - Maintain **8mm minimum** clearance between AC and DC traces
 - Use **thick traces** for AC paths (minimum 2mm width)
 - Add **isolation slots** in PCB for extra safety
 - Place optocouplers at the **isolation barrier**
 
-### Thermal Management
+### 9.2 Thermal Management
 
 - Use **copper pour** under TRIACs for heatsinking
 - Add **thermal vias** under power components
 - Mount TRIACs on edge of PCB for external heatsink access
 - Keep high-current traces short and wide
 
-### Grounding
+### 9.3 Grounding
 
 - Use **star ground** topology
 - Separate analog and digital grounds
 - Connect at single point near power supply
 
----
 
-## 📦 Enclosure Design
 
-### Requirements
+## 10.0 Enclosure Design
+
+### 10.1 Requirements
 
 - **Material**: Non-conductive (ABS plastic recommended)
 - **Ventilation**: Slots for airflow (not large enough to touch components)
@@ -323,47 +328,47 @@ AC Live Wire:
 - **Cable Entry**: Strain relief glands
 - **Labeling**: Clear warning labels for high voltage
 
-### Dimensions
+### 10.2 Dimensions
 
 - Minimum internal space: 120mm × 80mm × 40mm
 - Allow clearance for wire bending radius
 - Consider future expansion
 
----
 
-## 🔍 Troubleshooting
 
-### Problem: Zero-cross not detected
+## 11.0 Troubleshooting
+
+### 11.1 Problem: Zero-cross not detected
 
 - **Check**: Transformer connections and polarity
 - **Check**: Bridge rectifier orientation
 - **Check**: Optocoupler pins and resistor values
 - **Test**: With oscilloscope at each stage
 
-### Problem: TRIAC not switching
+### 11.2 Problem: TRIAC not switching
 
 - **Check**: Gate resistor value (should be 100-180Ω)
 - **Check**: Optocoupler orientation
 - **Check**: ESP32 GPIO output voltage (should be 3.3V)
 - **Test**: TRIAC with multimeter (should show near-zero resistance when triggered)
 
-### Problem: Loads flickering
+### 11.3 Problem: Loads flickering
 
 - **Check**: Zero-cross timing
 - **Check**: TRIAC gate current
 - **Add**: Snubber circuit across TRIAC
 - **Check**: Load compatibility (some LEDs don't dim well)
 
-### Problem: WiFi not connecting
+### 11.4 Problem: WiFi not connecting
 
 - **Check**: 2.4GHz network availability
 - **Check**: ESP32 power supply (needs >500mA peak)
 - **Check**: Antenna connection
 - **Reset**: WiFi credentials via physical switch
 
----
 
-## 📸 Visual Reference
+
+## 12.0 Visual Reference
 
 See **schematics/** folder for:
 - Complete circuit diagram
@@ -371,9 +376,9 @@ See **schematics/** folder for:
 - 3D renders
 - Assembly photos
 
----
 
-## ✅ Final Checklist
+
+## 13.0 Final Checklist
 
 Before permanent installation:
 
@@ -386,20 +391,20 @@ Before permanent installation:
 - [ ] Documentation completed
 - [ ] Photos taken for reference
 
----
 
-## 📞 Support
+
+## 14.0 Support
 
 For connection issues:
 - Review hardware README
 - Check schematic diagrams
 - Consult licensed electrician if unsure
 
----
+
 
 **Safety Notice**: This guide is for educational purposes. Always follow local electrical codes and regulations. Have a licensed electrician verify your work before permanent installation.
 
----
+
 
 **Version**: 1.0  
 **Last Updated**: December 2024

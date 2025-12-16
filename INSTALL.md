@@ -1,22 +1,28 @@
-# Installation & Setup Guide
+# Installation and Configuration Procedures
 
-Complete guide for installing and configuring the Smart Home Controller firmware.
+**Document Number:** SYS-INSTALL-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Technical Procedure
 
-## Table of Contents
+**Abstract:** This document specifies the installation and configuration procedures for the Smart Home Controller system, including hardware assembly, firmware programming, backend deployment, and system integration.
 
-1. [Prerequisites](#prerequisites)
-2. [Hardware Setup](#hardware-setup)
-3. [Software Installation](#software-installation)
-4. [Firmware Upload](#firmware-upload)
-5. [Initial Configuration](#initial-configuration)
-6. [Google Apps Script Setup](#google-apps-script-setup)
-7. [Voice Assistant Setup](#voice-assistant-setup)
-8. [Flutter App Integration](#flutter-app-integration)
-9. [Troubleshooting](#troubleshooting)
+## Contents
 
-## Prerequisites
+1.0 Prerequisites  
+2.0 Hardware Assembly  
+3.0 Software Installation  
+4.0 Firmware Programming  
+5.0 Initial Configuration  
+6.0 Backend Deployment  
+7.0 Voice Assistant Integration  
+8.0 Mobile Application Setup  
+9.0 System Verification  
+10.0 Troubleshooting Procedures
 
-### Hardware Requirements
+## 1.0 Prerequisites
+
+### 1.1 Hardware Requirements
 
 - ESP32 development board (WROOM-32 or compatible)
 - 4-channel TRIAC controller board
@@ -24,16 +30,16 @@ Complete guide for installing and configuring the Smart Home Controller firmware
 - 5V power supply (2A minimum)
 - USB cable for programming
 
-### Software Requirements
+### 1.2 Software Requirements
 
 - Arduino IDE 2.x or PlatformIO
 - USB-to-UART drivers for ESP32
 - Google Apps Script account (free)
 - WiFi network (2.4GHz)
 
-## Hardware Setup
+## 2.0 Hardware Assembly
 
-### Pin Connections
+### 2.1 Pin Connections
 
 Connect your ESP32 to the TRIAC controller as follows:
 

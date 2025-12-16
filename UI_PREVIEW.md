@@ -1,52 +1,57 @@
-# Smart Home Controller - UI Preview Gallery
+# User Interface Preview Documentation
 
-## 📸 Dashboard Screenshots
+**Document Number:** SYS-UI-PREV-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Technical Documentation
+
+## 1.0 Dashboard Screenshots
 
 This document provides a comprehensive visual guide to the Smart Home Controller's user interface. All screenshots showcase the modern, professional dashboard with glassmorphism design and gradient accents.
 
----
 
-## 🖥️ Web Dashboard (Desktop View)
 
-### Main Dashboard - Active Devices View
+## 2.0 Web Dashboard (Desktop View)
+
+### 2.1 Main Dashboard - Active Devices View
 
 ![Smart Home Controller Dashboard](https://github.com/user-attachments/assets/d744726f-4be5-4d46-ad67-1705a11d3b0f)
 
 **Features Shown:**
-- 🏠 **Header Section**
+-  **Header Section**
   - Smart Home Controller branding with icon
   - Professional IoT Management System subtitle
   - Action buttons: Download App, Schedules, Scenes, Settings
   
-- 📊 **System Statistics Dashboard**
+-  **System Statistics Dashboard**
   - **Total Devices**: 4 registered devices
   - **Active Devices**: 2 currently powered on
   - **Schedules**: 3 automation schedules
   - **Scenes**: 2 saved scene presets
   - Color-coded gradient icons for each stat
 
-- 🎨 **Modern Design Elements**
+-  **Modern Design Elements**
   - Slate blue gradient background (#0F172A to #1E293B)
   - Glassmorphism effects with backdrop blur
   - Indigo/Purple gradient accents (#6366F1 to #8B5CF6)
   - Premium card designs with subtle borders
 
-- 📱 **Device Cards Grid**
+-  **Device Cards Grid**
   1. **Living Room Fan** (Online, Powered On, 75% Speed)
   2. **Bedroom Light** (Online, Powered On, 60% Brightness)
   3. **Kitchen Light** (Online, Powered Off)
   4. **Bathroom Fan** (Online, Powered Off)
 
-- 🎛️ **Interactive Controls**
+-  **Interactive Controls**
   - Modern toggle switches with gradient backgrounds
   - Slider controls with real-time value display
   - Online status indicators with pulsing animation
   - Device type badges (Fan/Light)
   - Device UID display (MAC addresses)
 
----
 
-### Empty State Dashboard
+
+### 2.2 Empty State Dashboard
 
 ![Empty State Dashboard](https://github.com/user-attachments/assets/283358ca-8a84-419f-ab56-5fe5a26b01dd)
 
@@ -57,9 +62,9 @@ This document provides a comprehensive visual guide to the Smart Home Controller
 - Tab navigation (Devices, Schedules, Scenes)
 - User-friendly call-to-action
 
----
 
-### Alternative Active View
+
+### 2.3 Alternative Active View
 
 ![Active Devices Dashboard](https://github.com/user-attachments/assets/411dd368-23e9-42dc-804b-4337b6b28414)
 
@@ -72,11 +77,11 @@ This document provides a comprehensive visual guide to the Smart Home Controller
 - Device UIDs for identification
 - Hover effects and animations
 
----
 
-## 🎨 Design System
 
-### Color Palette
+## 3.0 Design System
+
+### 3.1 Color Palette
 
 **Background Colors:**
 - Primary Background: `#0F172A` (Slate 900)
@@ -94,7 +99,7 @@ This document provides a comprehensive visual guide to the Smart Home Controller
 - Secondary Text: `#94A3B8` (Slate 400)
 - Muted Text: `#64748B` (Slate 500)
 
-### Typography
+### 3.2 Typography
 
 - **Font Family**: System font stack (-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto)
 - **Headers**: Bold 600-700 weight with gradient effects
@@ -102,7 +107,7 @@ This document provides a comprehensive visual guide to the Smart Home Controller
 - **Labels**: Medium 500 weight
 - **Device UIDs**: Monospace font
 
-### Component Styles
+### 3.3 Component Styles
 
 **Cards:**
 - Border radius: 16-24px
@@ -128,9 +133,9 @@ This document provides a comprehensive visual guide to the Smart Home Controller
 - Gradient thumb: #6366F1 to #8B5CF6
 - Real-time value display
 
----
 
-## 📱 Navigation Tabs
+
+## 4.0 Navigation Tabs
 
 The dashboard features three main sections accessible via pill-style tabs:
 
@@ -152,11 +157,11 @@ The dashboard features three main sections accessible via pill-style tabs:
    - Quick activation of scenes
    - Manage saved scenes
 
----
 
-## 🎯 Interactive Elements
 
-### Device Cards
+## 5.0 Interactive Elements
+
+### 5.1 Device Cards
 
 Each device card includes:
 - **Device Name**: Clear identification (e.g., "Living Room Fan")
@@ -167,7 +172,7 @@ Each device card includes:
 - **Control Slider**: Brightness (lights) or Speed (fans) adjustment
 - **Hover Effects**: Gradient border animation on hover
 
-### System Stat Cards
+### 5.2 System Stat Cards
 
 Four cards showing real-time statistics:
 - **Total Devices**: Green gradient icon
@@ -181,7 +186,7 @@ Each card features:
 - Smooth hover animation
 - Glassmorphism backdrop effect
 
-### Action Buttons
+### 5.3 Action Buttons
 
 Header buttons include:
 - **Download App**: Primary gradient button
@@ -189,82 +194,82 @@ Header buttons include:
 - **Scenes**: Opens scene management
 - **Settings**: Device and system configuration
 
----
 
-## 💡 Key Features Visible in Screenshots
 
-### 1. Glassmorphism Design
+## 6.0 Key Features Visible in Screenshots
+
+### 6.1 1. Glassmorphism Design
 - Translucent cards with backdrop blur
 - Layered depth effect
 - Premium aesthetic feel
 
-### 2. Gradient Accents
+### 6.2 2. Gradient Accents
 - Indigo to purple gradients throughout
 - Color-coded stat icons
 - Animated gradient borders
 
-### 3. Real-time Feedback
+### 6.3 3. Real-time Feedback
 - Slider value display while dragging
 - Toggle state animations
 - Online status pulsing indicators
 
-### 4. Professional Layout
+### 6.4 4. Professional Layout
 - Responsive grid system
 - Proper spacing and hierarchy
 - Clean, uncluttered design
 
-### 5. Status Visibility
+### 6.5 5. Status Visibility
 - Clear online/offline indicators
 - Power state clearly shown
 - Current values displayed (%, speed)
 
-### 6. Device Information
+### 6.6 6. Device Information
 - Device names for easy identification
 - Device types with icon badges
 - MAC addresses (UIDs) for technical reference
 
----
 
-## 📐 Responsive Design
+
+## 7.0 Responsive Design
 
 The dashboard is fully responsive and adapts to different screen sizes:
 
-### Desktop (1400px+)
+### 7.1 Desktop (1400px+)
 - Full-width layout with maximum 1400px container
 - 4-column device grid
 - 4-column statistics grid
 - All features fully accessible
 
-### Tablet (768px - 1024px)
+### 7.2 Tablet (768px - 1024px)
 - 2-column device grid
 - 2-column statistics grid
 - Optimized spacing
 - Touch-friendly controls
 
-### Mobile (< 768px)
+### 7.3 Mobile (< 768px)
 - Single-column layout
 - Stacked stat cards
 - Full-width buttons
 - Large tap targets
 - Optimized modal sizes
 
----
 
-## 🔗 Additional Resources
 
-### Documentation
+## 8.0 Additional Resources
+
+### 8.1 Documentation
 - [UI Redesign Summary](./docs/UI_REDESIGN_SUMMARY.md) - Complete design documentation
 - [UI Verification Report](./docs/UI_VERIFICATION.md) - Implementation verification
 - [Features List](./FEATURES.md) - Complete feature documentation
 
-### Access the Dashboard
+### 8.2 Access the Dashboard
 - **Web Dashboard**: Deploy via Google Apps Script (see [backend README](./backend/google-apps-script/README.md))
 - **Mobile App**: Download APK from [app directory](./app/)
 - **Deployment Guide**: See [DEPLOYMENT.md](./DEPLOYMENT.md)
 
----
 
-## 🎬 Getting Started
+
+## 9.0 Getting Started
 
 To see this UI in action:
 
@@ -285,9 +290,9 @@ To see this UI in action:
    - Install on your Android device
    - Connect to the same backend
 
----
 
-## 📝 Design Credits
+
+## 10.0 Design Credits
 
 **Design System:** Modern glassmorphism with gradient accents  
 **Color Palette:** Tailwind CSS inspired (Slate, Indigo, Purple, Emerald)  
@@ -295,14 +300,14 @@ To see this UI in action:
 **Icons:** Emoji icons for universal compatibility  
 **Performance:** GPU-accelerated animations for smooth 60fps
 
----
 
-## 🔄 Last Updated
+
+## 11.0 Last Updated
 
 **Date:** December 13, 2025  
 **Version:** 3.0  
-**Status:** Production Ready ✅
+**Status:** Production Ready 
 
----
+
 
 For more information, see the main [README.md](./README.md) or visit the [documentation](./docs/).

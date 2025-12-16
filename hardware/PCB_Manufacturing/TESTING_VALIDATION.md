@@ -1,13 +1,19 @@
-# Testing and Validation Protocol
-## Smart Home Controller v3.1 - Production Quality Assurance
+# Testing and Validation Procedures
 
-### Document Control
+**Document Number:** HW-TEST-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Test Specification
+
+## 1.0 Smart Home Controller v3.1 - Production Quality Assurance
+
+### 1.1 Document Control
 - **Version:** 1.0
 - **Date:** December 2024
 - **Classification:** Internal Use
 - **Prepared by:** Hardware Engineering Team
 
----
+
 
 ## 1. SCOPE AND OBJECTIVES
 
@@ -20,7 +26,7 @@ This document establishes the testing and validation procedures for the Smart Ho
 
 **Test Coverage:** Hardware, firmware integration, system integration, safety compliance, and reliability validation.
 
----
+
 
 ## 2. TEST EQUIPMENT REQUIREMENTS
 
@@ -43,7 +49,7 @@ This document establishes the testing and validation procedures for the Smart Ho
 - EMI receiver (compliance testing)
 - High-pot tester (dielectric withstand)
 
----
+
 
 ## 3. INCOMING INSPECTION
 
@@ -75,7 +81,7 @@ Verify components against BOM:
 - No physical damage
 - Date codes within specification
 
----
+
 
 ## 4. ASSEMBLY VERIFICATION
 
@@ -109,7 +115,7 @@ Verify components against BOM:
 | Insufficient solder | Minor | Rework recommended |
 | Flux residue | Minor | Clean if excessive |
 
----
+
 
 ## 5. ELECTRICAL TESTING
 
@@ -205,7 +211,7 @@ Measurement: Use multimeter or oscilloscope
 Expected: 3.3V HIGH, 0V LOW
 ```
 
----
+
 
 ## 6. FUNCTIONAL TESTING
 
@@ -287,7 +293,7 @@ Expected: <50ms response time
 Debounce verification: Rapid presses should not cause false triggers
 ```
 
----
+
 
 ## 7. SYSTEM INTEGRATION TESTING
 
@@ -393,11 +399,11 @@ Expected: Discovery <30 seconds
 Control latency: <2 seconds
 ```
 
----
+
 
 ## 8. MAINS VOLTAGE TESTING (230V/110V AC)
 
-### ⚠️ SAFETY PRECAUTIONS
+### 1.2 SAFETY PRECAUTIONS
 
 **DANGER: LETHAL VOLTAGE**
 
@@ -584,7 +590,7 @@ Derate: 50% current for inductive loads
 Power factor: Expect 0.5-0.8 (lagging)
 ```
 
----
+
 
 ## 9. SAFETY COMPLIANCE TESTING
 
@@ -655,7 +661,7 @@ Typical issues: TRIAC switching transients
 Mitigation: MOC3041 zero-cross reduces conducted noise
 ```
 
----
+
 
 ## 10. RELIABILITY TESTING
 
@@ -725,7 +731,7 @@ Expected life: >100,000 cycles for quality switches
 Failure mode: Contact wear, spring fatigue
 ```
 
----
+
 
 ## 11. FIRMWARE INTEGRATION VALIDATION
 
@@ -736,7 +742,7 @@ Failure mode: Contact wear, spring fatigue
 Verification Matrix:
 
 config.h Pin | Hardware Connection | Test Result
-─────────────────────────────────────────────────
+
 GPIO 13      | Zero-cross detect   | [ ]
 GPIO 16      | MOC3041 U2 (Ch1)   | [ ]
 GPIO 17      | MOC3041 U3 (Ch2)   | [ ]
@@ -802,7 +808,7 @@ Expected: Error message: "Zero-cross signal lost"
 Verification: All GPIO 16-19 go LOW
 ```
 
----
+
 
 ## 12. BACKEND INTEGRATION VALIDATION
 
@@ -865,7 +871,7 @@ Expected: Dashboard → Backend: <500ms
           Firmware → Hardware: <50ms
 ```
 
----
+
 
 ## 13. FRONTEND INTEGRATION VALIDATION
 
@@ -888,7 +894,7 @@ Expected: JSON message with device state
 Test Matrix:
 
 Dashboard Action    | Expected Result           | Pass/Fail
-────────────────────────────────────────────────────────
+
 Toggle switch ON    | TRIAC activates          | [ ]
 Toggle switch OFF   | TRIAC deactivates        | [ ]
 Slider to 50%       | Brightness changes       | [ ]
@@ -922,7 +928,7 @@ Procedure:
 Latency measurement: <200ms for local control
 ```
 
----
+
 
 ## 14. ACCEPTANCE CRITERIA
 
@@ -985,7 +991,7 @@ Latency measurement: <200ms for local control
 - Documentation complete
 - Ready for installation
 
----
+
 
 ## 15. TEST REPORTING
 
@@ -1045,7 +1051,7 @@ Signature: ____________  Date: ____________
 4. Verify effectiveness
 5. Update procedures
 
----
+
 
 ## 16. REVISION HISTORY
 
@@ -1053,11 +1059,11 @@ Signature: ____________  Date: ____________
 |---------|------|---------|--------|
 | 1.0 | Dec 2024 | Initial release | Hardware Team |
 
----
 
-## APPENDIX A: TEST CHECKLISTS
 
-### Quick Inspection Checklist
+## 2.0 APPENDIX A: TEST CHECKLISTS
+
+### 2.1 Quick Inspection Checklist
 
 **5-Minute Quick Test (Post-Assembly):**
 - [ ] Visual inspection clean
@@ -1079,9 +1085,9 @@ Signature: ____________  Date: ____________
 - [ ] Thermal testing satisfactory
 - [ ] Documentation complete
 
----
 
-## APPENDIX B: TROUBLESHOOTING GUIDE
+
+## 3.0 APPENDIX B: TROUBLESHOOTING GUIDE
 
 | Symptom | Probable Cause | Check | Fix |
 |---------|---------------|-------|-----|
@@ -1093,7 +1099,7 @@ Signature: ____________  Date: ____________
 | WiFi drops | Power supply noise | Capacitor values, routing | Add filtering |
 | Intermittent faults | Cold solder joint | Reflow suspected joints | Rework |
 
----
+
 
 **END OF TESTING AND VALIDATION PROTOCOL**
 

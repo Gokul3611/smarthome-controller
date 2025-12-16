@@ -1,8 +1,13 @@
-# 🚀 QUICK START GUIDE - PCB Manufacturing
+# Manufacturing Quick Start Guide
 
-## Ready to Order? Follow These Steps!
+**Document Number:** HW-MFG-QUICK-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** User Guide
 
-### ⚡ FAST TRACK (Recommended)
+## 1.0 Ready to Order? Follow These Steps!
+
+### 1.1 FAST TRACK (Recommended)
 
 **Option 1: JLCPCB (China) - Fastest & Cheapest**
 1. Go to https://jlcpcb.com
@@ -28,20 +33,20 @@ Similar process, slightly higher cost but better quality control
 - Purple PCBs (their standard)
 - Excellent quality, US-based
 
----
 
-## 📦 WHAT YOU NEED TO ORDER
 
-### Files to Upload
+## 2.0 WHAT YOU NEED TO ORDER
+
+### 2.1 Files to Upload
 ```
 Gerber_Files/
-├── TopCopper.gtl          ← Copper layer (component side)
-├── BottomCopper.gbl       ← Copper layer (ground plane)
-├── TopSolderMask.gts      ← Soldermask (component side)
-├── BottomSolderMask.gbs   ← Soldermask (bottom)
-├── TopSilkscreen.gto      ← Labels and text
-├── BottomSilkscreen.gbo   ← Bottom markings
-└── BoardOutline.gko       ← PCB shape and mounting holes
+ TopCopper.gtl          ← Copper layer (component side)
+ BottomCopper.gbl       ← Copper layer (ground plane)
+ TopSolderMask.gts      ← Soldermask (component side)
+ BottomSolderMask.gbs   ← Soldermask (bottom)
+ TopSilkscreen.gto      ← Labels and text
+ BottomSilkscreen.gbo   ← Bottom markings
+ BoardOutline.gko       ← PCB shape and mounting holes
 
 DrillFile.drl              ← All holes (vias, components, mounting)
 
@@ -50,7 +55,7 @@ BOM.csv                    ← Parts list with supplier codes
 PickAndPlace.csv           ← SMD component positions
 ```
 
-### Ordering Options
+### 2.2 Ordering Options
 
 | Option | Cost (5 pcs) | Lead Time | Pros | Cons |
 |--------|-------------|-----------|------|------|
@@ -58,11 +63,11 @@ PickAndPlace.csv           ← SMD component positions
 | **PCB + SMD** | $150-200 | 10-15 days | Only through-hole left | Still need hand soldering |
 | **Full Assembly** | $250-350 | 15-20 days | Ready to use | Most expensive |
 
----
 
-## 🛠️ ASSEMBLY OPTIONS
 
-### Option A: DIY Assembly (Cheapest)
+## 3.0 ASSEMBLY OPTIONS
+
+### 3.1 Option A: DIY Assembly (Cheapest)
 **What you need:**
 - Bare PCBs ($10-20)
 - Components from BOM.csv (~$40)
@@ -73,7 +78,7 @@ PickAndPlace.csv           ← SMD component positions
 **Skill:** Intermediate to advanced  
 **Tools:** Soldering station, hot air, tweezers, magnifier
 
-### Option B: PCBA Service (Recommended)
+### 3.2 Option B: PCBA Service (Recommended)
 **What you need:**
 - Order PCB + SMD assembly from JLCPCB
 - Buy through-hole parts separately (ESP32, TRIACs, connectors)
@@ -84,7 +89,7 @@ PickAndPlace.csv           ← SMD component positions
 **Skill:** Beginner to intermediate  
 **Tools:** Basic soldering iron
 
-### Option C: Full Turnkey Assembly (Easiest)
+### 3.3 Option C: Full Turnkey Assembly (Easiest)
 **What you need:**
 - Order complete assembly service
 - Manufacturer sources all parts
@@ -94,30 +99,30 @@ PickAndPlace.csv           ← SMD component positions
 **Skill:** None required  
 **Tools:** None needed
 
----
 
-## 📋 JLCPCB ASSEMBLY GUIDE (Step-by-Step)
 
-### Step 1: Upload Gerber Files
+## 4.0 JLCPCB ASSEMBLY GUIDE (Step-by-Step)
+
+### 4.1 Step 1: Upload Gerber Files
 1. Create ZIP of all Gerber files: `SmartHome_Gerbers.zip`
 2. Upload to JLCPCB
 3. System auto-detects: 70mm × 50mm, 2-layer
 
-### Step 2: Select PCB Options
+### 4.2 Step 2: Select PCB Options
 ```
-✓ Base Material: FR-4
-✓ Layers: 2
-✓ PCB Thickness: 1.6mm
-✓ PCB Color: Green (or your choice)
-✓ Silkscreen: White
-✓ Surface Finish: HASL (Lead free) or ENIG
-✓ Copper Weight: 2 oz
-✓ Via Covering: Tented
-✓ Remove Order Number: Yes (or specify location)
-✓ Flying Probe Test: Yes (recommended)
+ Base Material: FR-4
+ Layers: 2
+ PCB Thickness: 1.6mm
+ PCB Color: Green (or your choice)
+ Silkscreen: White
+ Surface Finish: HASL (Lead free) or ENIG
+ Copper Weight: 2 oz
+ Via Covering: Tented
+ Remove Order Number: Yes (or specify location)
+ Flying Probe Test: Yes (recommended)
 ```
 
-### Step 3: Enable SMT Assembly (Optional)
+### 4.3 Step 3: Enable SMT Assembly (Optional)
 1. Toggle "SMT Assembly" ON
 2. Select side: Top Side
 3. Upload BOM: `BOM.csv`
@@ -126,36 +131,36 @@ PickAndPlace.csv           ← SMD component positions
 6. Review and confirm parts (some may need manual selection)
 7. Parts not in JLCPCB library: Order separately
 
-### Step 4: Review & Checkout
+### 4.4 Step 4: Review & Checkout
 1. Review PCB preview (check for errors)
 2. Review assembly preview (component positions)
 3. Add to cart
 4. Checkout with PayPal/Credit Card
 5. Select shipping (DHL faster, ePacket cheaper)
 
-### Step 5: Wait for Delivery
+### 4.5 Step 5: Wait for Delivery
 - Manufacturing: 5-7 days
 - Shipping: 5-10 days (ePacket) or 2-5 days (DHL)
 - Total: 10-17 days to your door
 
----
 
-## 🔧 COMPONENT SOURCING
 
-### Parts in JLCPCB Library (Auto-sourced)
-✅ Most resistors and capacitors (0805, 1206, 2512)  
-✅ PC817C optocoupler  
-✅ DF04M bridge rectifier  
-✅ Some MOC3041 variants  
+## 5.0 COMPONENT SOURCING
 
-### Parts to Order Separately
-❌ ESP32-WROOM-32 (through-hole) - DigiKey, Mouser, AliExpress  
-❌ BTA16-600B TRIACs (TO-220) - DigiKey, Mouser  
-❌ HLK-PM01 power module - AliExpress, LCSC  
-❌ Screw terminals - Amazon, DigiKey  
-❌ JST connectors - DigiKey, AliExpress  
+### 5.1 Parts in JLCPCB Library (Auto-sourced)
+ Most resistors and capacitors (0805, 1206, 2512)  
+ PC817C optocoupler  
+ DF04M bridge rectifier  
+ Some MOC3041 variants  
 
-### Where to Buy Components
+### 5.2 Parts to Order Separately
+ ESP32-WROOM-32 (through-hole) - DigiKey, Mouser, AliExpress  
+ BTA16-600B TRIACs (TO-220) - DigiKey, Mouser  
+ HLK-PM01 power module - AliExpress, LCSC  
+ Screw terminals - Amazon, DigiKey  
+ JST connectors - DigiKey, AliExpress  
+
+### 5.3 Where to Buy Components
 
 | Supplier | Best For | Shipping | Notes |
 |----------|----------|----------|-------|
@@ -168,44 +173,44 @@ PickAndPlace.csv           ← SMD component positions
 **Recommended:** Order HLK-PM01 and MOC3041 from LCSC or AliExpress (3-4 weeks)  
 Order ESP32 and TRIACs from DigiKey/Mouser (fast, reliable)
 
----
 
-## 💰 COST BREAKDOWN
 
-### Bare PCB Only (DIY Assembly)
+## 6.0 COST BREAKDOWN
+
+### 6.1 Bare PCB Only (DIY Assembly)
 ```
 5× PCBs from JLCPCB           $12
 5× Component sets              $200 ($40 each)
 Solder paste, flux, misc       $10
-──────────────────────────────────
+
 TOTAL for 5 units:             $222
 Per unit:                      $44
 ```
 
-### PCB + SMD Assembly
+### 6.2 PCB + SMD Assembly
 ```
 5× PCBs + SMD assembly         $180
 5× Through-hole parts          $50 ($10 each)
-──────────────────────────────────
+
 TOTAL for 5 units:             $230
 Per unit:                      $46
 ```
 
-### Bulk Order (100 units)
+### 6.3 Bulk Order (100 units)
 ```
 100× PCBs                      $300
 100× Component sets            $1,600 (volume discount)
 Assembly service               $500
-──────────────────────────────────
+
 TOTAL for 100 units:           $2,400
 Per unit:                      $24
 ```
 
----
 
-## ⏱️ TIMELINE
 
-### Fastest Path (3 weeks total)
+## 7.0 ⏱ TIMELINE
+
+### 7.1 Fastest Path (3 weeks total)
 ```
 Day 0:    Order PCBs + components
 Day 7:    PCBs arrive
@@ -216,7 +221,7 @@ Day 18:   Installation in switch boxes
 Day 21:   System operational
 ```
 
-### Lazy Path (4-6 weeks)
+### 7.2 Lazy Path (4-6 weeks)
 ```
 Week 1:   Order everything
 Week 2-3: Manufacturing & shipping
@@ -224,11 +229,11 @@ Week 4:   Assembly service or DIY when free
 Week 5-6: Testing and deployment
 ```
 
----
 
-## ✅ QUALITY CHECKS BEFORE ORDERING
 
-### Files Checklist
+## 8.0 QUALITY CHECKS BEFORE ORDERING
+
+### 8.1 Files Checklist
 - [x] All 7 Gerber files present
 - [x] DrillFile.drl included
 - [x] BOM.csv has all parts
@@ -236,7 +241,7 @@ Week 5-6: Testing and deployment
 - [x] Board dimensions correct (70mm × 50mm)
 - [x] Mounting holes correct (M2.5 / 2.7mm)
 
-### Design Verification
+### 8.2 Design Verification
 - [x] Isolation barrier visible (6mm gap)
 - [x] High voltage traces adequate width (2mm)
 - [x] Thermal vias under TRIACs
@@ -244,7 +249,7 @@ Week 5-6: Testing and deployment
 - [x] Soldermask openings correct
 - [x] Component footprints verified
 
-### Use Gerber Viewer
+### 8.3 Use Gerber Viewer
 1. Download: https://www.pcbway.com/project/OnlineGerberViewer.html
 2. Upload Gerber files
 3. Check visually:
@@ -253,54 +258,54 @@ Week 5-6: Testing and deployment
    - Silkscreen not on pads
    - Drill holes aligned
 
----
 
-## 🆘 TROUBLESHOOTING
 
-### Issue: Gerber files rejected
+## 9.0 TROUBLESHOOTING
+
+### 9.1 Issue: Gerber files rejected
 **Solution:** ZIP all files without folder structure
 ```bash
 cd hardware/PCB_Manufacturing/Gerber_Files/
 zip -j SmartHome_Gerbers.zip *.gtl *.gbl *.gts *.gbs *.gto *.gbo *.gko
 ```
 
-### Issue: BOM parts not found in JLCPCB
+### 9.2 Issue: BOM parts not found in JLCPCB
 **Solution:** 
 1. Note which parts are missing
 2. Order those separately
 3. Continue with available parts
 4. Hand-solder missing components later
 
-### Issue: Drill file not recognized
+### 9.3 Issue: Drill file not recognized
 **Solution:** Ensure DrillFile.drl is in Excellon format (it is!)
 
-### Issue: Assembly costs too high
+### 9.4 Issue: Assembly costs too high
 **Solution:**
 1. Disable assembly
 2. Order bare PCBs only ($12)
 3. Buy components separately
 4. Assemble yourself or local service
 
----
 
-## 📞 SUPPORT
 
-### Before Ordering
+## 10.0 SUPPORT
+
+### 10.1 Before Ordering
 - Review `FAILSAFE_DESIGN.md` for technical details
 - Check `README.md` for manufacturing specifications
 - Review `PCB_Stackup.txt` for layer details
 
-### During Manufacturing
+### 10.2 During Manufacturing
 - JLCPCB Support: support@jlcpcb.com
 - PCBWay Support: support@pcbway.com
 
-### After Assembly
+### 10.3 After Assembly
 - GitHub Issues: https://github.com/Gokul3611/smarthome-controller/issues
 - Label: "PCB:" prefix
 
----
 
-## 🎓 TIPS FOR SUCCESS
+
+## 11.0 TIPS FOR SUCCESS
 
 1. **Start Small:** Order 5 PCBs first, not 100
 2. **Test One:** Assemble and test one board completely before doing all
@@ -311,9 +316,9 @@ zip -j SmartHome_Gerbers.zip *.gtl *.gbl *.gts *.gbs *.gto *.gbo *.gko
 7. **Have Backup:** Keep one spare programmed board
 8. **Safety First:** Double-check AC wiring before power-on
 
----
 
-## 🚀 READY TO ORDER!
+
+## 12.0 READY TO ORDER!
 
 **Recommended First Order:**
 - 5× PCBs with SMD assembly from JLCPCB (~$180)
@@ -326,14 +331,14 @@ zip -j SmartHome_Gerbers.zip *.gtl *.gbl *.gts *.gbs *.gto *.gbo *.gko
 
 **Time: 3-4 weeks from order to operational**
 
----
 
-**Good luck with your build! 🎉**
+
+**Good luck with your build! **
 
 For questions, open a GitHub issue with "PCB:" prefix.
 
----
+
 
 Document Version: 1.0  
 Last Updated: December 2024  
-Status: Ready for Production ✅
+Status: Ready for Production 

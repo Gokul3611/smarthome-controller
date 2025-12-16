@@ -1,14 +1,19 @@
-# How to View the Smart Home Controller UI
+# User Interface Viewing Procedures
+
+**Document Number:** SYS-UI-VIEW-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** User Guide
 
 This guide explains how to see and interact with the Smart Home Controller user interfaces after cloning the repository.
 
----
 
-## 📱 Option 1: View Web Dashboard UI
+
+## 1.0 Option 1: View Web Dashboard UI
 
 The web dashboard has a modern glassmorphism design with gradient accents.
 
-### Method A: Quick Preview (Easiest - No Setup Required)
+### 1.1 Method A: Quick Preview (Easiest - No Setup Required)
 
 Simply open the dashboard HTML file directly in your browser:
 
@@ -27,7 +32,7 @@ xdg-open backend/google-apps-script/Dashboard.html
 
 **Note:** This shows the UI design but won't have live device data (backend not connected).
 
-### Method B: Full Deployment (With Backend)
+### 1.2 Method B: Full Deployment (With Backend)
 
 For full functionality with real device control:
 
@@ -49,13 +54,13 @@ For full functionality with real device control:
 - Gradient accents (#6366F1 to #8B5CF6)
 - Backdrop blur effects
 
----
 
-## 📱 Option 2: View Flutter Mobile App UI
+
+## 2.0 Option 2: View Flutter Mobile App UI
 
 The Flutter app has a native mobile UI matching the web dashboard design.
 
-### Prerequisites
+### 2.1 Prerequisites
 
 Install Flutter SDK:
 ```bash
@@ -69,7 +74,7 @@ brew install flutter
 sudo snap install flutter --classic
 ```
 
-### Running the App
+### 2.2 Running the App
 
 1. **Navigate to the Flutter project:**
    ```bash
@@ -106,13 +111,13 @@ sudo snap install flutter --classic
 - Connection management
 - Matching color scheme with web dashboard
 
----
 
-## 🖼️ Option 3: View Screenshots (No Running Required)
+
+## 3.0 Option 3: View Screenshots (No Running Required)
 
 If you just want to see what the UI looks like without running anything:
 
-### View in GitHub
+### 3.1 View in GitHub
 
 1. **Open README.md** - Has embedded screenshot at the top
 2. **Open UI_PREVIEW.md** - Complete gallery with 3 screenshots
@@ -121,7 +126,7 @@ If you just want to see what the UI looks like without running anything:
    - [Active Devices](https://github.com/user-attachments/assets/411dd368-23e9-42dc-804b-4337b6b28414)
    - [Empty State](https://github.com/user-attachments/assets/283358ca-8a84-419f-ab56-5fe5a26b01dd)
 
-### View Locally
+### 3.2 View Locally
 
 Open these documentation files in your browser or markdown viewer:
 ```bash
@@ -134,23 +139,23 @@ start UI_PREVIEW.md  # Windows
 xdg-open UI_PREVIEW.md  # Linux
 ```
 
----
 
-## 🎨 What You'll See
 
-### Web Dashboard Features
+## 4.0 What You'll See
+
+### 4.1 Web Dashboard Features
 
 **Header Section:**
-- 🏠 Smart Home Controller logo with gradient
+-  Smart Home Controller logo with gradient
 - Professional IoT Management System subtitle
 - Connection status indicator
 - Action buttons: Download App, Schedules, Scenes, Settings
 
 **System Statistics:**
-- 📱 Total Devices (with green gradient icon)
-- ⚡ Active Devices (with blue gradient icon)
+-  Total Devices (with green gradient icon)
+-  Active Devices (with blue gradient icon)
 - ⏰ Schedules (with purple gradient icon)
-- 🎬 Scenes (with orange gradient icon)
+-  Scenes (with orange gradient icon)
 
 **Device Cards:**
 Each device card shows:
@@ -168,7 +173,7 @@ Each device card shows:
 - Smooth animations and transitions
 - Responsive layout (mobile, tablet, desktop)
 
-### Flutter App Features
+### 4.2 Flutter App Features
 
 **Pages:**
 - **Home:** Welcome screen with navigation cards
@@ -185,9 +190,9 @@ Each device card shows:
 - Native iOS/Android feel
 - Smooth page transitions
 
----
 
-## 🚀 Quick Start (Fastest Way to See UI)
+
+## 5.0 Quick Start (Fastest Way to See UI)
 
 **For Web Dashboard (30 seconds):**
 ```bash
@@ -208,18 +213,18 @@ flutter run -d chrome  # Opens in browser
 open UI_PREVIEW.md  # or view on GitHub
 ```
 
----
 
-## ❓ Troubleshooting
 
-### "I don't see the modern UI when I open Dashboard.html"
+## 6.0 Troubleshooting
+
+### 6.1 "I don't see the modern UI when I open Dashboard.html"
 
 **Possible causes:**
 1. **Browser caching:** Hard refresh with `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac)
 2. **Wrong file:** Make sure you're opening `backend/google-apps-script/Dashboard.html`, not an old version
 3. **Browser compatibility:** Use a modern browser (Chrome 90+, Firefox 88+, Safari 14+)
 
-### "Flutter commands not found"
+### 6.2 "Flutter commands not found"
 
 Install Flutter SDK:
 ```bash
@@ -227,7 +232,7 @@ Install Flutter SDK:
 # Follow installation instructions for your OS
 ```
 
-### "I want to see the UI with real device data"
+### 6.3 "I want to see the UI with real device data"
 
 You need to:
 1. Deploy the backend to Google Apps Script
@@ -235,7 +240,7 @@ You need to:
 3. Configure the connection between components
 4. See [DEPLOYMENT.md](./DEPLOYMENT.md) for full setup
 
-### "The UI looks different from the screenshots"
+### 6.4 "The UI looks different from the screenshots"
 
 The screenshots show the UI with:
 - Multiple devices connected
@@ -249,9 +254,9 @@ Without backend connection, you'll see:
 
 This is expected - the UI is there, just waiting for data.
 
----
 
-## 📚 Next Steps
+
+## 7.0 Next Steps
 
 After viewing the UI:
 
@@ -267,9 +272,9 @@ After viewing the UI:
 4. **Need help?** Check the FAQ
    - See [INSTALL.md](./INSTALL.md)
 
----
 
-## 🎯 Summary
+
+## 8.0 Summary
 
 | Method | Time | Requirements | Shows |
 |--------|------|--------------|-------|
@@ -280,7 +285,7 @@ After viewing the UI:
 
 **Recommended for first-time viewing:** Open `Dashboard.html` directly in your browser.
 
----
+
 
 **Last Updated:** December 13, 2025  
 **For Issues:** Check [GitHub Issues](https://github.com/Gokul3611/smarthome-controller/issues)

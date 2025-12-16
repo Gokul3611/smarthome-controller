@@ -1,10 +1,15 @@
-# Quick Start Guide - Building APK
+# Mobile Application Quick Start Guide
+
+**Document Number:** APP-QUICK-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** User Guide
 
 This is a quick reference guide for building the Android APK.
 
-## 🚀 Quick Build Commands
+## 1.0 Quick Build Commands
 
-### Recommended: Step-by-Step Build
+### 1.1 Recommended: Step-by-Step Build
 
 ```bash
 # 1. Navigate to Flutter project
@@ -24,7 +29,7 @@ cp build/app/outputs/flutter-apk/app-release.apk \
 cd ../../..
 ```
 
-### Alternative: Multi-line Command
+### 1.2 Alternative: Multi-line Command
 
 ```bash
 # Build release APK
@@ -44,7 +49,7 @@ cd "software_Team/flutter project/demo" && \
   cd ../../..
 ```
 
-### Build Script
+### 1.3 Build Script
 
 Save this as `build-apk.sh` in the repository root:
 
@@ -65,7 +70,7 @@ cp "build/app/outputs/flutter-apk/app-$BUILD_TYPE.apk" \
    "../../../app/$BUILD_TYPE/smart-home-controller-v$VERSION-$BUILD_TYPE.apk" || exit 1
 
 cd ../../..
-echo "✓ APK built successfully: app/$BUILD_TYPE/smart-home-controller-v$VERSION-$BUILD_TYPE.apk"
+echo " APK built successfully: app/$BUILD_TYPE/smart-home-controller-v$VERSION-$BUILD_TYPE.apk"
 ```
 
 Usage:
@@ -74,20 +79,20 @@ chmod +x build-apk.sh
 ./build-apk.sh release  # or ./build-apk.sh debug
 ```
 
-## 📦 Output Location
+## 2.0 Output Location
 
 After building:
 - **Release APK**: `app/release/smart-home-controller-v1.0.0-release.apk`
 - **Debug APK**: `app/debug/smart-home-controller-v1.0.0-debug.apk`
 
-## 📲 Quick Install
+## 3.0 Quick Install
 
 ```bash
 # Install via ADB
 adb install app/release/smart-home-controller-v1.0.0-release.apk
 ```
 
-## 🔍 Verify Build
+## 4.0 Verify Build
 
 ```bash
 # Check APK exists
@@ -97,13 +102,13 @@ ls -lh app/release/*.apk
 aapt dump badging app/release/smart-home-controller-v1.0.0-release.apk | grep package
 ```
 
-## ⚠️ Prerequisites
+## 5.0 Prerequisites
 
 Make sure you have:
 - [ ] Flutter SDK installed (`flutter --version`)
 - [ ] Android SDK installed (`flutter doctor`)
 - [ ] All licenses accepted (`flutter doctor --android-licenses`)
 
-## 📚 Full Documentation
+## 6.0 Full Documentation
 
 For complete instructions, see [app/README.md](./README.md)
