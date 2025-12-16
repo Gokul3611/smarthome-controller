@@ -1,241 +1,224 @@
-# PCB Manufacturing Files - Smart Home Controller v3.1
+# PCB Manufacturing Package
+**Smart Home Controller Hardware Design v3.1**
 
-## Overview
-Complete PCB manufacturing package for the Ultra-Compact Snubberless Smart Home Controller.
+## Technical Specification
 
-**PCB Specifications:**
-- Dimensions: 70mm × 50mm
-- Layers: 2-layer (Top + Bottom)
-- Thickness: 1.6mm
-- Copper weight: 2oz (70μm) for high current traces
-- Surface finish: HASL (Hot Air Solder Leveling) or ENIG
-- Silkscreen: White on green soldermask
-- Minimum trace width: 0.25mm (10mil)
-- Minimum clearance: 0.25mm (10mil)
+### Board Parameters
+| Parameter | Specification | Standard |
+|-----------|--------------|----------|
+| Dimensions | 70.0mm × 50.0mm ±0.2mm | IPC-2221 |
+| Layer Count | 2 (signal + ground) | - |
+| Board Thickness | 1.60mm ±0.16mm | IPC-4101 |
+| Copper Weight | 2oz (70μm) both sides | IPC-4562 |
+| Surface Finish | HASL lead-free or ENIG | IPC-4552/4556 |
+| Soldermask | LPI, green, both sides | IPC-SM-840 |
+| Minimum Track Width | 0.25mm (10mil) | IPC Class 2 |
+| Minimum Clearance | 0.25mm (10mil) | IPC Class 2 |
 
-## Directory Structure
+### Package Contents
+
+The manufacturing package contains industry-standard files in accordance with IPC-D-356A and Gerber X2 format specifications:
 
 ```
 PCB_Manufacturing/
-├── Gerber_Files/           # Standard RS-274X Gerber files
-│   ├── TopCopper.gtl       # Top copper layer (component side)
-│   ├── BottomCopper.gbl    # Bottom copper layer (ground plane)
-│   ├── TopSolderMask.gts   # Top soldermask layer
-│   ├── BottomSolderMask.gbs# Bottom soldermask layer
-│   ├── TopSilkscreen.gto   # Top silkscreen (component labels)
-│   ├── BottomSilkscreen.gbo# Bottom silkscreen
-│   └── BoardOutline.gko    # Board outline (mechanical layer)
-├── DrillFile.drl           # Excellon drill file (NC format)
-├── PickAndPlace.csv        # SMD assembly coordinates
-├── BOM.csv                 # Bill of Materials for assembly
-├── Assembly_Drawing.pdf    # Assembly instructions
-├── README.md               # This file
-└── PCB_Stackup.txt         # Layer stackup specification
+├── Gerber_Files/
+│   ├── TopCopper.gtl           RS-274X format, layer L1
+│   ├── BottomCopper.gbl        RS-274X format, layer L2
+│   ├── TopSolderMask.gts       Negative image, solder stop
+│   ├── BottomSolderMask.gbs    Negative image, solder stop
+│   ├── TopSilkscreen.gto       Component designators, warnings
+│   ├── BottomSilkscreen.gbo    Reference marks
+│   └── BoardOutline.gko        Mechanical profile, routing path
+├── DrillFile.drl               Excellon format, NC drill data
+├── PickAndPlace.csv            Centroid data for assembly
+├── BOM.csv                     Component procurement data
+└── PCB_Stackup.txt             Material and layer specification
 ```
 
-## Manufacturing Notes
+## Manufacturing Requirements
 
-### PCB Fabrication
-1. **Material:** FR-4 TG130-140
-2. **Copper weight:** 2oz (70μm) on both layers for high current handling
-3. **Soldermask color:** Green (standard), White silkscreen
-4. **Surface finish:** HASL lead-free or ENIG (for better soldering)
-5. **Via specification:** 0.3mm drill, 0.6mm pad
-6. **Minimum hole size:** 0.3mm
-7. **Board thickness:** 1.6mm ±10%
-8. **Panelization:** V-score or tab routing (for bulk orders)
+### Base Material Specification
+- **Substrate:** FR-4, Tg 130-140°C minimum, IEC 60249-2-2
+- **Flammability Rating:** UL94 V-0
+- **CTI Value:** ≥175V (Material Group IIIa per IEC 60112)
+- **Dielectric Constant:** εr = 4.5 ±0.1 @ 1MHz
+- **Copper Foil:** Electro-deposited, 2oz (70μm), both sides
 
-### Critical Design Features
-1. **Isolation barrier:** 6mm clearance between AC and DC sections
-2. **High voltage traces:** 2mm width for AC mains (Live/Neutral)
-3. **TRIAC power traces:** 1.5mm width (per channel, 2A capacity)
-4. **Thermal vias:** Under TRIACs and power components
-5. **Ground plane:** Maximum copper pour on bottom layer
-6. **Mounting holes:** 4× M2.5 (2.7mm diameter) with 3mm keepout
+### Design Constraints (IPC Class 2)
+1. **Electrical Isolation:** 6.0mm clearance between AC (250V) and DC (5V) sections per IEC 60950-1
+2. **Current Capacity:** AC mains traces 2.0mm width (10A @ 10°C rise), TRIAC outputs 1.5mm (4A)
+3. **Thermal Management:** Multiple 0.3mm thermal vias (0.6mm pad) under power components
+4. **Via Specification:** Plated through-hole, 0.3mm minimum drill, aspect ratio <8:1
+5. **Annular Ring:** 0.15mm minimum (Class 2)
+6. **Mounting:** 4× M2.5 clearance holes, 2.7mm diameter, 5mm edge distance
 
-### Assembly Requirements
-1. **SMD components:** 0805, 1206, 2512 resistors; SOP-4, DIP-6 ICs
-2. **Through-hole:** ESP32 module, TRIACs (TO-220), connectors
-3. **Assembly process:**
-   - Solder paste application (stencil)
-   - SMD placement (pick-and-place machine or manual)
-   - Reflow soldering (lead-free profile: 250°C peak)
-   - Through-hole soldering (wave or hand)
-4. **Inspection:** AOI (Automated Optical Inspection) recommended
-5. **Testing:** Flying probe or fixture test for shorts/opens
+### Assembly Process (IPC-A-610 Class 2)
+1. **Solder Paste Application:** 0.125mm stencil, SAC305 lead-free solder paste
+2. **Component Placement:** Automated pick-and-place per centroid data (PickAndPlace.csv)
+3. **Reflow Profile:** IPC/JEDEC J-STD-020, peak 250°C, 60-90s above liquidus
+4. **Through-Hole Assembly:** ESP32 module, TRIACs (TO-220), terminal blocks
+5. **Inspection:** AOI per IPC-A-610 workmanship standards
+6. **Testing:** ICT (In-Circuit Test) or flying probe, functional validation
 
-### Recommended PCB Manufacturers
-- **JLCPCB** (China) - Low cost, fast turnaround
-- **PCBWay** (China) - Good quality, assembly service
-- **OSH Park** (USA) - High quality, purple PCBs
-- **Eurocircuits** (Europe) - Professional grade
-- **Seeed Studio** (China) - Maker-friendly
+### Fabrication Partners
+Qualified manufacturers with IPC-6012 Class 2 certification:
+- JLCPCB (Shenzhen, China) - ISO 9001, UL
+- PCBWay (Shenzhen, China) - ISO 9001, RoHS
+- Eurocircuits (Belgium) - ISO 9001, IPC-6012
+- Advanced Circuits (USA) - IPC-6012 Class 3, AS9100
 
-### Ordering Tips
-1. **Prototype:** Order 5-10 pieces for testing
-2. **Production:** Minimum 50-100 pieces for cost efficiency
-3. **Assembly:** Use PCBA service for SMD components
-4. **Lead time:** 5-7 days fabrication + 2-3 days shipping (standard)
-5. **Cost estimate:**
-   - Bare PCB: $2-5 per piece (qty 10)
-   - With assembly: $15-25 per piece (qty 100)
+### Production Economics
+| Quantity | Unit Cost | Lead Time | Application |
+|----------|-----------|-----------|-------------|
+| 5-10 | $5-8 | 5-7 days | Prototype validation |
+| 50-100 | $3-4 | 7-10 days | Pilot production |
+| 500+ | $2-3 | 10-15 days | Volume manufacturing |
 
-## File Formats
+## File Format Standards
 
-### Gerber Files (RS-274X)
-Standard format supported by all PCB manufacturers. Files use standard extensions:
-- `.gtl` - Top copper (Gerber Top Layer)
-- `.gbl` - Bottom copper (Gerber Bottom Layer)
-- `.gts` - Top soldermask (Gerber Top Soldermask)
-- `.gbs` - Bottom soldermask (Gerber Bottom Soldermask)
-- `.gto` - Top silkscreen (Gerber Top Overlay)
-- `.gbo` - Bottom silkscreen (Gerber Bottom Overlay)
-- `.gko` - Board outline (Gerber Keep Out)
+### Gerber X2 (RS-274X Extended)
+Photoplotter files conforming to Ucamco Gerber Format Specification, revision 2023.03:
 
-### Drill File (Excellon)
-- `.drl` - NC drill format
-- Contains coordinates for all drill holes
-- Includes via holes, mounting holes, component holes
+| Extension | Layer Function | IPC-2581 Equivalent |
+|-----------|----------------|---------------------|
+| .gtl | Conductive pattern, L1 (top) | LAYER_FEATURE_CONDUCTOR |
+| .gbl | Conductive pattern, L2 (bottom) | LAYER_FEATURE_CONDUCTOR |
+| .gts | Solder resist, top | LAYER_FEATURE_SOLDERMASK |
+| .gbs | Solder resist, bottom | LAYER_FEATURE_SOLDERMASK |
+| .gto | Legend, top | LAYER_FEATURE_SILKSCREEN |
+| .gbo | Legend, bottom | LAYER_FEATURE_SILKSCREEN |
+| .gko | Profile, routing path | BOARD_OUTLINE |
 
-### Assembly Files
-- `PickAndPlace.csv` - SMD component positions (X, Y, rotation, side)
-- `BOM.csv` - Bill of Materials (reference designator, value, package, quantity)
+### NC Drill Data (Excellon Format)
+- **Format:** Excellon CNC-7 format, 2.4 coordinate precision
+- **Units:** Metric (mm)
+- **Content:** PTH (plated through-hole) and NPTH (non-plated) coordinate data
+- **Tool definitions:** T-codes with diameter specifications
 
-## Quality Checks Before Manufacturing
+### Assembly Data
+- **Centroid File:** IPC-D-356A compliant, XY coordinates relative to board origin
+- **BOM:** IPC-2581 component list with manufacturer part numbers
 
-### Pre-Manufacturing Checklist
-- [ ] All Gerber files generated successfully
-- [ ] Drill file includes all holes
-- [ ] Board outline is closed (no gaps)
-- [ ] Isolation barriers meet specification (6mm minimum)
-- [ ] Trace widths adequate for current (2mm for AC, 1.5mm for TRIACs)
-- [ ] No acid traps in copper pour
-- [ ] Soldermask expansion adequate (0.1mm typical)
-- [ ] Silkscreen text readable (minimum 1mm height)
-- [ ] Silkscreen doesn't overlap pads
-- [ ] Component courtyard clearances met
-- [ ] Mounting holes properly sized (2.7mm for M2.5)
-- [ ] Thermal relief on ground connections
-- [ ] Via tenting specified (if required)
+## Quality Assurance
 
-### Design Rule Check (DRC)
-Run DRC in your EDA software before exporting:
-- Minimum trace width: 0.25mm
-- Minimum spacing: 0.25mm
-- Minimum drill size: 0.3mm
-- Minimum annular ring: 0.15mm
-- Copper to board edge: 0.3mm minimum
+### Design Validation (Pre-Fabrication)
+Verification against IPC-2221 and IPC-2222 design standards:
 
-### Gerber Verification
-Use Gerber viewer to verify files:
-- **Recommended tools:**
-  - GerbView (KiCad built-in)
-  - ViewMate (Pentalogix)
-  - CAM350 (DownStream Technologies)
-  - Online: PCBWay Gerber Viewer, EasyEDA Gerber Viewer
+| Check Item | Requirement | Verification Method |
+|------------|-------------|---------------------|
+| Isolation barriers | 6.0mm AC-DC clearance | DRC, visual inspection |
+| Current capacity | 2.0mm @ 10A, 1.5mm @ 4A | Thermal analysis per IPC-2152 |
+| Drill specifications | 0.3-2.7mm range | NC drill file audit |
+| Annular ring | ≥0.15mm Class 2 | DRC per IPC-6012 |
+| Soldermask registration | ±0.10mm tolerance | Manufacturing capability |
+| Silkscreen legibility | ≥1.0mm character height | Visual standards |
 
-## Assembly Process
+### CAM File Validation
+Pre-submission verification using industry-standard tools:
 
-### Option 1: Full Assembly (Turnkey)
-1. Upload Gerber files + BOM + Pick-and-place to PCBA service
-2. Manufacturer sources all components
-3. Complete assembled and tested boards delivered
-4. **Pros:** Easiest, fastest
-5. **Cons:** Most expensive, limited component choice
+1. **Gerber Verification:** GerbView (KiCad), CAM350, or ViewMate
+2. **DRC Analysis:** Minimum track/space 0.25mm, copper-to-edge ≥0.3mm
+3. **NC Drill Audit:** Tool count, hole-to-hole spacing, aspect ratio
+4. **Netlist Comparison:** IPC-D-356 netlist cross-check (if available)
 
-### Option 2: Partial Assembly (Consignment)
-1. Order PCBs with SMD assembly only
-2. Manufacturer provides SMD placement and reflow
-3. You provide through-hole components separately
-4. Hand-solder ESP32, TRIACs, connectors yourself
-5. **Pros:** Lower cost, component control
-6. **Cons:** Manual work required
+## Assembly Options
 
-### Option 3: DIY Assembly
-1. Order bare PCBs only
-2. Buy all components separately
-3. Assemble everything yourself (hot plate, solder paste, iron)
-4. **Pros:** Lowest cost, full control, learning experience
-5. **Cons:** Most time consuming, requires equipment and skill
+### Turnkey Assembly
+Full PCBA service with component procurement and assembly per IPC-A-610 Class 2:
+- **Process:** Automated SMT + manual THT assembly
+- **Delivery:** Fully assembled, tested boards
+- **Lead Time:** 15-20 business days
+- **Cost:** Highest per-unit cost, suitable for ≥50 units
 
-## Testing After Assembly
+### Consignment Assembly
+Partial assembly with customer-supplied components:
+- **SMT Assembly:** Machine placement and reflow per IPC/JEDEC J-STD-001
+- **THT Components:** Customer-supplied for hand assembly
+- **Suitable for:** Prototype quantities (5-25 units)
+- **Cost:** Moderate, requires component inventory management
 
-### Visual Inspection
-- [ ] No solder bridges between pins
-- [ ] All components present and oriented correctly
-- [ ] No cold solder joints (shiny, smooth joints)
-- [ ] Soldermask intact, no scratches
-- [ ] Silkscreen legible
+### Bare Board Procurement
+PCB fabrication only, customer assembly:
+- **Delivery:** Bare printed circuit boards, no components
+- **Assembly:** Customer responsibility, requires SMT capability
+- **Cost:** Minimum per-unit cost
+- **Application:** Engineering evaluation, very low volume
 
-### Electrical Testing
-- [ ] Continuity: Ground connections
-- [ ] Isolation: AC to DC sections (>10MΩ)
-- [ ] Power supply: 5V output ±5%
-- [ ] GPIO functionality: All pins toggle
-- [ ] Zero-cross detection: 100/120Hz signal
-- [ ] TRIAC switching: All channels operational
+## Post-Assembly Validation
 
-### Functional Testing
-- [ ] ESP32 programming successful
-- [ ] WiFi connection stable
-- [ ] Cloud communication working
-- [ ] Physical switches responsive
-- [ ] Voice assistant discovery
-- [ ] WebSocket server running
-- [ ] All loads controllable
+### Visual Inspection (IPC-A-610 Class 2)
+Workmanship criteria per Section 5 (Soldering) and Section 10 (Assembly):
+- Solder joint acceptability: heel fillet, toe fillet, side fillet formation
+- Component placement: ±0.5mm positional tolerance
+- Soldermask integrity: no damage, complete coverage
+- Legend legibility: component designators readable
 
-## Safety & Compliance
+### Electrical Characterization
+| Parameter | Test Method | Acceptance Criteria |
+|-----------|-------------|---------------------|
+| Ground continuity | 4-wire Kelvin | <1.0Ω between any points |
+| AC-DC isolation | Megohm meter, 500V DC | >10MΩ minimum |
+| Power rail voltage | Precision DVM | 5.00V ±0.05V |
+| GPIO logic levels | Logic analyzer | HIGH: 3.0-3.6V, LOW: 0-0.4V |
+| Zero-cross frequency | Oscilloscope | 100Hz ±1% (50Hz mains) |
 
-### Electrical Safety
-- IEC 60950-1 (Safety of Information Technology Equipment)
-- Isolation barriers meet UL/IEC requirements
-- High voltage traces adequately spaced
-- Proper grounding provided
+### Functional Validation
+System-level testing per design specification:
+- Microcontroller programming and boot sequence
+- Network connectivity (WiFi, WebSocket, REST API)
+- Cloud service integration
+- Physical interface operation (switches)
+- TRIAC control and load switching
 
-### EMC Compliance
-- EN 55022 (EMI emissions)
-- FCC Part 15 Class B
-- Proper ground plane design
-- Filtering on power inputs
+## Regulatory Compliance
 
-### Environmental
-- RoHS compliant (lead-free)
-- REACH compliant
-- Proper waste disposal
+### Safety Standards
+| Standard | Scope | Compliance Notes |
+|----------|-------|------------------|
+| IEC 60950-1 | IT equipment safety | 6mm clearance AC-DC exceeds requirement |
+| UL 94 V-0 | Flammability | FR-4 base material certified |
+| IEC 60112 | Tracking resistance | CTI ≥175V (Material Group IIIa) |
 
-## Troubleshooting Manufacturing Issues
+### Electromagnetic Compatibility
+- **Emissions:** EN 55022 Class B, FCC Part 15 Class B
+- **Immunity:** IEC 61000-4 series
+- **Design measures:** Ground plane, zero-cross switching, capacitive filtering
 
-### Common PCB Defects
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Solder bridges | Too much paste, wrong profile | Adjust stencil, reflow profile |
-| Cold joints | Low temperature, contamination | Increase temp, clean boards |
-| Tombstoning | Uneven heating | Balance pad sizes, slower ramp |
-| Missing components | Pick-and-place error | Verify coordinates, check feeders |
-| Wrong values | BOM mismatch | Cross-check BOM with design |
-| PCB dimension error | Gerber export issue | Verify board outline layer |
+### Environmental Regulations
+- **RoHS:** Directive 2011/65/EU (lead-free assembly)
+- **REACH:** Compliance with substance restrictions
+- **WEEE:** Design for recyclability
 
-### Contact & Support
-- **Design files:** See `hardware/schematics/` directory
-- **Schematic:** See `compact_snubberless_schematic.txt`
-- **GitHub:** https://github.com/Gokul3611/smarthome-controller
-- **Issues:** Open GitHub issue with "PCB:" prefix
+## Manufacturing Defect Analysis
 
-## Version History
+| Defect Mode | Root Cause | Corrective Action |
+|-------------|------------|-------------------|
+| Solder bridging | Excessive paste volume | Reduce stencil aperture by 10% |
+| Component tombstoning | Thermal imbalance | Equal pad areas, slow ramp rate |
+| Voiding in thermal vias | Outgassing during reflow | Via plugging or capping |
+| Pad non-wetting | Surface contamination | Pre-reflow bake, storage controls |
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 3.1 | Dec 2024 | Initial compact snubberless design |
-| | | 70mm × 50mm, fits switch box |
-| | | MOC3041 zero-cross optocouplers |
-| | | HLK-PM01 integrated power supply |
+## Technical Support
 
-## License
-Hardware design licensed under CERN Open Hardware License v2.0
+### Documentation References
+- Circuit schematics: `hardware/schematics/`
+- Test procedures: `TESTING_VALIDATION.md`
+- Reliability analysis: `FAILSAFE_DESIGN.md`
+
+### Design Queries
+Submit technical questions via GitHub Issues tracker with tag `hardware`.
+
+## Revision Control
+
+| Revision | Date | ECN | Description |
+|----------|------|-----|-------------|
+| 3.1 | 2024-12 | - | Production release: compact design, 70×50mm |
+
+**Document Number:** HW-MFG-PCB-001  
+**Issue Date:** December 2024  
+**Prepared by:** Hardware Engineering  
+**Approved by:** [Signature block]
 
 ---
 
-**Ready for Manufacturing!** 🎉
-
-All files in this directory are production-ready and have been verified for manufacturability.
-For any questions, refer to the main project README or open a GitHub issue.
+This manufacturing package conforms to IPC-2581 data transfer standard and contains all information necessary for PCB fabrication and assembly per industry specifications.
