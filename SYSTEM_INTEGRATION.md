@@ -1,61 +1,66 @@
-# Smart Home Controller - System Integration Guide
+# System Integration Specification
 
-## 🎯 Overview
+**Document Number:** SYS-INTEG-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Technical Specification
+
+## 1.0 Overview
 
 This document demonstrates how all components of the Smart Home Controller work together in harmony, providing a seamless user experience across web dashboard, mobile app, and firmware.
 
----
 
-## 🏗️ System Architecture
+
+## 2.0 System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    USER INTERFACES                           │
-├──────────────────────────┬──────────────────────────────────┤
-│   Web Dashboard          │   Flutter Mobile App              │
-│   (Google Apps Script)   │   (Android/iOS)                   │
-│   - Glassmorphism UI     │   - Native Performance            │
-│   - Real-time Control    │   - Offline Capable               │
-│   - System Stats         │   - Push Notifications            │
-└──────────────┬───────────┴────────────┬─────────────────────┘
-               │                        │
-               │      ☁️ CLOUD LAYER    │
-               └────────────┬───────────┘
-                            │
-              ┌─────────────▼─────────────┐
-              │  Google Apps Script       │
-              │  - REST API               │
-              │  - Data Storage           │
-              │  - Configuration          │
-              │  - Scene Management       │
-              └─────────────┬─────────────┘
-                            │
-                   📡 HTTP/HTTPS
-                            │
-              ┌─────────────▼─────────────┐
-              │  ESP32 Firmware           │
-              │  - WiFi Connectivity      │
-              │  - TRIAC Control          │
-              │  - Zero-cross Detection   │
-              │  - Multi-core FreeRTOS    │
-              └─────────────┬─────────────┘
-                            │
-                   ⚡ Hardware Layer
-                            │
-              ┌─────────────▼─────────────┐
-              │  4-Channel TRIAC Board    │
-              │  - AC Load Control        │
-              │  - Phase Angle Dimming    │
-              │  - Zero-cross Detection   │
-              │  - Safety Protection      │
-              └───────────────────────────┘
+
+                    USER INTERFACES                           
+
+   Web Dashboard             Flutter Mobile App              
+   (Google Apps Script)      (Android/iOS)                   
+   - Glassmorphism UI        - Native Performance            
+   - Real-time Control       - Offline Capable               
+   - System Stats            - Push Notifications            
+
+                                       
+                      CLOUD LAYER    
+               
+                            
+              
+                Google Apps Script       
+                - REST API               
+                - Data Storage           
+                - Configuration          
+                - Scene Management       
+              
+                            
+                    HTTP/HTTPS
+                            
+              
+                ESP32 Firmware           
+                - WiFi Connectivity      
+                - TRIAC Control          
+                - Zero-cross Detection   
+                - Multi-core FreeRTOS    
+              
+                            
+                    Hardware Layer
+                            
+              
+                4-Channel TRIAC Board    
+                - AC Load Control        
+                - Phase Angle Dimming    
+                - Zero-cross Detection   
+                - Safety Protection      
+              
 ```
 
----
 
-## 🎨 UI Design Harmony
 
-### Design System Consistency
+## 3.0 UI Design Harmony
+
+### 3.1 Design System Consistency
 
 All interfaces share the same professional design language:
 
@@ -81,11 +86,11 @@ Text Secondary:     #94A3B8 (Slate 400)
   - Flutter: Default Material Design fonts
 - **Hierarchy**: Clear distinction between headings, body, and captions
 
----
 
-## 🔗 Component Integration
 
-### 1. Web Dashboard → Backend → Firmware
+## 4.0 Component Integration
+
+### 4.1 1. Web Dashboard → Backend → Firmware
 
 **Data Flow:**
 ```
@@ -102,7 +107,7 @@ User Action (Web) → Google Apps Script API → ESP32 Firmware → TRIAC Contro
 7. Updated state sent back to cloud
 8. Web dashboard reflects current state
 
-### 2. Flutter App → Backend → Firmware
+### 4.2 2. Flutter App → Backend → Firmware
 
 **Data Flow:**
 ```
@@ -118,7 +123,7 @@ User Action (App) → REST API → Cloud Storage → ESP32 → Hardware
 6. Real-time phase angle control applied
 7. App shows updated brightness percentage
 
-### 3. Voice Control Integration
+### 4.3 3. Voice Control Integration
 
 **Data Flow:**
 ```
@@ -134,11 +139,11 @@ Voice Command → Alexa/Google → SinricPro → ESP32 → Hardware
 6. State synced to cloud backend
 7. All interfaces update automatically
 
----
 
-## 📱 Web Dashboard Features
 
-### Core Capabilities
+## 5.0 Web Dashboard Features
+
+### 5.1 Core Capabilities
 
 **System Statistics Dashboard**
 - Total Devices count
@@ -166,7 +171,7 @@ Voice Command → Alexa/Google → SinricPro → ESP32 → Hardware
 - Cloud integration setup
 - OTA firmware updates
 
-### Technical Implementation
+### 5.2 Technical Implementation
 
 **File**: `backend/google-apps-script/Dashboard.html`
 - **Lines**: 1647 (HTML + CSS + JavaScript)
@@ -174,11 +179,11 @@ Voice Command → Alexa/Google → SinricPro → ESP32 → Hardware
 - **API Polling**: Every 3 seconds for real-time updates
 - **Responsive**: Mobile, tablet, desktop breakpoints
 
----
 
-## 📱 Flutter Mobile App Features
 
-### Core Capabilities
+## 6.0 Flutter Mobile App Features
+
+### 6.1 Core Capabilities
 
 **Navigation**
 - Home screen with quick actions
@@ -199,7 +204,7 @@ Voice Command → Alexa/Google → SinricPro → ESP32 → Hardware
 - Smooth page transitions
 - Native iOS/Android feel
 
-### Technical Implementation
+### 6.2 Technical Implementation
 
 **Location**: `software_Team/flutter project/demo/`
 - **Framework**: Flutter 3.10+
@@ -210,26 +215,26 @@ Voice Command → Alexa/Google → SinricPro → ESP32 → Hardware
 **Key Files**:
 ```
 lib/
-├── config/
-│   └── app_theme.dart        # Centralized design system
-├── models/
-│   └── device_model.dart     # Data models
-├── services/
-│   └── api_service.dart      # Backend communication
-├── pages/
-│   ├── home_page.dart        # Main dashboard
-│   ├── devices_page.dart     # Device list
-│   ├── fan_page.dart         # Fan control
-│   ├── light_page.dart       # Light control
-│   └── connection_page.dart  # WiFi setup
-└── main.dart                 # App entry point
+ config/
+    app_theme.dart        # Centralized design system
+ models/
+    device_model.dart     # Data models
+ services/
+    api_service.dart      # Backend communication
+ pages/
+    home_page.dart        # Main dashboard
+    devices_page.dart     # Device list
+    fan_page.dart         # Fan control
+    light_page.dart       # Light control
+    connection_page.dart  # WiFi setup
+ main.dart                 # App entry point
 ```
 
----
 
-## ⚡ ESP32 Firmware Architecture
 
-### Core Features
+## 7.0 ESP32 Firmware Architecture
+
+### 7.1 Core Features
 
 **Multi-Core Design**
 - **Core 1 (PRO_CPU)**: Time-critical TRIAC control
@@ -253,7 +258,7 @@ lib/
 - Google Assistant via SinricPro
 - WebSocket real-time control
 
-### Technical Implementation
+### 7.2 Technical Implementation
 
 **Location**: `firmware/main/`
 - **Total Lines**: 2640+ across modular files
@@ -264,12 +269,12 @@ lib/
 **File Structure**:
 ```
 firmware/main/
-├── main.ino           # Core firmware (40KB)
-├── config.h           # Pin definitions, constants
-├── api.h              # API interface definitions
-├── api_impl.h         # REST API implementation
-├── voice.h            # Voice control interfaces
-└── voice_impl.h       # Alexa/Google integration
+ main.ino           # Core firmware (40KB)
+ config.h           # Pin definitions, constants
+ api.h              # API interface definitions
+ api_impl.h         # REST API implementation
+ voice.h            # Voice control interfaces
+ voice_impl.h       # Alexa/Google integration
 ```
 
 **Key Functions**:
@@ -291,11 +296,11 @@ void checkZeroCrossHealth()       // Monitor AC signal
 void enforceChildLock()           // Safety protection
 ```
 
----
 
-## 🔄 Data Synchronization
 
-### State Management
+## 8.0 Data Synchronization
+
+### 8.1 State Management
 
 **Three-Way Sync**:
 ```
@@ -311,7 +316,7 @@ Web Dashboard ←→ Cloud Backend ←→ ESP32 Firmware
 4. UIs poll and display cloud state
 5. User changes propagate within 3 seconds
 
-### Real-Time Updates
+### 8.2 Real-Time Updates
 
 **Web Dashboard**:
 - Polling interval: 3 seconds (configurable)
@@ -328,11 +333,11 @@ Web Dashboard ←→ Cloud Backend ←→ ESP32 Firmware
 - State pushed to cloud every 5 seconds
 - Event-driven updates (voice, schedule)
 
----
 
-## 🎬 Scene & Schedule Integration
 
-### Scenes
+## 9.0 Scene & Schedule Integration
+
+### 9.1 Scenes
 
 **Definition**: Pre-configured device state combinations
 
@@ -357,7 +362,7 @@ Web Dashboard ←→ Cloud Backend ←→ ESP32 Firmware
 5. All devices updated simultaneously
 6. Smooth transitions with fade effects
 
-### Schedules
+### 9.2 Schedules
 
 **Definition**: Time-based automation rules
 
@@ -382,11 +387,11 @@ Web Dashboard ←→ Cloud Backend ←→ ESP32 Firmware
 5. Reaches end brightness at end time
 6. All logged for analytics
 
----
 
-## 🔒 Security & Safety
 
-### Network Security
+## 10.0 Security & Safety
+
+### 10.1 Network Security
 
 **Web Dashboard**:
 - HTTPS only (Google Apps Script)
@@ -398,7 +403,7 @@ Web Dashboard ←→ Cloud Backend ←→ ESP32 Firmware
 - Certificate validation
 - Encrypted credentials in NVS
 
-### Hardware Safety
+### 10.2 Hardware Safety
 
 **Zero-Cross Detection**:
 ```cpp
@@ -428,11 +433,11 @@ void checkZeroCrossHealth() {
 - Configurable per device
 - Persists across reboots
 
----
 
-## 📊 Performance Optimization
 
-### Web Dashboard
+## 11.0 Performance Optimization
+
+### 11.1 Web Dashboard
 
 **Optimizations**:
 - Inline CSS/JS (no external requests)
@@ -442,7 +447,7 @@ void checkZeroCrossHealth() {
 
 **Load Time**: < 2 seconds on 3G
 
-### Flutter App
+### 11.2 Flutter App
 
 **Optimizations**:
 - Lazy loading of pages
@@ -452,7 +457,7 @@ void checkZeroCrossHealth() {
 
 **App Size**: ~15MB (release APK)
 
-### Firmware
+### 11.3 Firmware
 
 **Optimizations**:
 - Multi-core task distribution
@@ -462,11 +467,11 @@ void checkZeroCrossHealth() {
 
 **Memory**: ~180KB RAM, ~1.2MB Flash
 
----
 
-## 🧪 Testing Integration
 
-### End-to-End Test Scenario
+## 12.0 🧪 Testing Integration
+
+### 12.1 End-to-End Test Scenario
 
 **Scenario**: User controls bedroom light via voice, monitors via web
 
@@ -494,13 +499,13 @@ void checkZeroCrossHealth() {
    - Bedroom light shows 50% brightness
    - UI reflects actual hardware state
 
-**Result**: ✅ All components in harmony
+**Result**:  All components in harmony
 
----
 
-## 🚀 Deployment Workflow
 
-### Production Deployment Steps
+## 13.0 Deployment Workflow
+
+### 13.1 Production Deployment Steps
 
 1. **Firmware Update**:
    ```bash
@@ -527,11 +532,11 @@ void checkZeroCrossHealth() {
    - Automatically deployed with backend
    - Access via Apps Script web app URL
 
----
 
-## 📱 User Experience Flow
 
-### First-Time Setup
+## 14.0 User Experience Flow
+
+### 14.1 First-Time Setup
 
 1. **Hardware Installation**:
    - Connect ESP32 to TRIAC board
@@ -561,7 +566,7 @@ void checkZeroCrossHealth() {
    - Configure default behaviors
    - Test each device
 
-### Daily Usage
+### 14.2 Daily Usage
 
 **Morning**:
 - Schedule turns on bathroom light at 6:00 AM
@@ -583,37 +588,37 @@ void checkZeroCrossHealth() {
 - Bedroom light fades out gradually
 - System logs activity for analytics
 
----
 
-## 🎯 Key Integration Benefits
 
-### For Users
+## 15.0 Key Integration Benefits
 
-✅ **Seamless Control**: Multiple interfaces, one system
-✅ **Real-Time Sync**: Changes reflected everywhere instantly
-✅ **Reliable**: Offline capability with cloud backup
-✅ **Flexible**: Voice, web, or mobile - your choice
-✅ **Safe**: Zero-cross detection and safety features
+### 15.1 For Users
 
-### For Developers
+ **Seamless Control**: Multiple interfaces, one system
+ **Real-Time Sync**: Changes reflected everywhere instantly
+ **Reliable**: Offline capability with cloud backup
+ **Flexible**: Voice, web, or mobile - your choice
+ **Safe**: Zero-cross detection and safety features
 
-✅ **Modular**: Each component independent yet integrated
-✅ **Scalable**: Add devices or features easily
-✅ **Maintainable**: Clear code structure and documentation
-✅ **Testable**: Each layer can be tested independently
-✅ **Professional**: Production-grade code quality
+### 15.2 For Developers
 
-### For System
+ **Modular**: Each component independent yet integrated
+ **Scalable**: Add devices or features easily
+ **Maintainable**: Clear code structure and documentation
+ **Testable**: Each layer can be tested independently
+ **Professional**: Production-grade code quality
 
-✅ **Harmony**: All components designed to work together
-✅ **Consistency**: Shared design language across platforms
-✅ **Performance**: Optimized for speed and efficiency
-✅ **Security**: Multiple layers of protection
-✅ **Future-Proof**: Extensible architecture
+### 15.3 For System
 
----
+ **Harmony**: All components designed to work together
+ **Consistency**: Shared design language across platforms
+ **Performance**: Optimized for speed and efficiency
+ **Security**: Multiple layers of protection
+ **Future-Proof**: Extensible architecture
 
-## 📚 Related Documentation
+
+
+## 16.0 Related Documentation
 
 - [UI Preview Gallery](./UI_PREVIEW.md) - Screenshots and visual guide
 - [Features List](./FEATURES.md) - Complete feature documentation  
@@ -621,9 +626,9 @@ void checkZeroCrossHealth() {
 - [Production Guide](./PRODUCTION_GUIDE.md) - Production deployment
 - [OTA Guide](./OTA_GUIDE.md) - Firmware update procedures
 
----
 
-## 🔄 Version History
+
+## 17.0 Version History
 
 **Version 3.0** (December 2025)
 - Modern glassmorphism UI across all platforms
@@ -631,8 +636,8 @@ void checkZeroCrossHealth() {
 - Production-ready documentation
 - Comprehensive testing completed
 
----
 
-**Document Status**: ✅ Complete and Verified  
+
+**Document Status**:  Complete and Verified  
 **Last Updated**: December 13, 2025  
 **Maintained By**: Development Team

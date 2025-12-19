@@ -1,0 +1,143 @@
+M48
+; DRILL file {KiCad 6.0} date 2024-12-16 04:50:00
+; FORMAT={-:-/ absolute / metric / decimal}
+; #@! TF.CreationDate,2024-12-16T04:50:00+00:00
+; #@! TF.GenerationSoftware,Kicad,Pcbnew,6.0
+; #@! TF.FileFunction,Plated,1,2,PTH
+FMAT,2
+METRIC
+; #@! TA.AperFunction,Plated,PTH,ViaDrill
+T1C0.300
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T2C0.800
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T3C1.000
+; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill
+T4C2.700
+%
+G90
+G05
+T1
+; Via holes for ground stitching (0.3mm)
+X10.0Y10.0
+X20.0Y10.0
+X30.0Y10.0
+X40.0Y10.0
+X50.0Y10.0
+X60.0Y10.0
+X10.0Y15.0
+X20.0Y15.0
+X30.0Y15.0
+X40.0Y15.0
+X50.0Y15.0
+X60.0Y15.0
+X10.0Y20.0
+X20.0Y20.0
+X50.0Y20.0
+X60.0Y20.0
+; Thermal vias under TRIACs (0.3mm)
+X25.0Y41.0
+X26.0Y41.0
+X24.0Y41.0
+X25.0Y40.0
+X25.0Y42.0
+X30.0Y41.0
+X31.0Y41.0
+X29.0Y41.0
+X30.0Y40.0
+X30.0Y42.0
+X35.0Y41.0
+X36.0Y41.0
+X34.0Y41.0
+X35.0Y40.0
+X35.0Y42.0
+X40.0Y41.0
+X41.0Y41.0
+X39.0Y41.0
+X40.0Y40.0
+X40.0Y42.0
+T2
+; Component holes - resistors, capacitors, small ICs (0.8mm)
+; MOC3041 optocoupler through-hole pads
+X22.0Y36.0
+X22.0Y34.0
+X22.0Y32.0
+X24.0Y36.0
+X24.0Y34.0
+X24.0Y32.0
+X27.0Y36.0
+X27.0Y34.0
+X27.0Y32.0
+X29.0Y36.0
+X29.0Y34.0
+X29.0Y32.0
+X32.0Y36.0
+X32.0Y34.0
+X32.0Y32.0
+X34.0Y36.0
+X34.0Y34.0
+X34.0Y32.0
+X37.0Y36.0
+X37.0Y34.0
+X37.0Y32.0
+X39.0Y36.0
+X39.0Y34.0
+X39.0Y32.0
+; PC817 optocoupler
+X10.0Y22.0
+X10.0Y24.0
+X12.0Y22.0
+X12.0Y24.0
+; Bridge rectifier
+X8.0Y22.0
+X8.0Y24.0
+X6.0Y22.0
+X6.0Y24.0
+; ESP32 module header pins
+X35.0Y10.0
+X37.0Y10.0
+X39.0Y10.0
+X41.0Y10.0
+X43.0Y10.0
+X45.0Y10.0
+X35.0Y8.0
+X37.0Y8.0
+X39.0Y8.0
+X41.0Y8.0
+X43.0Y8.0
+X45.0Y8.0
+T3
+; Power component holes - TRIACs, power connectors (1.0mm)
+; TRIAC holes (TO-220)
+X25.0Y43.0
+X30.0Y43.0
+X35.0Y43.0
+X40.0Y43.0
+; HLK-PM01 power module
+X8.0Y43.0
+X8.0Y40.0
+X8.0Y37.0
+X8.0Y34.0
+; Screw terminals - AC input
+X3.0Y45.0
+X3.0Y40.0
+; Screw terminals - AC outputs
+X65.0Y45.0
+X65.0Y42.5
+X65.0Y40.0
+X65.0Y37.5
+X65.0Y35.0
+; Switch connector
+X60.0Y5.0
+X61.5Y5.0
+X63.0Y5.0
+X64.5Y5.0
+X66.0Y5.0
+T4
+; Mounting holes - non-plated (2.7mm for M2.5 screws)
+X3.5Y3.5
+X66.5Y3.5
+X3.5Y46.5
+X66.5Y46.5
+T0
+M30

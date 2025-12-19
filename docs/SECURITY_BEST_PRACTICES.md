@@ -1,14 +1,19 @@
 # Security Best Practices
 
-## Overview
+**Document Number:** DOC-SEC-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Security Specification
+
+## 1.0 Overview
 
 This document outlines security best practices implemented in the Smart Home Controller system and guidelines for maintaining security in production deployments.
 
----
 
-## Web Dashboard Security
 
-### XSS Protection
+## 2.0 Web Dashboard Security
+
+### 2.1 XSS Protection
 
 **Implemented:**
 - All user-provided data (device names, UIDs, scene names, schedule names) is sanitized using HTML escaping
@@ -33,7 +38,7 @@ function escapeHtml(text) {
 const safeName = escapeHtml(device.name);
 ```
 
-### Input Validation
+### 2.2 Input Validation
 
 **Implemented:**
 - Device names: max 30 characters
@@ -42,7 +47,7 @@ const safeName = escapeHtml(device.name);
 - Scene descriptions: max 200 characters
 - All inputs are trimmed before processing
 
-### API Security
+### 2.3 API Security
 
 **Implemented:**
 - API key authentication (`smarthome-2024`)
@@ -56,11 +61,11 @@ const safeName = escapeHtml(device.name);
 4. Enable CORS with specific origin restrictions
 5. Implement session management for user authentication
 
----
 
-## Firmware Security
 
-### Network Security
+## 3.0 Firmware Security
+
+### 3.1 Network Security
 
 **Implemented:**
 - WiFiManager for secure WiFi credential storage
@@ -73,7 +78,7 @@ const safeName = escapeHtml(device.name);
 3. Implement device-specific API keys (instead of shared key)
 4. Regular firmware updates via OTA
 
-### Over-The-Air (OTA) Updates
+### 3.2 Over-The-Air (OTA) Updates
 
 **Implemented:**
 - Rollback protection
@@ -86,7 +91,7 @@ const safeName = escapeHtml(device.name);
 3. Implement version checking before updates
 4. Monitor update success rates
 
-### Physical Security
+### 3.3 Physical Security
 
 **Recommendations:**
 1. Disable debug ports in production builds
@@ -94,11 +99,11 @@ const safeName = escapeHtml(device.name);
 3. Consider tamper detection mechanisms
 4. Implement secure boot (ESP32 feature)
 
----
 
-## Mobile App Security
 
-### Data Protection
+## 4.0 Mobile App Security
+
+### 4.1 Data Protection
 
 **Implemented:**
 - Secure HTTPS communications
@@ -112,7 +117,7 @@ const safeName = escapeHtml(device.name);
 4. Add app-level encryption for cached data
 5. Clear sensitive data on logout
 
-### API Communications
+### 4.2 API Communications
 
 **Best Practices:**
 1. Never hardcode API keys in the app
@@ -121,11 +126,11 @@ const safeName = escapeHtml(device.name);
 4. Add request/response encryption
 5. Handle network timeouts gracefully
 
----
 
-## Backend Security (Google Apps Script)
 
-### Access Control
+## 5.0 Backend Security (Google Apps Script)
+
+### 5.1 Access Control
 
 **Implemented:**
 - API key authentication
@@ -138,7 +143,7 @@ const safeName = escapeHtml(device.name);
 4. Implement IP whitelisting if possible
 5. Rate limiting per user/device
 
-### Data Storage
+### 5.2 Data Storage
 
 **Best Practices:**
 1. Don't store passwords in plain text
@@ -147,7 +152,7 @@ const safeName = escapeHtml(device.name);
 4. Regular database backups
 5. Implement data retention policies
 
-### Script Security
+### 5.3 Script Security
 
 **Recommendations:**
 1. Validate all input parameters
@@ -156,11 +161,11 @@ const safeName = escapeHtml(device.name);
 4. Regular security audits
 5. Keep dependencies updated
 
----
 
-## Network Security
 
-### Device Communication
+## 6.0 Network Security
+
+### 6.1 Device Communication
 
 **Recommendations:**
 1. Use a dedicated IoT network/VLAN
@@ -172,7 +177,7 @@ const safeName = escapeHtml(device.name);
 4. Disable UPnP on routers
 5. Regular network security audits
 
-### Port Security
+### 6.2 Port Security
 
 **Open Ports (ESP32):**
 - Port 80: HTTP redirect server
@@ -185,11 +190,11 @@ const safeName = escapeHtml(device.name);
 3. Consider VPN for remote access instead of port forwarding
 4. Monitor for suspicious connection attempts
 
----
 
-## Monitoring & Incident Response
 
-### Logging
+## 7.0 Monitoring & Incident Response
+
+### 7.1 Logging
 
 **Implemented:**
 - Console logging for debugging
@@ -205,7 +210,7 @@ const safeName = escapeHtml(device.name);
 3. Set up alerts for suspicious activities
 4. Regular log reviews
 
-### Incident Response
+### 7.2 Incident Response
 
 **Preparation:**
 1. Document incident response procedures
@@ -220,11 +225,11 @@ const safeName = escapeHtml(device.name);
 4. Document lessons learned
 5. Update security measures
 
----
 
-## Compliance & Privacy
 
-### Data Privacy
+## 8.0 Compliance & Privacy
+
+### 8.1 Data Privacy
 
 **Considerations:**
 1. Inform users about data collection
@@ -233,7 +238,7 @@ const safeName = escapeHtml(device.name);
 4. Comply with GDPR, CCPA, or relevant regulations
 5. Regular privacy audits
 
-### Documentation
+### 8.2 Documentation
 
 **Maintain:**
 1. Privacy policy
@@ -242,11 +247,11 @@ const safeName = escapeHtml(device.name);
 4. Change management records
 5. Audit trails
 
----
 
-## Regular Maintenance
 
-### Security Updates
+## 9.0 Regular Maintenance
+
+### 9.1 Security Updates
 
 **Schedule:**
 - Weekly: Review security advisories for dependencies
@@ -254,7 +259,7 @@ const safeName = escapeHtml(device.name);
 - Quarterly: Security audit and penetration testing
 - Annually: Comprehensive security review
 
-### Checklist
+### 9.2 Checklist
 
 - [ ] Update all dependencies to latest secure versions
 - [ ] Review and rotate API keys
@@ -265,27 +270,27 @@ const safeName = escapeHtml(device.name);
 - [ ] Train team on security best practices
 - [ ] Review incident response plan
 
----
 
-## Security Resources
 
-### Tools
+## 10.0 Security Resources
+
+### 10.1 Tools
 
 - **OWASP ZAP**: Web application security scanner
 - **Wireshark**: Network traffic analysis
 - **ESP32 Secure Boot**: Firmware integrity verification
 - **SSL Labs**: SSL/TLS configuration checker
 
-### References
+### 10.2 References
 
 - OWASP IoT Security Top 10
 - NIST Cybersecurity Framework
 - IoT Security Foundation Best Practices
 - ESP32 Security Features Guide
 
----
 
-## Contact
+
+## 11.0 Contact
 
 For security issues or questions:
 - **Security Email**: security@smarthome-controller.com
@@ -293,7 +298,7 @@ For security issues or questions:
 
 **Please report security vulnerabilities privately before public disclosure.**
 
----
+
 
 *Last Updated: December 2024*
 *Version: 1.0*

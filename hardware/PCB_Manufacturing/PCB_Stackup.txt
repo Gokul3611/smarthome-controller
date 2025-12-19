@@ -1,0 +1,333 @@
+================================================================================
+PCB LAYER STACKUP SPECIFICATION
+Smart Home Controller v3.1 - Compact Snubberless Design
+================================================================================
+
+Board Specifications:
+- Total thickness: 1.60mm (±0.16mm tolerance)
+- Number of layers: 2 (Top copper + Bottom copper)
+- Board size: 70mm × 50mm
+- Board material: FR-4 TG130-140
+- Copper weight: 2oz (70µm) on both layers
+- Surface finish: HASL lead-free or ENIG
+- Soldermask: Green LPI (Liquid Photo Imageable)
+- Silkscreen: White epoxy ink
+- Min trace width: 0.25mm (10 mil)
+- Min spacing: 0.25mm (10 mil)
+- Min drill size: 0.30mm (12 mil)
+
+================================================================================
+LAYER STACKUP (Top to Bottom):
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────┐
+│  Top Silkscreen (White)                            ~0.025mm     │
+│  - Component designators (U1, R1, Q1, etc.)                     │
+│  - Warning labels ("HIGH VOLTAGE", "230V AC")                   │
+│  - Connector labels (J1, J2, J3)                                │
+│  - Version marking (v3.1)                                       │
+│  - Safety symbols (lightning bolt, ground)                      │
+├─────────────────────────────────────────────────────────────────┤
+│  Top Soldermask (Green)                            ~0.025mm     │
+│  - Covers all copper except pads                                │
+│  - Solder mask expansion: 0.1mm                                 │
+│  - Provides electrical insulation and protection                │
+├─────────────────────────────────────────────────────────────────┤
+│  Top Copper Layer (L1) - SIGNAL & POWER            70µm (2oz)   │
+│  ┌───────────────────────────────────────────────────────────┐ │
+│  │  AC HIGH VOLTAGE SECTION (Top half)                       │ │
+│  │  - AC Live distribution (2mm traces)                      │ │
+│  │  - AC Neutral return (2mm traces)                         │ │
+│  │  - TRIAC output traces (1.5mm per channel)                │ │
+│  │  - Power module connections                               │ │
+│  │  - Zero-cross detection circuit                           │ │
+│  │  - Component pads (TRIACs, MOC3041, HLK-PM01)            │ │
+│  ├───────────────────────────────────────────────────────────┤ │
+│  │  ISOLATION BARRIER - 6mm CLEARANCE                        │ │
+│  │  - No copper between Y=26mm and Y=32mm                    │ │
+│  │  - Physical separation for safety                         │ │
+│  ├───────────────────────────────────────────────────────────┤ │
+│  │  DC LOW VOLTAGE SECTION (Bottom half)                     │ │
+│  │  - 5V power distribution (0.8mm traces)                   │ │
+│  │  - 3.3V logic signals from ESP32                          │ │
+│  │  - GPIO traces to optocouplers (0.5mm)                    │ │
+│  │  - GPIO traces from switches (0.5mm)                      │ │
+│  │  - Component pads (ESP32, resistors, capacitors)          │ │
+│  │  - Signal routing (0.25mm minimum width)                  │ │
+│  └───────────────────────────────────────────────────────────┘ │
+├─────────────────────────────────────────────────────────────────┤
+│  Core Material (FR-4 Dielectric)                   ~1.45mm      │
+│  - Fiberglass reinforced epoxy resin                            │
+│  - Dielectric constant (Er): 4.5 @ 1MHz                         │
+│  - TG (Glass Transition Temperature): 135°C minimum            │
+│  - Flame retardant: UL94 V-0 rated                              │
+├─────────────────────────────────────────────────────────────────┤
+│  Bottom Copper Layer (L2) - GROUND PLANE           70µm (2oz)   │
+│  ┌───────────────────────────────────────────────────────────┐ │
+│  │  SPLIT GROUND PLANE (Maximum copper pour)                 │ │
+│  │  - AC section ground (top half above isolation line)      │ │
+│  │  - DC section ground (bottom half below isolation line)   │ │
+│  │  - Thermal vias connect to this layer for heat sinking    │ │
+│  │  - Low impedance return path for all currents             │ │
+│  │  - Provides EMI shielding                                  │ │
+│  │  - Through-hole pads for all components                    │ │
+│  │  - Thermal relief on power pins                            │ │
+│  └───────────────────────────────────────────────────────────┘ │
+├─────────────────────────────────────────────────────────────────┤
+│  Bottom Soldermask (Green)                         ~0.025mm     │
+│  - Covers ground plane copper                                   │
+│  - Exposed copper areas for thermal dissipation (optional)      │
+│  - Solder mask expansion: 0.1mm                                 │
+├─────────────────────────────────────────────────────────────────┤
+│  Bottom Silkscreen (White)                         ~0.025mm     │
+│  - "GROUND PLANE" text marking                                  │
+│  - Mounting hole markers                                        │
+│  - Manufacturing date code area                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+TOTAL THICKNESS: 1.60mm (±10% tolerance)
+
+================================================================================
+CRITICAL DESIGN FEATURES:
+================================================================================
+
+1. ISOLATION BARRIER (6mm):
+   - Physical copper clearance between AC and DC sections
+   - Exceeds IEC 60950-1 requirements (4mm for 250V)
+   - Prevents arcing and ensures safety
+   - No copper, vias, or traces cross this barrier
+
+2. COPPER WEIGHT (2oz):
+   - Heavy copper for high current capacity
+   - 2oz = 70µm thickness = 2.8A per mm width (10°C rise)
+   - AC mains traces (2mm): 5.6A capacity
+   - TRIAC traces (1.5mm): 4.2A capacity
+   - More than adequate for 4A TRIACs
+
+3. GROUND PLANE (Bottom layer):
+   - Maximum copper pour for low impedance
+   - Split between AC and DC sections
+   - Connected only through isolation (optocouplers)
+   - Provides EMI shielding
+   - Heat dissipation for power components
+
+4. THERMAL MANAGEMENT:
+   - Multiple 0.3mm thermal vias under each TRIAC
+   - Vias connect top copper to bottom ground plane
+   - Bottom copper acts as heatsink
+   - Thermal resistance: ~30°C/W per TRIAC
+   - Adequate for 2A continuous per channel
+
+5. IMPEDANCE CONTROL:
+   - 50Ω controlled impedance (if required)
+   - Trace width: 0.5mm for 50Ω on FR-4 (1.45mm height)
+   - Ground plane provides reference
+
+================================================================================
+MANUFACTURING TOLERANCES:
+================================================================================
+
+Parameter                  Nominal      Tolerance      Notes
+─────────────────────────────────────────────────────────────────
+Board thickness            1.60mm       ±0.16mm        ±10%
+Copper thickness           70µm         ±7µm           ±10%
+Minimum trace width        0.25mm       +0.05/-0.00mm  Class 2
+Minimum spacing            0.25mm       +0.00/-0.05mm  Class 2
+Drill hole diameter        0.30-2.70mm  ±0.05mm        Class 2
+Drill hole position        --           ±0.10mm        Class 2
+Soldermask alignment       --           ±0.10mm        Class 2
+Silkscreen alignment       --           ±0.20mm        Class 2
+Board outline              --           ±0.20mm        Class 2
+Impedance (if controlled)  50Ω          ±10%           Optional
+
+================================================================================
+ELECTRICAL SPECIFICATIONS:
+================================================================================
+
+1. VOLTAGE RATINGS:
+   - AC section: 250V AC maximum
+   - DC section: 5V DC maximum
+   - Isolation: >5kV (optocoupler + physical barrier)
+   - Tracking resistance: CTI >175V (Material Group IIIa)
+
+2. CURRENT RATINGS:
+   - AC Live/Neutral: 10A continuous (2mm traces, 2oz copper)
+   - TRIAC outputs: 4A continuous per channel (1.5mm traces)
+   - 5V power: 1A continuous (0.8mm traces)
+   - GPIO signals: 50mA maximum (0.25mm traces)
+
+3. THERMAL RATINGS:
+   - Operating temperature: -20°C to +70°C
+   - Storage temperature: -40°C to +85°C
+   - Maximum PCB temperature: 105°C
+   - TG (Glass Transition): >130°C
+
+4. IMPEDANCE:
+   - DC resistance per mm of 2mm trace: 0.25mΩ
+   - Via resistance (0.3mm): ~10mΩ
+   - Ground plane resistance: <1mΩ between any two points
+
+================================================================================
+MATERIAL SPECIFICATIONS:
+================================================================================
+
+1. BASE MATERIAL (Core):
+   - Type: FR-4 (Flame Retardant 4)
+   - Grade: TG130-140 or higher
+   - Thickness: 1.45mm (after copper etch)
+   - Dielectric constant (εr): 4.5 @ 1MHz
+   - Dissipation factor: 0.02 @ 1MHz
+   - Flame rating: UL94 V-0
+   - CTI (Comparative Tracking Index): >175V
+
+2. COPPER FOIL:
+   - Type: Electro-deposited (ED) copper
+   - Weight: 2oz (70µm / 2.8 mils) both sides
+   - Purity: >99.8% Cu
+   - Surface: Matte finish for better adhesion
+
+3. SOLDERMASK:
+   - Type: LPI (Liquid Photo Imageable)
+   - Color: Green (Pantone 349C standard)
+   - Thickness: 20-30µm
+   - Cure: UV + thermal
+   - Hardness: >6H pencil hardness
+   - Insulation resistance: >10^9Ω
+
+4. SILKSCREEN:
+   - Type: Epoxy ink
+   - Color: White (high contrast on green)
+   - Thickness: 20-25µm
+   - Resolution: 0.15mm minimum feature size
+   - Text height: 1.0mm minimum for readability
+
+5. SURFACE FINISH:
+   - Option A: HASL (Hot Air Solder Leveling) lead-free
+     - Thickness: 1-40µm
+     - Composition: Sn-Cu (99.3% Sn, 0.7% Cu)
+     - Shelf life: 12 months
+     - Cost: Low
+   
+   - Option B: ENIG (Electroless Nickel Immersion Gold)
+     - Nickel thickness: 3-6µm
+     - Gold thickness: 0.05-0.1µm
+     - Shelf life: 24 months
+     - Cost: 30% higher than HASL
+     - Preferred for fine pitch SMD
+
+================================================================================
+DESIGN RULES SUMMARY:
+================================================================================
+
+Minimum Values (IPC Class 2):
+├── Trace width: 0.25mm (10 mil)
+├── Trace spacing: 0.25mm (10 mil)
+├── Annular ring: 0.15mm (6 mil)
+├── Drill hole diameter: 0.30mm (12 mil)
+├── Via pad diameter: 0.60mm (24 mil)
+├── Copper to board edge: 0.30mm (12 mil)
+├── Silkscreen line width: 0.15mm (6 mil)
+├── Silkscreen text height: 1.0mm (40 mil)
+└── Soldermask expansion: 0.10mm (4 mil)
+
+Power Traces:
+├── AC Mains (10A): 2.0mm width minimum
+├── TRIAC outputs (4A): 1.5mm width minimum
+├── 5V power (1A): 0.8mm width minimum
+└── 3.3V logic: 0.5mm width minimum
+
+Special Requirements:
+├── Isolation barrier: 6.0mm clearance (AC to DC)
+├── High voltage spacing: 1.0mm minimum (AC traces)
+├── Thermal vias: 0.3mm drill, 0.6mm pad, filled/capped
+└── Mounting holes: 2.7mm drill (non-plated)
+
+================================================================================
+QUALITY STANDARDS:
+================================================================================
+
+1. IPC STANDARDS:
+   - IPC-2221: Generic PCB Design Standard
+   - IPC-2222: Rigid Organic PCB Design Standard
+   - IPC-6012: Qualification and Performance Specification (Class 2)
+   - IPC-A-600: Acceptability of Printed Boards (Class 2)
+   - IPC-6013: Qualification and Performance Specification (Class 2)
+
+2. SAFETY STANDARDS:
+   - IEC 60950-1: Safety of Information Technology Equipment
+   - UL 94 V-0: Flammability rating
+   - RoHS: Restriction of Hazardous Substances (lead-free)
+   - REACH: Registration, Evaluation, Authorization of Chemicals
+
+3. TESTING REQUIREMENTS:
+   - Visual inspection (IPC-A-600)
+   - Electrical continuity test (flying probe or fixture)
+   - Isolation resistance test: >10MΩ between AC and DC
+   - High-pot test: 1000V for 60 seconds (optional)
+   - Impedance test: ±10% of nominal (if controlled)
+   - Thermal cycle test: -40°C to +85°C, 100 cycles
+   - Solderability test: Wetting balance test (IPC-TM-650)
+
+================================================================================
+FAIL-SAFE FEATURES IN STACKUP:
+================================================================================
+
+1. REDUNDANT ISOLATION:
+   ✓ 6mm physical copper clearance (2× safety margin)
+   ✓ Optocoupler isolation (5kV rated)
+   ✓ Soldermask barrier (additional insulation)
+   ✓ FR-4 dielectric (>1.45mm thickness)
+
+2. THERMAL PROTECTION:
+   ✓ Heavy copper (2oz) for current capacity
+   ✓ Multiple thermal vias per power component
+   ✓ Ground plane heat spreading
+   ✓ Adequate trace widths (no hot spots)
+
+3. ELECTRICAL PROTECTION:
+   ✓ Low impedance ground plane
+   ✓ Short power paths (minimize voltage drop)
+   ✓ Adequate spacing (no arcing risk)
+   ✓ Controlled impedance (if needed)
+
+4. MECHANICAL ROBUSTNESS:
+   ✓ 1.6mm thickness (no flex/warp)
+   ✓ FR-4 TG>130°C (high temperature stability)
+   ✓ Mounting holes properly sized
+   ✓ Board outline with rounded corners
+
+================================================================================
+MANUFACTURING NOTES FOR JLCPCB/PCBWAY:
+================================================================================
+
+Order Configuration:
+- Base Material: FR-4
+- Layers: 2
+- Dimensions: 70mm × 50mm
+- PCB Qty: 5/10/50/100 (select quantity)
+- Different Design: 1
+- Delivery Format: Single PCB
+- PCB Thickness: 1.6mm
+- PCB Color: Green
+- Silkscreen: White
+- Surface Finish: HASL (Lead free) or ENIG
+- Outer Copper Weight: 2oz
+- Via Covering: Tented
+- Board Outline Tolerance: ±0.2mm (Regular)
+- Confirm Production File: Yes (review before production)
+- Remove Order Number: Specify position (or No)
+- Flying Probe Test: Fully Test
+- Gold Fingers: No
+- Castellated Holes: No
+- Edge Plating: No
+
+Special Instructions:
+1. "6mm clearance between AC and DC sections - CRITICAL for safety"
+2. "Thermal vias under TRIACs Q1-Q4 must remain open (not plugged)"
+3. "2oz copper required for high current handling"
+4. "Flying probe test required to verify isolation >10MΩ"
+5. "RoHS and lead-free compliant materials"
+
+================================================================================
+END OF PCB STACKUP SPECIFICATION
+================================================================================

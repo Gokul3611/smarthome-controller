@@ -1,8 +1,13 @@
-# Bill of Materials (BOM)
+# Bill of Materials
+
+**Document Number:** HW-BOM-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Technical Specification
 
 Complete parts list for building the Smart Home Controller.
 
-## Main Components
+## 1.0 Main Components
 
 | Item | Part Number | Description | Qty | Unit Price | Total | Supplier |
 |------|-------------|-------------|-----|------------|-------|----------|
@@ -14,7 +19,7 @@ Complete parts list for building the Smart Home Controller.
 | 6 | AMS1117-5.0 | 5V 1A Linear Regulator | 1 | $0.50 | $0.50 | DigiKey, Mouser |
 | 7 | Transformer | 230V to 12V 2VA | 1 | $3.00 | $3.00 | Local supplier |
 
-## Resistors (1/4W unless noted)
+## 2.0 Resistors (1/4W unless noted)
 
 | Value | Description | Qty | Notes |
 |-------|-------------|-----|-------|
@@ -24,7 +29,7 @@ Complete parts list for building the Smart Home Controller.
 | 10kΩ | Pull-down/Pull-up | 8 | General purpose |
 | 100kΩ | High impedance | 2 | Optional, for RC snubber |
 
-## Capacitors
+## 3.0 Capacitors
 
 | Value | Type | Voltage | Qty | Description |
 |-------|------|---------|-----|-------------|
@@ -34,7 +39,7 @@ Complete parts list for building the Smart Home Controller.
 | 100µF | Electrolytic | 16V | 2 | Power supply filtering |
 | 1000µF | Electrolytic | 16V | 1 | Main power reservoir |
 
-## Connectors & Terminals
+## 4.0 Connectors & Terminals
 
 | Item | Description | Qty | Notes |
 |------|-------------|-----|-------|
@@ -42,7 +47,7 @@ Complete parts list for building the Smart Home Controller.
 | Pin headers | 2.54mm pitch | 20 | For ESP32 mounting |
 | USB connector | Micro-B or Type-C | 1 | For programming |
 
-## Mechanical Parts
+## 5.0 Mechanical Parts
 
 | Item | Description | Qty | Notes |
 |------|-------------|-----|-------|
@@ -52,7 +57,7 @@ Complete parts list for building the Smart Home Controller.
 | Standoffs | M3 × 10mm | 4 | For PCB mounting |
 | Enclosure | ABS plastic 120×80×40mm | 1 | Non-conductive |
 
-## Optional Components
+## 6.0 Optional Components
 
 | Item | Description | Qty | Purpose |
 |------|-------------|-----|---------|
@@ -62,7 +67,7 @@ Complete parts list for building the Smart Home Controller.
 | Temperature sensor | DS18B20 | 1 | Thermal monitoring |
 | Current sensor | ACS712 5A | 4 | Power monitoring |
 
-## Tools & Consumables
+## 7.0 Tools & Consumables
 
 | Item | Description | Notes |
 |------|-------------|-------|
@@ -73,7 +78,7 @@ Complete parts list for building the Smart Home Controller.
 | Heat shrink | Assorted sizes | For insulation |
 | Cable ties | 100mm | For wire management |
 
-## Cost Summary
+## 8.0 Cost Summary
 
 | Category | Estimated Cost |
 |----------|----------------|
@@ -89,9 +94,9 @@ Complete parts list for building the Smart Home Controller.
 
 *Prices approximate, as of December 2024. Bulk pricing available for quantities >10.*
 
-## Supplier Information
+## 9.0 Supplier Information
 
-### Recommended Suppliers
+### 9.1 Recommended Suppliers
 
 **International:**
 - DigiKey (digikey.com) - Fast shipping, large inventory
@@ -104,16 +109,16 @@ Complete parts list for building the Smart Home Controller.
 - ElectronicsPro.in
 - Amazon.in (limited selection)
 
-### Bulk Purchasing
+### 9.2 Bulk Purchasing
 
 For quantities >50 units:
 - Contact manufacturers directly
 - Use Alibaba for Chinese suppliers
 - Negotiate pricing with local distributors
 
-## Substitutions
+## 10.0 Substitutions
 
-### Acceptable Alternatives
+### 10.1 Acceptable Alternatives
 
 | Original Part | Alternative | Notes |
 |---------------|-------------|-------|
@@ -123,13 +128,13 @@ For quantities >50 units:
 | ESP32-WROOM-32 | ESP32-WROVER-32 | More RAM |
 | AMS1117 | LM1117, LD1117 | Same footprint |
 
-### NOT Recommended
+### 10.2 NOT Recommended
 
 - Don't use SCRs instead of TRIACs (won't work for AC)
 - Don't use transistors instead of optocouplers (no isolation)
 - Don't use undersized TRIACs (minimum 4A rating)
 
-## Procurement Notes
+## 11.0 Procurement Notes
 
 1. **Order extra components** (10-20% surplus) for prototyping and repairs
 2. **Check lead times** - some components may have 4-8 week delivery
@@ -137,9 +142,9 @@ For quantities >50 units:
 4. **Keep datasheets** - download and archive for reference
 5. **Test components** before assembly (especially TRIACs and optocouplers)
 
-## Quality Control
+## 12.0 Quality Control
 
-### Incoming Inspection
+### 12.1 Incoming Inspection
 
 For critical components, test:
 - [ ] TRIAC forward voltage drop
@@ -148,13 +153,13 @@ For critical components, test:
 - [ ] Power supply output voltage
 - [ ] Capacitor ESR (for electrolytics)
 
-## Revision History
+## 13.0 Revision History
 
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | Dec 2024 | Initial BOM |
 
-## Notes
+## 14.0 Notes
 
 - All prices in USD
 - Minimum order quantities (MOQ) may apply
@@ -162,6 +167,6 @@ For critical components, test:
 - Consider lead-free requirements for commercial products
 - Add margin for damaged/lost components
 
----
+
 
 **Contact**: For BOM questions, open GitHub issue with "BOM:" prefix

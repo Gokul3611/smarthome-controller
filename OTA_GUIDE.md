@@ -1,10 +1,15 @@
-# OTA (Over-The-Air) Update Guide
+# Over-The-Air Update Technical Guide
+
+**Document Number:** SYS-OTA-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Technical Procedure
 
 Complete guide for implementing and using OTA firmware updates for the Smart Home Controller.
 
----
 
-## 📡 Overview
+
+## 1.0 Overview
 
 OTA updates allow you to update ESP32 firmware remotely without physical access to the device. This is essential for:
 - Bug fixes and security patches
@@ -12,16 +17,16 @@ OTA updates allow you to update ESP32 firmware remotely without physical access 
 - Configuration updates
 - Emergency fixes
 
----
 
-## 🏗️ System Architecture
+
+## 2.0 System Architecture
 
 ```
 Developer → GitHub Release → Google Apps Script → ESP32 Device
               (Binary)         (Distribution)      (Downloads & Installs)
 ```
 
-### Update Flow
+### 2.1 Update Flow
 
 1. **Compile** new firmware binary (.bin file)
 2. **Upload** to hosting (GitHub Releases, Google Drive, or Apps Script)
@@ -33,11 +38,11 @@ Developer → GitHub Release → Google Apps Script → ESP32 Device
 8. **Reboot** and test
 9. **Rollback** if boot fails (automatic)
 
----
 
-## 🔧 ESP32 OTA Implementation
 
-### 1. Partition Scheme
+## 3.0 ESP32 OTA Implementation
+
+### 3.1 1. Partition Scheme
 
 ESP32 requires special partition layout for OTA:
 
@@ -56,7 +61,7 @@ spiffs,   data, spiffs,  0x290000,0x70000
 - System alternates between them
 - Failed boot automatically rolls back
 
-### 2. Arduino Code
+### 3.2 2. Arduino Code
 
 Add to your ESP32 firmware:
 
@@ -150,7 +155,7 @@ void loop() {
 }
 ```
 
-### 3. Build Firmware Binary
+### 3.3 3. Build Firmware Binary
 
 **Using Arduino IDE:**
 ```
@@ -171,11 +176,11 @@ idf.py build
 # Binary at: build/project_name.bin
 ```
 
----
 
-## ☁️ Backend OTA Configuration
 
-### Google Apps Script Implementation
+## 4.0 Backend OTA Configuration
+
+### 4.1 Google Apps Script Implementation
 
 Add to `Code.gs`:
 
@@ -216,11 +221,11 @@ function compareVersions(v1, v2) {
 }
 ```
 
----
 
-## 📦 Hosting Firmware Binaries
 
-### Option 1: GitHub Releases (Recommended)
+## 5.0 Hosting Firmware Binaries
+
+### 5.1 Option 1: GitHub Releases (Recommended)
 
 **Advantages:**
 - Free
@@ -240,7 +245,7 @@ function compareVersions(v1, v2) {
 https://github.com/USER/REPO/releases/download/v3.0.1/firmware.bin
 ```
 
-### Option 2: Google Drive
+### 5.2 Option 2: Google Drive
 
 **Advantages:**
 - Free 15GB storage
@@ -256,7 +261,7 @@ Original: https://drive.google.com/file/d/FILE_ID/view
 Direct: https://drive.google.com/uc?export=download&id=FILE_ID
 ```
 
-### Option 3: Apps Script as Host
+### 5.3 Option 3: Apps Script as Host
 
 **Advantages:**
 - Same infrastructure as backend
@@ -278,11 +283,11 @@ function doGet(e) {
 }
 ```
 
----
 
-## 🔒 Security Best Practices
 
-### 1. Firmware Signing
+## 6.0 Security Best Practices
+
+### 6.1 1. Firmware Signing
 
 Generate signature for firmware:
 
@@ -323,7 +328,7 @@ bool verifyChecksum(uint8_t* data, size_t len, const char* expectedHash) {
 }
 ```
 
-### 2. HTTPS Only
+### 6.2 2. HTTPS Only
 
 Always use HTTPS for firmware downloads:
 ```cpp
@@ -331,7 +336,7 @@ WiFiClientSecure client;
 client.setCACert(root_ca); // Production: use proper certificate
 ```
 
-### 3. Version Control
+### 6.3 3. Version Control
 
 Implement strict version checking:
 ```cpp
@@ -341,7 +346,7 @@ bool isNewerVersion(String current, String available) {
 }
 ```
 
-### 4. Rollback Protection
+### 6.4 4. Rollback Protection
 
 Firmware should mark itself as valid:
 ```cpp
@@ -356,9 +361,9 @@ void setup() {
 }
 ```
 
----
 
-## 📱 Dashboard OTA Management
+
+## 7.0 Dashboard OTA Management
 
 Add to dashboard:
 
@@ -390,11 +395,11 @@ async function triggerOTA() {
 </script>
 ```
 
----
 
-## 🧪 Testing OTA Updates
 
-### Test Procedure
+## 8.0 🧪 Testing OTA Updates
+
+### 8.1 Test Procedure
 
 1. **Prepare Test Device**
    - Flash current firmware via USB
@@ -426,7 +431,7 @@ async function triggerOTA() {
    - Device should detect and rollback
    - Should boot to previous version
 
-### Monitoring
+### 8.2 Monitoring
 
 Add logging:
 ```cpp
@@ -439,11 +444,11 @@ Serial.printf("Progress: %d%%\n", (written * 100) / contentLength);
 Serial.println("======================");
 ```
 
----
 
-## 🚨 Troubleshooting
 
-### Issue: Update Fails to Download
+## 9.0 Troubleshooting
+
+### 9.1 Issue: Update Fails to Download
 
 **Causes:**
 - Poor WiFi signal
@@ -457,7 +462,7 @@ Serial.println("======================");
 - Reduce binary size
 - Retry with exponential backoff
 
-### Issue: Update Downloaded but Won't Install
+### 9.2 Issue: Update Downloaded but Won't Install
 
 **Causes:**
 - Not enough space
@@ -469,7 +474,7 @@ Serial.println("======================");
 - Verify checksum
 - Clear OTA partition
 
-### Issue: Device Boots but Functions Wrong
+### 9.3 Issue: Device Boots but Functions Wrong
 
 **Causes:**
 - Configuration mismatch
@@ -481,7 +486,7 @@ Serial.println("======================");
 - Migrate settings if needed
 - Test thoroughly before deployment
 
-### Issue: Device Won't Boot After Update
+### 9.4 Issue: Device Won't Boot After Update
 
 **Causes:**
 - Corrupted firmware
@@ -493,20 +498,20 @@ Serial.println("======================");
 - If not, flash via USB
 - Check partition table
 
----
 
-## 📊 OTA Update Statistics
+
+## 10.0 OTA Update Statistics
 
 Track in Google Sheets:
 
 | Device UID | Current Version | Update Time | Success | Error |
 |------------|----------------|-------------|---------|-------|
-| AA:BB:CC... | 3.0.0 → 3.0.1 | 2024-12-04 10:30 | ✅ | - |
-| DD:EE:FF... | 3.0.0 → 3.0.1 | 2024-12-04 10:35 | ❌ | Download failed |
+| AA:BB:CC... | 3.0.0 → 3.0.1 | 2024-12-04 10:30 |  | - |
+| DD:EE:FF... | 3.0.0 → 3.0.1 | 2024-12-04 10:35 |  | Download failed |
 
----
 
-## 🎯 Best Practices
+
+## 11.0 Best Practices
 
 1. **Test First**: Always test on one device before mass rollout
 2. **Gradual Rollout**: Update 10% → 50% → 100% over time
@@ -519,9 +524,9 @@ Track in Google Sheets:
 9. **Notification**: Alert users before major updates
 10. **Rollback Plan**: Always have a way to revert
 
----
 
-## 📞 Support
+
+## 12.0 Support
 
 For OTA issues:
 - Check ESP32 serial output
@@ -529,7 +534,7 @@ For OTA issues:
 - Test binary locally first
 - Open GitHub issue
 
----
+
 
 **Version**: 1.0  
 **Last Updated**: December 2024  

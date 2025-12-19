@@ -1,18 +1,23 @@
-# Production Deployment Guide
+# Production Deployment Procedures
+
+**Document Number:** SYS-PROD-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Technical Procedure
 
 Complete guide for deploying the Smart Home Controller system to production environment.
 
----
 
-## 🎯 Overview
+
+## 1.0 Overview
 
 This guide covers the deployment process from development to production, including testing, security hardening, and scaling considerations.
 
----
 
-## 📋 Pre-Deployment Checklist
 
-### Development Complete
+## 2.0 Pre-Deployment Checklist
+
+### 2.1 Development Complete
 - [ ] All features implemented and tested
 - [ ] Code reviewed and approved
 - [ ] Documentation complete
@@ -21,7 +26,7 @@ This guide covers the deployment process from development to production, includi
 - [ ] Hardware validated
 - [ ] Security audit completed
 
-### Infrastructure Ready
+### 2.2 Infrastructure Ready
 - [ ] Google Apps Script deployed
 - [ ] Google Sheets database configured
 - [ ] Domain/URL configured
@@ -29,7 +34,7 @@ This guide covers the deployment process from development to production, includi
 - [ ] Backup systems in place
 - [ ] Monitoring tools configured
 
-### Production Hardware
+### 2.3 Production Hardware
 - [ ] Final PCB manufactured and tested
 - [ ] Enclosures prepared
 - [ ] All components procured
@@ -37,9 +42,9 @@ This guide covers the deployment process from development to production, includi
 - [ ] Quality control passed
 - [ ] Labeling and documentation included
 
----
 
-## 🔧 Step 1: Backend Deployment
+
+## 3.0 Step 1: Backend Deployment
 
 ### 1.1 Google Sheets Setup
 
@@ -97,11 +102,11 @@ function rateLimitCheck(deviceId) {
 }
 ```
 
----
 
-## 🌐 Step 2: Domain Configuration
 
-### Option A: Custom Domain (Recommended for Production)
+## 4.0 Step 2: Domain Configuration
+
+### 4.1 Option A: Custom Domain (Recommended for Production)
 
 ```
 1. Register domain (e.g., smarthome.company.com)
@@ -111,7 +116,7 @@ function rateLimitCheck(deviceId) {
 5. Test accessibility
 ```
 
-### Option B: URL Shortener
+### 4.2 Option B: URL Shortener
 
 ```
 1. Use bit.ly or custom shortener
@@ -120,9 +125,9 @@ function rateLimitCheck(deviceId) {
 4. Test and document
 ```
 
----
 
-## 📱 Step 3: Mobile App Deployment
+
+## 5.0 Step 3: Mobile App Deployment
 
 ### 3.1 Production Configuration
 
@@ -201,9 +206,9 @@ flutter build appbundle --release
 flutter build ios --release
 ```
 
----
 
-## 🔌 Step 4: ESP32 Firmware Deployment
+
+## 6.0 Step 4: ESP32 Firmware Deployment
 
 ### 4.1 Production Firmware Configuration
 
@@ -280,9 +285,9 @@ void firstBootSetup() {
 }
 ```
 
----
 
-## 🧪 Step 5: Testing & Validation
+
+## 7.0 🧪 Step 5: Testing & Validation
 
 ### 5.1 System Integration Test
 
@@ -365,9 +370,9 @@ Security Checklist:
 [ ] File upload validation (if any)
 ```
 
----
 
-## 📊 Step 6: Monitoring & Analytics
+
+## 8.0 Step 6: Monitoring & Analytics
 
 ### 6.1 Apps Script Logging
 
@@ -437,9 +442,9 @@ function sendAlert(message) {
 // Schedule to run hourly
 ```
 
----
 
-## 🔒 Step 7: Security Hardening
+
+## 9.0 Step 7: Security Hardening
 
 ### 7.1 API Key Rotation
 
@@ -484,9 +489,9 @@ function sanitizeString(str) {
 }
 ```
 
----
 
-## 📦 Step 8: Backup & Recovery
+
+## 10.0 Step 8: Backup & Recovery
 
 ### 8.1 Automated Backups
 
@@ -529,9 +534,9 @@ function backupDatabase() {
 7. Document incident and recovery
 ```
 
----
 
-## 📈 Step 9: Scaling Considerations
+
+## 11.0 Step 9: Scaling Considerations
 
 ### 9.1 Google Apps Script Limits
 
@@ -575,9 +580,9 @@ function getCachedDeviceList() {
 }
 ```
 
----
 
-## 🎓 Step 10: User Training
+
+## 12.0 Step 10: User Training
 
 ### 10.1 Administrator Training
 
@@ -602,9 +607,9 @@ Provide:
 - Video demonstrations
 - Support contact info
 
----
 
-## 📞 Step 11: Support Setup
+
+## 13.0 Step 11: Support Setup
 
 ### 11.1 Support Channels
 
@@ -623,9 +628,9 @@ Use GitHub Issues with labels:
 - `enhancement` - Feature requests
 - `documentation` - Doc updates
 
----
 
-## ✅ Production Launch Checklist
+
+## 14.0 Production Launch Checklist
 
 Final verification before going live:
 
@@ -642,9 +647,9 @@ Final verification before going live:
 - [ ] 24-hour monitoring period
 - [ ] Issue response team on standby
 
----
 
-## 📊 Success Metrics
+
+## 15.0 Success Metrics
 
 Track these KPIs:
 
@@ -655,11 +660,11 @@ Track these KPIs:
 - **Device Online Rate**: >95%
 - **Support Tickets**: <10/month per 100 devices
 
----
 
-## 🚨 Incident Response
 
-### Severity Levels
+## 16.0 Incident Response
+
+### 16.1 Severity Levels
 
 **P0 - Critical**
 - System down
@@ -682,16 +687,16 @@ Response: <24 hours
 - Enhancement requests
 Response: <1 week
 
----
 
-## 📞 Support
+
+## 17.0 Support
 
 For production deployment questions:
 - Technical Lead: [contact]
 - DevOps: [contact]
 - Security: [contact]
 
----
+
 
 **Version**: 1.0  
 **Last Updated**: December 2024  

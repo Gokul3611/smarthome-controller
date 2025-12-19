@@ -1,6 +1,11 @@
-# Quick Build Guide
+# Flutter Build Procedures
 
-## Build APK in 3 Steps
+**Document Number:** SOFT-BUILD-001  
+**Revision:** 1.0  
+**Date:** 2025-12-16  
+**Classification:** Technical Procedure
+
+## 1.0 Build APK in 3 Steps
 
 ```bash
 # 1. Install dependencies
@@ -13,7 +18,7 @@ flutter build apk --release
 # Location: build/app/outputs/flutter-apk/app-release.apk
 ```
 
-## Install on Phone
+## 2.0 Install on Phone
 
 ```bash
 # Transfer APK to phone and tap to install
