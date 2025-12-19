@@ -79,7 +79,7 @@ This document facilitates the complete handover of the Smart Home Controller pro
 **Status**: Production-ready, hosted on Google Apps Script
 
 ### 5. Mobile Application 📱
-**Location**: `software_Team/flutter project/demo/`
+**Location**: `frontend/flutter project/demo/`
 
 **Delivered:**
 - Flutter cross-platform app
@@ -134,13 +134,17 @@ smarthome-controller/
 │       ├── Database.gs
 │       ├── Dashboard.html
 │       └── README.md
-├── software_Team/             # Mobile app
+├── frontend/                  # Mobile app
 │   └── flutter project/demo/
 │       └── lib/
 │           ├── config/
 │           ├── models/
 │           ├── services/
 │           └── pages/
+├── hardware/                  # Hardware design
+│   ├── pcb/
+│   ├── schematics/
+│   └── bom/
 ├── app/                       # APK distribution
 │   ├── release/
 │   ├── debug/

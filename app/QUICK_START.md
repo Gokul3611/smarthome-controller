@@ -8,7 +8,7 @@ This is a quick reference guide for building the Android APK.
 
 ```bash
 # 1. Navigate to Flutter project
-cd "software_Team/flutter project/demo"
+cd "frontend/flutter project/demo"
 
 # 2. Get dependencies
 flutter pub get
@@ -28,7 +28,7 @@ cd ../../..
 
 ```bash
 # Build release APK
-cd "software_Team/flutter project/demo" && \
+cd "frontend/flutter project/demo" && \
   flutter pub get && \
   flutter build apk --release && \
   cp build/app/outputs/flutter-apk/app-release.apk \
@@ -36,7 +36,7 @@ cd "software_Team/flutter project/demo" && \
   cd ../../..
 
 # Build debug APK
-cd "software_Team/flutter project/demo" && \
+cd "frontend/flutter project/demo" && \
   flutter pub get && \
   flutter build apk --debug && \
   cp build/app/outputs/flutter-apk/app-debug.apk \
@@ -57,7 +57,7 @@ VERSION="1.0.0"
 
 echo "Building $BUILD_TYPE APK..."
 
-cd "software_Team/flutter project/demo" || exit 1
+cd "frontend/flutter project/demo" || exit 1
 flutter pub get || exit 1
 flutter build apk --"$BUILD_TYPE" || exit 1
 

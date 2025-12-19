@@ -45,7 +45,7 @@ Access it at: `[Your Web App URL]?page=dashboard`
 
 1. **Update API Configuration**
    ```dart
-   // Edit: software_Team/flutter project/demo/lib/config/api_config.dart
+   // Edit: frontend/flutter project/demo/lib/config/api_config.dart
    
    static const String baseUrl = 'YOUR_WEB_APP_URL';
    static const String apiKey = 'YOUR_API_KEY';
@@ -53,7 +53,7 @@ Access it at: `[Your Web App URL]?page=dashboard`
 
 2. **Build APK**
    ```bash
-   cd "software_Team/flutter project/demo"
+   cd "frontend/flutter project/demo"
    flutter pub get
    flutter build apk --release
    ```

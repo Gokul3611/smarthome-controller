@@ -59,7 +59,7 @@ To build the APK from source:
 
 1. **Navigate to the Flutter project directory**
    ```bash
-   cd "software_Team/flutter project/demo"
+   cd "frontend/flutter project/demo"
    ```
 
 2. **Get dependencies**
@@ -74,7 +74,7 @@ To build the APK from source:
    
    The APK will be generated at:
    ```
-   software_Team/flutter project/demo/build/app/outputs/flutter-apk/app-release.apk
+   frontend/flutter project/demo/build/app/outputs/flutter-apk/app-release.apk
    ```
 
 4. **Build Debug APK (for testing)**
@@ -88,11 +88,11 @@ To build the APK from source:
    cd ../../..
    
    # For release build
-   cp "software_Team/flutter project/demo/build/app/outputs/flutter-apk/app-release.apk" \
+   cp "frontend/flutter project/demo/build/app/outputs/flutter-apk/app-release.apk" \
       app/release/smart-home-controller-v1.0.0-release.apk
    
    # For debug build
-   cp "software_Team/flutter project/demo/build/app/outputs/flutter-apk/app-debug.apk" \
+   cp "frontend/flutter project/demo/build/app/outputs/flutter-apk/app-debug.apk" \
       app/debug/smart-home-controller-v1.0.0-debug.apk
    ```
    
@@ -215,7 +215,7 @@ For production releases, APKs should be signed with a release keystore:
 
 ## 🔗 Related Documentation
 
-- Flutter Project: `software_Team/flutter project/demo/`
+- Flutter Project: `frontend/flutter project/demo/`
 - [Firmware Documentation](../firmware/README.md)
 - [Installation Guide](../INSTALL.md)
 - [Main README](../README.md)

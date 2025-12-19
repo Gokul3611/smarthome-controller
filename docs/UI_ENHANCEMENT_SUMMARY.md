@@ -505,7 +505,7 @@ AppTheme.cardDecoration()
 
 ### Code References
 - Web Dashboard: `/backend/google-apps-script/Dashboard.html`
-- Mobile Theme: `/software_Team/flutter project/demo/lib/config/app_theme.dart`
+- Mobile Theme: `/frontend/flutter project/demo/lib/config/app_theme.dart`
 - Security Guide: `/docs/SECURITY_BEST_PRACTICES.md`
 
 ---
