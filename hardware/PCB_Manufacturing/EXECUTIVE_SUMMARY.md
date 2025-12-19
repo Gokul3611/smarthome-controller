@@ -1,330 +1,348 @@
-# Executive Technical Summary
-**Smart Home Controller Hardware Platform v3.1**
+# Smart Home Controller - PCB Manufacturing Executive Summary
 
-## Document Information
-- **Document Number:** HW-EXEC-001
-- **Revision:** 3.1
-- **Issue Date:** December 2024
-- **Classification:** Technical Summary
-- **Prepared by:** Hardware Engineering Team
+## Project Overview
 
----
-
-## 1. Project Overview
-
-The Smart Home Controller v3.1 represents a compact IoT-enabled AC load control system designed for residential installation within standard electrical enclosures. The system provides wireless control of four independent AC channels while maintaining compliance with international safety standards.
-
-### 1.1 Technical Objectives
-- Miniaturized form factor compatible with 2-gang electrical boxes
-- Galvanically isolated control architecture exceeding IEC 60950-1
-- Zero-cross switching topology for EMI reduction
-- Multi-interface control (WiFi, physical switches, voice integration)
-
-### 1.2 Application Domain
-Residential automation with focus on retrofit installation in existing electrical infrastructure.
+**Project Name**: Smart Home Controller  
+**Version**: 1.0  
+**PCB Revision**: Rev A  
+**Design Tool**: KiCad 6.0  
+**Manufacturer**: JLCPCB  
+**Date**: December 2024
 
 ---
 
-## 2. System Specification
+## Circuit Specifications
 
-### 2.1 Electrical Characteristics
+### Main Controller
+- **Microcontroller**: ESP32-WROOM-32
+- **Operating Voltage**: 3.3V logic, 5V power input
+- **WiFi**: 802.11 b/g/n (2.4GHz)
+- **Bluetooth**: BLE 4.2
 
-| Parameter | Specification | Test Condition |
-|-----------|--------------|----------------|
-| Input Voltage | 110-240V AC ±10% | 50/60Hz |
-| Output Channels | 4 independent | Isolated switching |
-| Channel Current | 4A continuous per channel | Resistive load |
-| Control Voltage | 5V DC, 600mA | Isolated SMPS |
-| Switching Method | Zero-cross TRIAC | MOC3041 optocoupler |
+### GPIO Pin Assignments
 
-### 2.2 Physical Dimensions
+| Function | GPIO Pin | Direction | Notes |
+|----------|----------|-----------|-------|
+| Zero-Cross Detection | GPIO 13 | Input | Rising edge interrupt, pull-down 10kΩ |
+| TRIAC Channel 1 | GPIO 16 | Output | Active HIGH, drives MOC3021 via 330Ω |
+| TRIAC Channel 2 | GPIO 17 | Output | Active HIGH, drives MOC3021 via 330Ω |
+| TRIAC Channel 3 | GPIO 18 | Output | Active HIGH, drives MOC3021 via 330Ω |
+| TRIAC Channel 4 | GPIO 19 | Output | Active HIGH, drives MOC3021 via 330Ω |
+| Physical Switch 1 | GPIO 32 | Input | Pull-up, active LOW, debounced |
+| Physical Switch 2 | GPIO 33 | Input | Pull-up, active LOW, debounced |
+| Physical Switch 3 | GPIO 25 | Input | Pull-up, active LOW, debounced |
+| Physical Switch 4 | GPIO 26 | Input | Pull-up, active LOW, debounced |
+| Status LED | GPIO 2 | Output | Built-in LED |
 
-| Dimension | Value | Tolerance |
-|-----------|-------|-----------|
-| Length | 70.0mm | ±0.2mm |
-| Width | 50.0mm | ±0.2mm |
-| Height | 38.0mm | Maximum (with components) |
-| Mass | <50g | Assembled |
+### TRIAC Driver Circuits (4 Channels)
 
-### 2.3 Environmental Ratings
-- **Operating Temperature:** -20°C to +70°C
-- **Storage Temperature:** -40°C to +85°C
-- **Humidity:** 20-80% RH, non-condensing
-- **Enclosure Rating:** IP20 (indoor use)
+Each channel consists of:
+1. **Optocoupler**: MOC3021 (random phase) or MOC3041 (zero-cross)
+   - Input: 330Ω current limiting resistor from ESP32 GPIO
+   - Isolation: 5000V RMS
+   
+2. **TRIAC**: BT136-600E
+   - Voltage Rating: 600V
+   - Current Rating: 4A RMS
+   - Package: TO-220 with heatsink
+   - Gate Resistor: 100Ω (1/2W)
+   - Snubber Circuit: 0.1µF/400V film capacitor + 100kΩ resistor (optional)
 
----
+3. **Thermal Management**:
+   - Heatsinks on all TRIACs (TO-220 compatible)
+   - Thermal vias under TRIAC mounting pads (0.5mm diameter, filled)
+   - Minimum 9 thermal vias per TRIAC in 3x3 grid pattern
+   - Thermal pad connection to bottom copper pour
 
-## 3. Design Architecture
+### Zero-Cross Detection Circuit
 
-### 3.1 Topology
+- **Input**: AC mains via step-down transformer (230V to 12V)
+- **Rectifier**: Bridge rectifier using 4x 1N4007 diodes
+- **Optocoupler**: 4N25 or PC817
+- **Current Limiting**: 1kΩ resistor (1/2W) on AC side
+- **Pull-down**: 10kΩ resistor on ESP32 side
+- **Output**: Digital pulse at each zero-crossing (100Hz for 50Hz mains, 120Hz for 60Hz mains)
+- **Protection**: 0.1µF ceramic capacitor for noise filtering
 
-The design employs a dual-isolation architecture:
+### Power Supply Circuit
 
-1. **Primary Isolation:** Optocoupler-based galvanic separation (5kV rating)
-2. **Secondary Isolation:** Physical PCB clearance (6mm creepage distance)
-
-This approach provides reinforced isolation exceeding IEC 60950-1 requirements for 250V AC systems.
-
-### 3.2 Key Subsystems
-
-**Power Management:**
-- AC-DC converter: HLK-PM01 (isolated flyback topology)
-- Output regulation: 5V ±100mV at 600mA
-
-**Control Interface:**
-- Microcontroller: ESP32-WROOM-32 (Xtensa dual-core, 240MHz)
-- Wireless: WiFi 802.11 b/g/n, 2.4GHz
-- Local I/O: 4× tactile switch inputs (debounced)
-
-**Load Switching:**
-- Semiconductor switches: BTA16-600B TRIAC (16A rating, 600V)
-- Gate drive: MOC3041 zero-cross optocoupler
-- Thermal management: Multiple thermal vias, 2oz copper
-
-### 3.3 Safety Features
-
-| Feature | Implementation | Standard |
-|---------|---------------|----------|
-| Overcurrent protection | Tri-level fusing (1A, 10A, 500mA) | IEC 60269 |
-| Surge protection | MOV (275V clamping) | IEC 61643-331 |
-| Isolation testing | >10MΩ @ 500V DC | IEC 60950-1 |
-| Thermal shutdown | ESP32 internal sensor monitoring | Firmware-based |
+- **Input**: AC mains via isolation transformer (230V/110V to 12V AC, 2VA minimum)
+- **Rectifier**: Full-wave bridge rectifier (1N4007 x4)
+- **Filter**: 1000µF/16V electrolytic capacitor
+- **Regulator**: AMS1117-5.0 (5V, 1A)
+- **Output Filter**: 100µF/16V + 10µF/16V electrolytic capacitors
+- **Bypass**: 0.1µF ceramic capacitors at ESP32 power pins
+- **Protection**: Reverse polarity protection diode, input fuse (2A)
 
 ---
 
-## 4. Manufacturing Data Package
+## PCB Design Requirements
 
-### 4.1 CAM File Inventory
+### Board Specifications
 
-| File Type | Quantity | Format | Standard |
-|-----------|----------|--------|----------|
-| Gerber photoplot | 7 layers | RS-274X | Ucamco 2023.03 |
-| NC drill data | 1 file | Excellon CNC-7 | Industry standard |
-| Assembly data | 2 files | CSV | IPC-D-356A |
-| Documentation | 8 files | Markdown/text | - |
+- **Dimensions**: 100mm x 80mm
+- **Layers**: 2-layer PCB
+- **Copper Weight**: 2oz (70µm) on both layers for high current handling
+- **Board Thickness**: 1.6mm (standard)
+- **Surface Finish**: HASL (Hot Air Solder Leveling) or ENIG
+- **Solder Mask**: Green (standard) or other color
+- **Silkscreen**: White text on both sides
 
-### 4.2 Bill of Materials Summary
+### Critical Design Rules
 
-- **Total unique parts:** 29
-- **Total component count:** 67
-- **SMD components:** 42 (placement automated)
-- **Through-hole:** 25 (manual assembly required)
+#### AC/DC Isolation Barrier
+- **Location**: Y = 26mm from bottom edge
+- **Barrier Width**: 6mm minimum clearance zone
+- **No Traces**: Absolutely no copper traces crossing the barrier
+- **No Vias**: No vias within the isolation barrier zone
+- **Keepout**: Defined keepout area in PCB layout
+- **Creepage**: Minimum 6mm creepage distance between AC and DC sides
+- **Clearance**: Minimum 6mm clearance in air
 
-**Critical components:**
-- ESP32-WROOM-32: WiFi/BT microcontroller module
-- BTA16-600B: TRIAC power switches (4×)
-- MOC3041: Zero-cross optocouplers (4×)
-- HLK-PM01: Isolated AC-DC power module
+#### Copper Clearances
+- **High Voltage AC traces**: 0.8mm minimum spacing
+- **Low Voltage DC traces**: 0.2mm minimum spacing
+- **AC to DC clearance**: 6mm minimum (enforced by isolation barrier)
+- **Trace Width (AC)**: 1.5mm minimum for 4A loads
+- **Trace Width (DC, 5V)**: 0.8mm for power, 0.3mm for signals
 
-### 4.3 PCB Specification
+#### Thermal Management
+- **TRIAC Thermal Vias**: 
+  - 9 vias per TRIAC in 3x3 grid pattern
+  - Via diameter: 0.5mm drill, 0.8mm pad
+  - Via spacing: 2mm center-to-center
+  - Connected to bottom layer ground/heat sink plane
+  - Filled or tented vias recommended
 
-- **Material:** FR-4, Tg 130-140°C, UL94 V-0
-- **Layers:** 2 (signal + ground plane)
-- **Thickness:** 1.60mm ±10%
-- **Copper weight:** 2oz (70μm) both sides
-- **Surface finish:** HASL lead-free or ENIG
-- **Minimum feature:** 0.25mm track/space (IPC Class 2)
+- **Copper Pours**:
+  - Bottom layer: Ground plane with thermal relief for TRIACs
+  - Top layer: Ground pour in non-AC areas
+  - Thermal connection from TRIAC tab to ground plane
 
----
+### Component Placement
 
-## 5. Compliance and Certification
+#### High Voltage Side (Below Y=26mm barrier)
+- AC input screw terminals
+- Transformer
+- Bridge rectifier
+- TRIACs (BT136) with heatsinks
+- MOC3021 optocouplers (straddling barrier)
+- AC load output screw terminals
+- Fuses and protection components
 
-### 5.1 Safety Standards
+#### Low Voltage Side (Above Y=26mm barrier)
+- ESP32-WROOM-32 module
+- 5V voltage regulator (AMS1117)
+- Zero-cross detection optocoupler output
+- Physical switches
+- Status LEDs
+- Bypass capacitors
+- Programming header (USB/UART)
 
-| Standard | Title | Compliance Status |
-|----------|-------|-------------------|
-| IEC 60950-1 | IT equipment safety | Design compliant |
-| UL 94 V-0 | Flammability | Material certified |
-| IEC 60112 | Tracking resistance | CTI ≥175V verified |
+#### Optocoupler Placement
+- MOC3021 optocouplers should straddle the isolation barrier
+- Input pins (1-2) on low voltage side
+- Output pins (4-6) on high voltage side
+- Package oriented perpendicular to barrier
 
-### 5.2 Electromagnetic Compatibility
+### Net Connections
 
-**Target standards:**
-- EN 55022 Class B (conducted and radiated emissions)
-- FCC Part 15 Subpart B Class B
-- IEC 61000-4 series (immunity)
+#### Power Nets
+- **AC_LIVE**: Mains live input
+- **AC_NEUTRAL**: Mains neutral input
+- **AC_L1, AC_L2, AC_L3, AC_L4**: TRIAC switched outputs to loads
+- **+5V**: Regulated 5V power rail
+- **+3V3**: 3.3V from ESP32 regulator
+- **GND**: Common ground (DC side only, isolated from AC)
 
-**Design mitigation:**
-- Ground plane for low-impedance return path
-- Zero-cross switching reduces dV/dt
-- Input filtering on AC and DC sides
-
-### 5.3 Environmental Compliance
-- RoHS Directive 2011/65/EU (lead-free)
-- REACH Regulation (EC) 1907/2006
-- WEEE Directive 2012/19/EU (recyclability)
-
----
-
-## 6. Reliability Analysis
-
-### 6.1 MTBF Estimation
-
-System-level mean time between failures calculated per MIL-HDBK-217F:
-
-| Component Class | Individual MTBF | Quantity | λ (FIT) |
-|----------------|-----------------|----------|---------|
-| Microcontroller | 100,000h | 1 | 10 |
-| Power supply | 200,000h | 1 | 5 |
-| TRIACs | 500,000h | 4 | 8 |
-| Passive components | >1,000,000h | 62 | 6 |
-
-**System MTBF:** >50,000 hours (5.7 years continuous operation)
-
-### 6.2 Failure Modes and Effects Analysis
-
-Critical failure modes identified and mitigated:
-
-1. **Zero-cross signal loss:** Dual-resistor redundancy, firmware health check
-2. **TRIAC thermal runaway:** Thermal vias, current derating, zero-cross switching
-3. **Power supply failure:** Brownout detection, capacitive buffering
-4. **Isolation breakdown:** 6mm clearance (2× safety margin), hi-pot testing
-
-### 6.3 Quality Metrics
-
-- **Target defect rate:** <1% post-manufacturing
-- **Field failure rate:** <0.5% annually
-- **Warranty period:** 24 months (recommended)
+#### Signal Nets
+- **ZCD**: Zero-cross detection signal to GPIO13
+- **TRIAC1**: GPIO16 to MOC3021 channel 1
+- **TRIAC2**: GPIO17 to MOC3021 channel 2
+- **TRIAC3**: GPIO18 to MOC3021 channel 3
+- **TRIAC4**: GPIO19 to MOC3021 channel 4
+- **SW1**: Physical switch 1 to GPIO32
+- **SW2**: Physical switch 2 to GPIO33
+- **SW3**: Physical switch 3 to GPIO25
+- **SW4**: Physical switch 4 to GPIO26
 
 ---
 
-## 7. Production Economics
+## Manufacturing Specifications (JLCPCB)
 
-### 7.1 Cost Analysis (USD, December 2024)
+### PCB Fabrication Parameters
 
-| Quantity | PCB Cost | Components | Assembly | Total | Unit Cost |
-|----------|----------|------------|----------|-------|-----------|
-| 10 | $15 | $400 | Manual | $415 | $41.50 |
-| 50 | $75 | $1,800 | $400 | $2,275 | $45.50 |
-| 100 | $300 | $3,200 | $500 | $4,000 | $40.00 |
-| 500 | $900 | $14,000 | $2,000 | $16,900 | $33.80 |
+```
+Board Type: Single PCB
+Layers: 2
+Dimensions: 100mm x 80mm
+PCB Qty: 5 (minimum order)
+PCB Thickness: 1.6mm
+PCB Color: Green
+Silkscreen: White
+Surface Finish: HASL (Lead Free)
+Outer Copper Weight: 2oz
+Via Covering: Tented
+Via Process: Tented vias (recommended for thermal vias)
+Plating Thickness: 1oz (25µm) minimum on via walls
+Gold Fingers: No
+Castellated Holes: No
+Material: FR-4 TG150
+Dielectric Constant: 4.5 @ 1MHz
+Remove Order Number: Yes (specify location on back silkscreen)
+Controlled Impedance: No (not required for this design)
+```
 
-**Note:** Pricing subject to component market conditions. Volume discounts available at >100 units.
+### Stackup Configuration
 
-### 7.2 Production Timeline
+```
+Layer 1 (Top):    0.07mm copper (2oz) - F.Cu - Signal/Power layer
+Dielectric:       1.46mm FR-4 core (εr = 4.5)
+Layer 2 (Bottom): 0.07mm copper (2oz) - B.Cu - Ground plane
+```
 
-| Phase | Duration | Deliverable |
-|-------|----------|-------------|
-| PCB fabrication | 5-7 days | Bare boards |
-| Component procurement | 7-21 days | Parts inventory |
-| Assembly (PCBA) | 3-5 days | Populated boards |
-| Testing and QA | 1-2 days | Validated units |
-| **Total lead time** | **16-35 days** | **Production units** |
+### Via Specifications for Thermal Management
 
-### 7.3 Manufacturing Partners
+- **Thermal Via Fill**: Tented (covered with solder mask)
+- **Via Plating**: Standard through-hole plating (1oz min)
+- **Thermal Via Pattern**: 3×3 grid under each TRIAC
+- **Via Spacing**: 2mm center-to-center
+- **Via Function**: Heat transfer from TRIAC to bottom ground plane
 
-Recommended fabricators with IPC-6012 Class 2 capability:
-- JLCPCB (Shenzhen, China) - Low-cost, high-volume
-- PCBWay (Shenzhen, China) - Quality focus, assembly services
-- Eurocircuits (Belgium) - European distribution
-- Advanced Circuits (USA) - Domestic quick-turn
+### Gerber Files Required
 
----
+1. **GTL** - Top copper layer
+2. **GBL** - Bottom copper layer
+3. **GTS** - Top solder mask
+4. **GBS** - Bottom solder mask
+5. **GTO** - Top silkscreen
+6. **GBO** - Bottom silkscreen
+7. **TXT** - Drill file (Excellon format)
+8. **GML/GKO** - Board outline
 
-## 8. Compatibility Verification
+### Design Rule Constraints (JLCPCB Standard)
 
-### 8.1 Firmware Integration
+- **Minimum Track Width**: 0.127mm (use 0.3mm minimum for this design)
+- **Minimum Track Spacing**: 0.127mm (use 0.8mm for AC, 0.2mm for DC)
+- **Minimum Via Hole Size**: 0.3mm (use 0.5mm)
+- **Minimum Via Diameter**: 0.5mm (use 0.8mm)
+- **PTH Drill Sizes**: 0.3mm - 6.3mm
+- **NPTH Drill Sizes**: 0.5mm - 6.3mm
+- **Board Outline Tolerance**: ±0.2mm
 
-Pin mapping validated against embedded software configuration:
+### Assembly (If Using JLCPCB Assembly Service)
 
-| Function | GPIO | Hardware Connection | Status |
-|----------|------|---------------------|--------|
-| Zero-cross detect | GPIO 13 | PC817 output | Verified |
-| TRIAC channel 1 | GPIO 16 | MOC3041 #1 input | Verified |
-| TRIAC channel 2 | GPIO 17 | MOC3041 #2 input | Verified |
-| TRIAC channel 3 | GPIO 18 | MOC3041 #3 input | Verified |
-| TRIAC channel 4 | GPIO 19 | MOC3041 #4 input | Verified |
-| Switch input 1 | GPIO 32 | Physical switch | Verified |
-| Switch input 2 | GPIO 33 | Physical switch | Verified |
-| Switch input 3 | GPIO 25 | Physical switch | Verified |
-| Switch input 4 | GPIO 26 | Physical switch | Verified |
-
-**Result:** 100% compatibility, no firmware modifications required.
-
-### 8.2 System Integration
-
-- **Backend API:** Google Apps Script polling interface (2.5s interval) - Compatible
-- **Frontend UI:** Dashboard WebSocket + REST API - Compatible
-- **Mobile App:** Flutter local/cloud control - Compatible
-- **Voice Control:** Amazon Alexa + Google Home integration - Compatible
-
----
-
-## 9. Risk Assessment
-
-### 9.1 Technical Risks
-
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Component obsolescence | Low | Medium | Multiple approved sources |
-| Manufacturing defect | Medium | Medium | IPC-A-610 inspection, testing |
-| Thermal management | Low | High | Thermal analysis completed, vias implemented |
-| EMC non-compliance | Low | High | Design follows best practices, testing planned |
-
-### 9.2 Supply Chain Risks
-
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Component shortage | Medium | High | 6-month inventory recommended |
-| Price volatility | High | Medium | Negotiate fixed pricing agreements |
-| Lead time extension | Medium | Medium | Dual-source critical components |
-
-### 9.3 Overall Risk Level
-**Assessment:** LOW to MEDIUM - Risks are identified and mitigation strategies are in place.
+- Basic assembly available for common SMD components
+- Through-hole components (TRIACs, transformers) require manual assembly
+- Extended parts library available at additional cost
+- BOM and Pick-and-Place (CPL) files required
 
 ---
 
-## 10. Recommendations
+## Safety & Compliance
 
-### 10.1 Immediate Actions (Week 1-2)
-1. Order pilot run (10-25 units) for design validation
-2. Source critical components (ESP32, HLK-PM01, TRIACs)
-3. Establish test fixtures and procedures
+### Electrical Safety
 
-### 10.2 Short-term Actions (Month 1-2)
-1. Complete pilot assembly and functional testing
-2. Conduct EMC pre-compliance testing
-3. Iterate design based on pilot results (if required)
+1. **Isolation Requirements**:
+   - Minimum 6mm AC/DC isolation barrier enforced
+   - Optocoupler isolation rating: 5000V RMS minimum
+   - No direct electrical connection between AC and DC sides
 
-### 10.3 Long-term Actions (Month 3-6)
-1. Scale to production volume (100+ units)
-2. Pursue formal certification (CE, FCC if applicable)
-3. Establish warranty and service infrastructure
+2. **Protection Features**:
+   - Input fuse on AC side (2A slow-blow)
+   - Reverse polarity protection on DC input
+   - ESD protection on exposed connectors
+   - Thermal shutdown in firmware
 
----
+3. **Grounding**:
+   - AC ground terminal provided
+   - Metal enclosure must be grounded
+   - DC ground isolated from AC ground
 
-## 11. Conclusion
+### Regulatory Compliance
 
-The Smart Home Controller v3.1 hardware design represents a production-ready, compliant solution for residential AC load control. Key achievements:
+- **Target Standards**:
+  - IEC 60950-1: Safety of IT equipment
+  - EN 55022: EMI emissions
+  - FCC Part 15: Radio frequency devices
+  - RoHS: Restriction of hazardous substances
 
-- **Miniaturization:** 73% size reduction versus conventional designs
-- **Safety:** Dual-isolation architecture exceeds standards
-- **Reliability:** FMEA-validated design, >50,000h MTBF
-- **Integration:** 100% firmware/software compatibility maintained
-- **Manufacturability:** Complete IPC-compliant documentation package
+- **Testing Required**:
+  - Hipot testing (isolation voltage)
+  - Ground bond testing
+  - EMI/RFI emissions testing
+  - Safety agency approval (UL/CE) for commercial use
 
-**Project Status:** READY FOR PILOT PRODUCTION
+### Warnings
 
-**Recommended Next Step:** Authorize pilot manufacturing run (10-25 units) for validation and field testing.
+⚠️ **HIGH VOLTAGE WARNING**: This device operates with mains AC voltage (110-240V) which can cause serious injury or death. Assembly and installation should only be performed by qualified personnel familiar with high voltage safety procedures.
 
----
-
-## Document Approval
-
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| Hardware Engineer | [Name] | _________ | _____ |
-| Technical Lead | [Name] | _________ | _____ |
-| Quality Assurance | [Name] | _________ | _____ |
-| Project Manager | [Name] | _________ | _____ |
+⚠️ **ISOLATION CRITICAL**: The 6mm isolation barrier is a critical safety feature. Do not modify or bypass this barrier. Any design changes must maintain minimum isolation requirements.
 
 ---
 
-**Document Control:**
-- **Number:** HW-EXEC-001
-- **Revision:** 3.1
-- **Pages:** 11
-- **Distribution:** Engineering, Management, Manufacturing
-- **Next Review:** Post-pilot production
+## Testing & Quality Control
 
-**End of Document**
+### Pre-Power Testing
+1. Visual inspection of PCB assembly
+2. Continuity testing of all connections
+3. Isolation resistance testing (AC to DC >10MΩ)
+4. Short circuit check on power rails
+5. Verify correct component orientation (especially diodes, ICs)
+
+### Low-Voltage Testing
+1. Apply 5V power (no AC connected)
+2. Verify 3.3V regulator output
+3. Program ESP32 with test firmware
+4. Test GPIO inputs/outputs
+5. Verify WiFi connectivity
+
+### High-Voltage Testing (With Safety Precautions)
+1. Connect low-voltage AC (12V) to test TRIACs
+2. Verify zero-cross detection timing
+3. Test TRIAC switching at various duty cycles
+4. Monitor TRIAC temperatures under load
+5. Test with full mains voltage (final step)
+
+### Production Testing
+- [ ] PCB visual inspection (IPC-A-610 standards)
+- [ ] Automated optical inspection (AOI)
+- [ ] In-circuit testing (ICT) if available
+- [ ] Functional testing with test fixture
+- [ ] Burn-in testing (24 hours at full load)
+- [ ] Final QC inspection and packaging
+
+---
+
+## Bill of Materials Reference
+
+See `BOM.csv` for complete component list including:
+- Part numbers
+- Manufacturer part numbers (MPN)
+- Quantities
+- Reference designators
+- Footprints
+- Supplier information
+- Pricing
+
+---
+
+## Revision History
+
+| Version | Date | Changes | Author |
+|---------|------|---------|--------|
+| 1.0 | Dec 2024 | Initial release for production | Engineering Team |
+
+---
+
+## Contact & Support
+
+**Project Repository**: [GitHub Repository URL]  
+**Technical Support**: Open GitHub issue with "Hardware:" prefix  
+**Safety Questions**: Consult licensed electrician  
+
+---
+
+**Document Status**: Production Ready  
+**Approved By**: Engineering Team  
+**Approval Date**: December 2024

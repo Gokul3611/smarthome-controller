@@ -1,61 +1,33 @@
-Reference,Quantity,Value,Package,Description,Manufacturer,Part Number,Supplier,Supplier Part,Unit Price,Total Price,Notes
-"U6",1,"ESP32-WROOM-32","Module 18x25.5mm","WiFi+BT MCU 4MB Flash","Espressif","ESP32-WROOM-32","DigiKey/JLCPCB","ESP32-WROOM-32","$5.00","$5.00","CRITICAL: Firmware compatible"
-"Q1,Q2,Q3,Q4",4,"BTA16-600B","TO-220","16A 600V TRIAC","NXP/STMicro","BTA16-600B","DigiKey/Mouser","BTA16-600B","$0.60","$2.40","Snubberless compatible"
-"U2,U3,U4,U5",4,"MOC3041","DIP-6 SMD","Zero-Cross Optocoupler","Fairchild/OnSemi","MOC3041M","DigiKey/JLCPCB","MOC3041M","$0.50","$2.00","CRITICAL: Zero-cross switching"
-"U1",1,"PC817C","SOP-4 SMD","Optocoupler 5kV","Sharp/LiteOn","PC817C","JLCPCB","C12084","$0.15","$0.15","Zero-cross detection"
-"BR1",1,"DF04M","SOP-4 SMD","1A 400V Bridge Rectifier","Diodes Inc","DF04M","JLCPCB","C90606","$0.20","$0.20","Zero-cross circuit"
-"PS1",1,"HLK-PM01","Module 34x20x15mm","5V 600mA AC-DC Isolated","Hi-Link","HLK-PM01","AliExpress/LCSC","HLK-PM01","$3.50","$3.50","CRITICAL: Power supply"
-"R1,R2",2,"470kΩ","SMD 2512 1W","High voltage dropper","Yageo","RC2512FK-07470KL","JLCPCB","C114768","$0.15","$0.30","FAIL-SAFE: Dual resistors"
-"R3,R4,R5,R6",4,"330Ω","SMD 0805","LED current limit","Yageo","RC0805FR-07330RL","JLCPCB","C17630","$0.01","$0.04","Optocoupler drive"
-"R7,R8,R9,R10",4,"180Ω","SMD 1206 1/2W","TRIAC gate resistor","Yageo","RC1206FR-07180RL","JLCPCB","C144481","$0.02","$0.08","TRIAC control"
-"R11",1,"1kΩ","SMD 1206 1/2W","Zero-cross current limit","Yageo","RC1206FR-071KL","JLCPCB","C4410","$0.01","$0.01",""
-"R12",1,"10kΩ","SMD 0805","Pull-down resistor","Yageo","RC0805FR-0710KL","JLCPCB","C17414","$0.01","$0.01","GPIO 13"
-"C1",1,"100µF 16V","SMD Electrolytic","Power input filter","Rubycon","16YXF100MEFC6.3X11","JLCPCB","C249384","$0.15","$0.15","Low ESR"
-"C2,C3,C4,C5,C6,C7,C8,C9",8,"100nF 50V","SMD 0805 Ceramic","Bypass capacitors","Samsung","CL21B104KBCNNNC","JLCPCB","C49678","$0.02","$0.16","X7R dielectric"
-"F1",1,"1A Fast","SMD 1206 Fuse","Zero-cross protection","Littelfuse","0451001.MRL","Mouser","576-0451001.MRL","$0.15","$0.15","Fast-blow"
-"F2",1,"10A Slow","Through-hole","Main AC fuse","Littelfuse","0217010.MXP","Mouser","576-0217010.MXP","$0.30","$0.30","Slow-blow"
-"F3",1,"500mA Fast","SMD 1206 Fuse","Power supply protection","Littelfuse","0451.500MRL","Mouser","576-0451.500MRL","$0.15","$0.15","FAIL-SAFE"
-"MOV1",1,"275V MOV","7mm Disc","Surge protection","Littelfuse","V07E275P","Mouser","576-V07E275P","$0.30","$0.30","FAIL-SAFE: Voltage clamp"
-"J1",1,"Terminal 2-pos","3.5mm pitch","AC Input connector","Phoenix","1757019","DigiKey","277-1667-ND","$0.30","$0.30","10A rated"
-"J2",1,"Terminal 5-pos","3.5mm pitch","AC Output connector","Phoenix","1757242","DigiKey","277-1670-ND","$0.60","$0.60","4 loads + return"
-"J3",1,"JST-XH 5-pin","2.5mm pitch","Switch input connector","JST","B5B-XH-A","DigiKey","455-2270-ND","$0.25","$0.25","Physical switches"
-"",4,"M2.5x10mm Screw","","PCB mounting hardware","Generic","M2.5x10","Hardware store","","$0.05","$0.20","Stainless steel"
-"",4,"M2.5 Standoff","10mm","PCB spacers","Generic","M2.5x10","Hardware store","","$0.10","$0.40","Nylon or metal"
-"PCB",1,"70x50mm 2-layer","1.6mm FR-4","Printed circuit board","JLCPCB/PCBWay","Custom","JLCPCB","","$2.00","$20.00","2oz copper, HASL"
-"",1,"Solder paste","","SMD assembly","Chipquik","SMD291SNL","Amazon","","$1.00","$1.00","Lead-free"
-"",1,"Stencil","70x50mm","Paste application","JLCPCB","Custom","JLCPCB","","$5.00","$5.00","Laser-cut stainless"
-"","","","","","","","","TOTAL:","","$42.45",""
-"","","","","","","","","Total (10 units):","","$270.00","With bulk pricing"
-"","","","","","","","","Total (100 units):","","$1,600.00","With volume discounts"
-
-ASSEMBLY NOTES:
-"1. All SMD components can be assembled by JLCPCB PCBA service"
-"2. Through-hole components (ESP32, TRIACs, connectors) require hand soldering or wave soldering"
-"3. Thermal paste required between TRIACs and PCB thermal vias"
-"4. Conformal coating recommended on AC section for moisture protection"
-"5. All components are RoHS compliant and lead-free compatible"
-
-CRITICAL COMPONENTS (MUST match firmware):
-"- ESP32-WROOM-32: Firmware expects specific GPIO pins"
-"- MOC3041: Zero-cross switching is REQUIRED for snubberless operation"
-"- BTA16-600B: Adequate current rating (16A) with safety margin"
-"- HLK-PM01: Isolated power supply critical for safety"
-
-FAIL-SAFE FEATURES:
-"- Dual 470kΩ resistors: Redundancy in zero-cross detection"
-"- MOV surge protection: Voltage spike clamping"
-"- Multiple fuses: Overcurrent protection at multiple levels"
-"- 6mm isolation barrier: Physical separation AC/DC"
-"- Thermal vias: Heat dissipation under TRIACs"
-"- Ground plane: Low impedance return path"
-
-SUBSTITUTIONS ALLOWED:
-"- BTA16-600B can be replaced with BT136, Q4008L (similar specs)"
-"- PC817C can be PC817A/B (all variants work)"
-"- DF04M can be any 1A 400V SMD bridge"
-"- Resistors/capacitors: Any manufacturer with same specs"
-
-DO NOT SUBSTITUTE:
-"- ESP32-WROOM-32 (firmware specific)"
-"- MOC3041 (zero-cross required, not MOC3021/3023)"
-"- HLK-PM01 (safety certified, specific footprint)"
+Reference,Quantity,Value,Description,Manufacturer,MPN,Package,Supplier,Supplier Part Number,Unit Price,Extended Price
+"U1",1,"ESP32-WROOM-32","WiFi+BT MCU Module","Espressif","ESP32-WROOM-32","SMD Module","DigiKey","1904-1010-1-ND",$5.00,$5.00
+"Q1,Q2,Q3,Q4",4,"BT136-600E","4A 600V TRIAC","NXP","BT136-600E","TO-220","Mouser","771-BT136-600E",$0.50,$2.00
+"U2,U3,U4,U5",4,"MOC3021","Random Phase Optocoupler","Lite-On","MOC3021M","DIP-6","DigiKey","160-1366-5-ND",$0.40,$1.60
+"U6",1,"4N25","Optocoupler for Zero-Cross","Vishay","4N25","DIP-6","Mouser","512-4N25",$0.30,$0.30
+"D1,D2,D3,D4,D5,D6,D7,D8",8,"1N4007","1A 1000V Rectifier Diode","ON Semi","1N4007G","DO-41","DigiKey","1N4007GDICT-ND",$0.10,$0.80
+"U7",1,"AMS1117-5.0","5V 1A Linear Regulator","AMS","AMS1117-5.0","SOT-223","DigiKey","AMS1117-5.0CT-ND",$0.50,$0.50
+"T1",1,"Transformer","230V to 12V 2VA Transformer","Generic","230V-12V-2VA","PCB Mount","Local Supplier","N/A",$3.00,$3.00
+"R1,R2,R3,R4",4,"330Ω","LED Current Limit 1/4W","Yageo","CFR-25JB-52-330R","Axial 1/4W","DigiKey","330QBK-ND",$0.02,$0.08
+"R5,R6,R7,R8",4,"100Ω","TRIAC Gate Resistor 1/2W","Yageo","MFR-25FBF52-100R","Axial 1/2W","DigiKey","100W-1-ND",$0.05,$0.20
+"R9",1,"1kΩ","Zero-Cross Limiting 1/2W","Yageo","MFR-25FBF52-1K","Axial 1/2W","DigiKey","1.0KQBK-ND",$0.05,$0.05
+"R10,R11,R12,R13,R14,R15,R16,R17",8,"10kΩ","Pull-down/Pull-up 1/4W","Yageo","CFR-25JB-52-10K","Axial 1/4W","DigiKey","10KQBK-ND",$0.02,$0.16
+"R18,R19",2,"100kΩ","High Impedance 1/4W","Yageo","CFR-25JB-52-100K","Axial 1/4W","DigiKey","100KQBK-ND",$0.02,$0.04
+"C1,C2,C3,C4,C5,C6,C7,C8",8,"0.1µF","Bypass Capacitor 50V","Kemet","C320C104K5R5TA","Ceramic Disc","DigiKey","399-4151-ND",$0.10,$0.80
+"C9,C10,C11,C12",4,"0.1µF","Snubber Capacitor 400V X2","EPCOS","B32922C3104M","Film Capacitor","Mouser","871-B32922C3104M",$0.30,$1.20
+"C13,C14",2,"10µF","Power Filter 16V","Nichicon","UVR1C100MDD","Electrolytic 5mm","DigiKey","493-2203-ND",$0.15,$0.30
+"C15,C16",2,"100µF","Power Filter 16V","Nichicon","UVR1C101MDD","Electrolytic 6.3mm","DigiKey","493-2206-ND",$0.20,$0.40
+"C17",1,"1000µF","Main Reservoir 16V","Nichicon","UVR1C102MHD","Electrolytic 10mm","DigiKey","493-2215-ND",$0.50,$0.50
+"J1,J2",2,"Screw Terminal","2-pos 5mm AC Input","Phoenix","1757019","5mm Pitch","DigiKey","277-1667-ND",$0.40,$0.80
+"J3,J4,J5,J6",4,"Screw Terminal","2-pos 5mm AC Output","Phoenix","1757019","5mm Pitch","DigiKey","277-1667-ND",$0.40,$1.60
+"J7",1,"Pin Header","2x19 2.54mm Female","Sullins","PPPC192LFBN-RC","2.54mm Pitch","DigiKey","S7118-ND",$1.00,$1.00
+"J8",1,"USB Connector","Micro-B USB","Molex","47346-0001","SMD","DigiKey","WM17117CT-ND",$0.50,$0.50
+"SW1,SW2,SW3,SW4",4,"Tactile Switch","6x6mm Tactile Button","Omron","B3F-1000","Through-hole","DigiKey","SW400-ND",$0.20,$0.80
+"F1",1,"Fuse","2A Slow-Blow 250V","Littelfuse","0215002.MXP","5x20mm","DigiKey","F2416-ND",$0.30,$0.30
+"F2",1,"Fuse Holder","5x20mm PCB Mount","Keystone","3568","Through-hole","DigiKey","36-3568-ND",$0.50,$0.50
+"HS1,HS2,HS3,HS4",4,"Heatsink","TO-220 Heatsink","Aavid","577102B00000G","TO-220","Mouser","532-577102B00",$0.60,$2.40
+"LED1",1,"LED","5mm Red LED","Kingbright","WP7113SRD","Through-hole 5mm","DigiKey","754-1217-ND",$0.10,$0.10
+"","","","","","","","","Subtotal:",$24.93
+"","","","","","","","","PCB (5pcs):",$10.00
+"","","","","","","","","Shipping:",$5.00
+"","","","","","","","","Total (single unit):",$39.93
+"","","","","","","","","Total (10 units):",$259.30
+"","","","","","","","","Total (100 units):",$2,093.00
