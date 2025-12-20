@@ -842,7 +842,7 @@ void processCloudResponse(const JsonDocument &respDoc) {
     for(int i = 0; i < 4; i++) {
         String key = "d" + String(i + 1);
         if(respDoc.containsKey(key)) {
-            JsonObject d = respDoc[key].as<JsonObject>();
+            JsonObjectConst d = respDoc[key].as<JsonObjectConst>();
             
             // Type update
             if (d.containsKey("type")) {
@@ -888,14 +888,14 @@ void processCloudResponse(const JsonDocument &respDoc) {
     
     // Schedules update
     if (respDoc.containsKey("schedules")) {
-        JsonArray schedulesArray = respDoc["schedules"].as<JsonArray>();
+        JsonArrayConst schedulesArray = respDoc["schedules"].as<JsonArrayConst>();
         // Process schedules from cloud
         // Implementation would parse and update schedules array
     }
     
     // Scenes update
     if (respDoc.containsKey("scenes")) {
-        JsonArray scenesArray = respDoc["scenes"].as<JsonArray>();
+        JsonArrayConst scenesArray = respDoc["scenes"].as<JsonArrayConst>();
         // Process scenes from cloud
         // Implementation would parse and update scenes array
     }
