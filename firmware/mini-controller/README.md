@@ -80,6 +80,26 @@ GPIO 2 ──────┤220Ω├──────►|──── GND
 
 ## 🚀 Quick Start Guide
 
+### Step 0: Configure Backend URL (IMPORTANT!)
+
+Before uploading, you MUST configure your Google Apps Script URL:
+
+1. **Get Your Backend URL**
+   - Deploy the backend from `backend/google-apps-script/`
+   - See [Backend README](../../backend/google-apps-script/README.md) for deployment
+   - Copy your deployment URL
+
+2. **Update the Firmware**
+   - Open `mini-controller.ino`
+   - Find line ~45: `String GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL_HERE";`
+   - Replace with your actual URL:
+     ```cpp
+     String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_ID/exec";
+     ```
+   - Save the file
+
+**Note:** Without a valid backend URL, cloud sync won't work (but local API will still function).
+
 ### Step 1: Upload Firmware
 
 1. **Open the sketch**

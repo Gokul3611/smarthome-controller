@@ -42,7 +42,14 @@
 #define LED_PIN 2  // Built-in LED or connect external LED here
 
 // Cloud Configuration
-String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJP31g9LhRulRHTbTd6KidEiBXlxCKfKcXkiUGe961IfNZDgHuoWAIif91PrPUQnHrIQ/exec";
+// IMPORTANT: Replace with YOUR Google Apps Script deployment URL
+// Get your URL from: backend/google-apps-script/README.md
+// This is a placeholder - update it before use!
+String GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL_HERE";
+
+// Alternative: Use the demo/test endpoint (if available)
+// String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
+
 String systemName = "Mini_Controller";
 
 // Network Configuration

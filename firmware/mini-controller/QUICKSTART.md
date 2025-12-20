@@ -48,7 +48,29 @@ Get your mini controller running in just 5 minutes!
 
 ---
 
-## Step 4: Upload Firmware
+## Step 4: Configure Backend URL
+
+**IMPORTANT:** Before uploading, update the Google Apps Script URL!
+
+1. Open `mini-controller.ino` in Arduino IDE
+2. Find this line near the top (around line 45):
+   ```cpp
+   String GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL_HERE";
+   ```
+3. Replace with your actual backend URL:
+   ```cpp
+   String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
+   ```
+4. Save the file
+
+**Where to get URL?**
+- Deploy backend from `backend/google-apps-script/`
+- See main project README or backend README
+- Or skip cloud for now (local API will still work!)
+
+---
+
+## Step 5: Upload Firmware
 
 1. Open `mini-controller.ino` in Arduino IDE
 2. Select your board:
@@ -60,7 +82,7 @@ Get your mini controller running in just 5 minutes!
 
 ---
 
-## Step 5: Setup WiFi
+## Step 6: Setup WiFi
 
 1. Open Serial Monitor (🔍 icon or `Ctrl+Shift+M`)
 2. Set baud rate to **115200**
@@ -76,7 +98,7 @@ Get your mini controller running in just 5 minutes!
 
 ---
 
-## Step 6: Verify Connection
+## Step 7: Verify Connection
 
 In Serial Monitor, you should see:
 
@@ -98,7 +120,7 @@ Build: MINI-001
 
 ---
 
-## Step 7: Test It!
+## Step 8: Test It!
 
 ### Test Built-in LED
 
