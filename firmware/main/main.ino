@@ -261,7 +261,9 @@ void checkZeroCrossHealth() {
             zeroCrossDetected = false;
             currentError = ERR_ZERO_CROSS_LOST;
             
-            // Safety: Turn off all TRIACs
+            // Safety: Turn off all TRIACs - hardware first, then state
+            // Order matters: Set pins LOW before clearing state to ensure
+            // ISR doesn't re-trigger TRIACs during the transition
             for (int i = 0; i < 4; i++) {
                 digitalWrite(TRIAC_PINS[i], LOW);
             }
@@ -728,9 +730,15 @@ void taskConnectivity(void * parameter) {
                 if (digitalRead(SWITCH_PINS[i]) == currentRead) {
                     lastSwitchState[i] = currentRead;
                     if (!devices[i].childLock) {
-                        // Toggle state - volatile variables provide atomic read on ESP32
-                        bool newState = !devices[i].state;
-                        int currentBrightness = devices[i].brightness;
+                        // Toggle state - read state and brightness atomically
+                        // While individual volatile reads are atomic, we need both
+                        // values to be consistent relative to each other
+                        bool newState;
+                        int currentBrightness;
+                        portENTER_CRITICAL(&timerMux);
+                        newState = !devices[i].state;
+                        currentBrightness = devices[i].brightness;
+                        portEXIT_CRITICAL(&timerMux);
                         setDeviceState(i, newState, currentBrightness);
                     }
                 }
