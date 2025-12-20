@@ -474,7 +474,6 @@ void processFadeTransitions() {
             devices[i].fireTick = calculateFireTick(devices[i].brightness);
             portEXIT_CRITICAL(&timerMux);
         }
-        }
     }
 }
 
