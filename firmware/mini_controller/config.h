@@ -54,6 +54,12 @@
 // 5000 = 5 seconds
 #define CLOUD_POLL_INTERVAL_MS 5000
 
+// HTTP request timeout in milliseconds
+#define HTTP_TIMEOUT_MS 10000
+
+// Minimum URL length for validation
+#define MIN_URL_LENGTH 10
+
 // WiFi configuration portal timeout in seconds
 // 180 = 3 minutes
 #define WIFI_CONFIG_TIMEOUT 180
@@ -64,7 +70,8 @@
 // Google Apps Script URL for cloud integration
 // Leave empty ("") to disable cloud features
 // Example: "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"
-#define GOOGLE_SCRIPT_URL "https://script.google.com/macros/s/AKfycbxJP31g9LhRulRHTbTd6KidEiBXlxCKfKcXkiUGe961IfNZDgHuoWAIif91PrPUQnHrIQ/exec"
+// IMPORTANT: Replace with your own script URL before deployment
+#define GOOGLE_SCRIPT_URL ""
 
 // ================================================================
 // MDNS CONFIGURATION

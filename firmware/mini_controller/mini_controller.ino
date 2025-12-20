@@ -561,8 +561,22 @@ void handleRoot() {
 // ================================================================
 
 bool syncWithCloud() {
-    if (googleScriptURL.length() < 10) {
-        return false;  // URL not configured
+    // Validate URL is configured and has proper format
+    if (googleScriptURL.length() < MIN_URL_LENGTH || 
+        !googleScriptURL.startsWith("https://")) {
+        return false;  // URL not configured or invalid
+    }
+    
+    // Cache system values to reduce overhead
+    static int cachedRSSI = 0;
+    static uint32_t cachedHeap = 0;
+    static unsigned long lastCacheUpdate = 0;
+    unsigned long now = millis();
+    
+    if (now - lastCacheUpdate > 1000) {  // Update cache every second
+        cachedRSSI = WiFi.RSSI();
+        cachedHeap = ESP.getFreeHeap();
+        lastCacheUpdate = now;
     }
     
     StaticJsonDocument<512> doc;
@@ -573,8 +587,8 @@ bool syncWithCloud() {
     doc["ver"] = FIRMWARE_VERSION;
     doc["device_type"] = "mini_controller";
     doc["uptime"] = getUptimeSeconds();
-    doc["rssi"] = WiFi.RSSI();
-    doc["heap"] = ESP.getFreeHeap();
+    doc["rssi"] = cachedRSSI;
+    doc["heap"] = cachedHeap;
     
     // Add LED state
     JsonObject device = doc.createNestedObject("d1");
@@ -589,7 +603,7 @@ bool syncWithCloud() {
     http.begin(googleScriptURL);
     http.addHeader("Content-Type", "application/json");
     http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
-    http.setTimeout(10000);
+    http.setTimeout(HTTP_TIMEOUT_MS);
     
     int httpCode = http.POST(jsonPayload);
     
@@ -727,10 +741,12 @@ void loop() {
     if (now - lastCloudSync >= CLOUD_POLL_INTERVAL_MS) {
         if (WiFi.status() == WL_CONNECTED) {
             cloudConnected = syncWithCloud();
+            lastCloudSync = now;  // Only update timestamp on successful attempt
         } else {
             cloudConnected = false;
+            // Retry more frequently when disconnected
+            lastCloudSync = now - (CLOUD_POLL_INTERVAL_MS / 2);
         }
-        lastCloudSync = now;
     }
     
     // Small delay to prevent watchdog triggers
