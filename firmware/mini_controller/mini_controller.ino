@@ -26,27 +26,11 @@
 #include <ESPmDNS.h>
 #include <WebSocketsServer.h>
 
-// ================================================================
-// CONFIGURATION
-// ================================================================
-#define FIRMWARE_VERSION "1.0"
-#define DEVICE_NAME "Mini_LED_Controller"
+// Project configuration
+#include "config.h"
 
-// Built-in LED Pin (GPIO 2 for most ESP32 boards)
-#define LED_PIN 2
-
-// PWM Configuration
-#define PWM_CHANNEL 0
-#define PWM_FREQUENCY 5000
-#define PWM_RESOLUTION 8  // 8-bit (0-255)
-
-// Network Configuration
-#define LOCAL_SERVER_PORT 8080
-#define WEBSOCKET_PORT 81
-#define CLOUD_POLL_INTERVAL_MS 5000
-
-// Google Apps Script URL (configure this)
-String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJP31g9LhRulRHTbTd6KidEiBXlxCKfKcXkiUGe961IfNZDgHuoWAIif91PrPUQnHrIQ/exec";
+// Google Apps Script URL (from config or override here)
+String googleScriptURL = GOOGLE_SCRIPT_URL;
 
 // ================================================================
 // GLOBAL OBJECTS
@@ -577,7 +561,7 @@ void handleRoot() {
 // ================================================================
 
 bool syncWithCloud() {
-    if (GOOGLE_SCRIPT_URL.length() < 10) {
+    if (googleScriptURL.length() < 10) {
         return false;  // URL not configured
     }
     
@@ -602,7 +586,7 @@ bool syncWithCloud() {
     String jsonPayload;
     serializeJson(doc, jsonPayload);
     
-    http.begin(GOOGLE_SCRIPT_URL);
+    http.begin(googleScriptURL);
     http.addHeader("Content-Type", "application/json");
     http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
     http.setTimeout(10000);
@@ -644,7 +628,7 @@ bool syncWithCloud() {
 // ================================================================
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(SERIAL_BAUD);
     delay(500);
     
     bootTime = millis();
@@ -659,9 +643,9 @@ void setup() {
     ledcWrite(PWM_CHANNEL, 0);  // Start with LED off
     
     // Initialize LED state
-    led.state = false;
-    led.brightness = 100;
-    led.name = "Built-in LED";
+    led.state = DEFAULT_LED_STATE;
+    led.brightness = DEFAULT_BRIGHTNESS;
+    led.name = DEFAULT_LED_NAME;
     led.lastOnTime = millis();
     led.totalRuntime = 0;
     
@@ -671,7 +655,7 @@ void setup() {
     
     // Initialize WiFi with captive portal
     WiFiManager wm;
-    wm.setConfigPortalTimeout(180);  // 3 minutes timeout
+    wm.setConfigPortalTimeout(WIFI_CONFIG_TIMEOUT);
     
     if (!wm.autoConnect(DEVICE_NAME)) {
         Serial.println("[WARN] WiFi connection failed - Restarting...");
@@ -683,10 +667,10 @@ void setup() {
     }
     
     // Initialize mDNS
-    if (MDNS.begin("mini-led")) {
+    if (MDNS.begin(MDNS_HOSTNAME)) {
         MDNS.addService("http", "tcp", LOCAL_SERVER_PORT);
         MDNS.addService("ws", "tcp", WEBSOCKET_PORT);
-        Serial.println("[INFO] mDNS started: mini-led.local");
+        Serial.printf("[INFO] mDNS started: %s.local\n", MDNS_HOSTNAME);
     }
     
     // Setup redirect server (port 80)
