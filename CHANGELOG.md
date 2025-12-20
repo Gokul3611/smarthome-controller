@@ -1,6 +1,33 @@
-# Production Firmware v3.0 - Change Summary
+# Changelog
 
-## Overview
+## v3.1 - Repository Reorganization (December 2024)
+
+### Repository Structure Updates
+- **Renamed `software_Team/` to `frontend/`** for professional naming convention
+- **Renamed `hardware/PCB_Manufacturing/` to `hardware/pcb/`** for consistency
+- **Removed 8 redundant documentation files** from root directory:
+  - FINAL_SUMMARY.md
+  - IMPLEMENTATION_SUMMARY.md
+  - PRODUCTION_READY_SUMMARY.md
+  - UI_CHANGE_CONFIRMATION.md
+  - PROJECT_STRUCTURE.md
+  - HOW_TO_VIEW_UI.md
+  - UI_PREVIEW.md
+  - ui-preview.html
+- **Updated all documentation references** to reflect new folder structure
+- **Streamlined root directory** from 16 to 9 essential markdown files
+
+### Improved Organization
+- Clear separation of concerns: backend, frontend, firmware, hardware
+- Professional folder naming throughout
+- Consolidated documentation in docs/ folder
+- Better maintainability and navigation
+
+---
+
+## v3.0 - Production Firmware (December 2024)
+
+### Overview
 
 Complete production-ready firmware overhaul for ESP32-based 4-channel TRIAC smart home controller. This release transforms the basic v2.1 firmware into a commercial-grade system suitable for manufacturing deployment.
 

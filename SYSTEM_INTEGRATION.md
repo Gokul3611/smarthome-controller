@@ -201,7 +201,7 @@ Voice Command → Alexa/Google → SinricPro → ESP32 → Hardware
 
 ### Technical Implementation
 
-**Location**: `software_Team/flutter project/demo/`
+**Location**: `frontend/flutter project/demo/`
 - **Framework**: Flutter 3.10+
 - **Architecture**: MVC pattern with services layer
 - **Packages**: http, connectivity_plus, network_info_plus
@@ -518,7 +518,7 @@ void checkZeroCrossHealth() {
 
 3. **Mobile App Release**:
    ```bash
-   cd software_Team/flutter\ project/demo
+   cd frontend/flutter\ project/demo
    flutter build apk --release
    # Upload to app/release/
    ```

@@ -28,8 +28,6 @@ A complete, professional-grade smart home automation solution for controlling 4-
 
 ### 📸 See the Dashboard in Action
 
-**[View Complete UI Gallery →](./UI_PREVIEW.md)** | **[How to View UI →](./HOW_TO_VIEW_UI.md)**
-
 ![Smart Home Controller Dashboard](https://github.com/user-attachments/assets/d744726f-4be5-4d46-ad67-1705a11d3b0f)
 
 *Modern glassmorphism design with real-time device control, system statistics, and professional aesthetics*
@@ -55,8 +53,6 @@ A complete, professional-grade smart home automation solution for controlling 4-
 ### For Users
 - 📱 [Mobile App](./app/README.md) - Download and install
 - 🌐 [Web Dashboard](./backend/google-apps-script/README.md) - Access guide
-- 🖼️ [UI Preview Gallery](./UI_PREVIEW.md) - Screenshot gallery
-- 👁️ [How to View UI](./HOW_TO_VIEW_UI.md) - See the app interfaces
 - ❓ [FAQ](./INSTALL.md) - Common questions
 
 ---
@@ -88,7 +84,7 @@ smarthome-controller/
 │       ├── Database.gs          # Database helpers
 │       ├── Dashboard.html       # Web dashboard UI
 │       └── README.md            # Backend deployment guide
-├── software_Team/                 # Software development files
+├── frontend/                      # Frontend applications
 │   └── flutter project/          # Flutter mobile app source code
 │       └── demo/                 # Main Flutter application
 │           ├── lib/
@@ -97,10 +93,16 @@ smarthome-controller/
 │           │   ├── services/    # API service layer
 │           │   └── pages/       # UI pages
 │           └── pubspec.yaml
-├── app/                          # 📱 Android APK builds folder
+├── hardware/                      # Hardware design files
+│   ├── pcb/                      # KiCad PCB design files
+│   ├── schematics/               # Circuit diagrams
+│   ├── bom/                      # Bill of materials
+│   └── README.md                 # Hardware documentation
+├── app/                          # 📱 Android APK builds
 │   ├── release/                  # Release APK builds
 │   ├── debug/                    # Debug APK builds
 │   └── README.md                 # App build & installation guide
+├── docs/                         # Additional documentation
 ├── README.md                     # This file (overview)
 ├── FEATURES.md                   # 🎯 Complete feature list
 ├── DEPLOYMENT.md                 # 🚀 Deployment guide
