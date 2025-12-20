@@ -4,8 +4,12 @@
 ![Platform](https://img.shields.io/badge/platform-ESP32-green)
 ![Status](https://img.shields.io/badge/status-production--ready-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-orange)
+![Deployment](https://img.shields.io/badge/deployment-automated-success)
+![APK](https://img.shields.io/badge/APK-auto--build-blue)
 
 > **Production-ready IoT smart home automation system** with ESP32 hardware, cloud backend, web dashboard, and cross-platform mobile application.
+
+## 🚀 **[📖 Complete Deployment Guide](./DEPLOYMENT_INDEX.md)** ← Start Here to Deploy!
 
 ---
 
