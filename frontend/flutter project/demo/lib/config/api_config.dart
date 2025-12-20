@@ -5,7 +5,7 @@ class ApiConfig {
 ';
   
   // API Key (must match the one in Apps Script properties)
-  static const String apiKey = 'YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9';
+  static const String apiKey = 'smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]';
   
   // WebSocket URL for ESP32 (if using direct connection)
   static const String wsUrl = 'ws://192.168.1.100:81';
