@@ -720,12 +720,14 @@ void taskConnectivity(void * parameter) {
                 if (digitalRead(SWITCH_PINS[i]) == currentRead) {
                     lastSwitchState[i] = currentRead;
                     if (!devices[i].childLock) {
-                        // Toggle state - use critical section to read state safely
+                        // Toggle state - read both state and brightness atomically
                         bool newState;
+                        int currentBrightness;
                         portENTER_CRITICAL(&timerMux);
                         newState = !devices[i].state;
+                        currentBrightness = devices[i].brightness;
                         portEXIT_CRITICAL(&timerMux);
-                        setDeviceState(i, newState, devices[i].brightness);
+                        setDeviceState(i, newState, currentBrightness);
                     }
                 }
             }
