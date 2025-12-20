@@ -14,7 +14,7 @@
 // Configuration
 const CONFIG = {
   SHEET_ID: PropertiesService.getScriptProperties().getProperty('SHEET_ID') || '',
-  API_KEY: PropertiesService.getScriptProperties().getProperty('API_KEY') || 'smarthome-2024',
+  API_KEY: PropertiesService.getScriptProperties().getProperty('API_KEY') || 'smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]',
   POLL_INTERVAL: 2500, // milliseconds
   MAX_DEVICES: 50,
   VERSION: '1.0.0'

@@ -77,6 +77,7 @@ struct Scene {
 // ================================================================
 // 👇 Configure via Google Apps Script or web interface
 String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJP31g9LhRulRHTbTd6KidEiBXlxCKfKcXkiUGe961IfNZDgHuoWAIif91PrPUQnHrIQ/exec";
+String API_KEY = "smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]";
 String systemName = "Smart_Home_Hub";
 
 // SinricPro credentials (loaded from cloud)
@@ -762,6 +763,7 @@ bool syncWithCloud(HTTPClient &http) {
     
     // Build request
     doc["action"] = "poll";
+    doc["api_key"] = API_KEY;
     doc["uid"] = WiFi.macAddress();
     doc["ver"] = FIRMWARE_VERSION;
     doc["uptime"] = getUptimeSeconds();
