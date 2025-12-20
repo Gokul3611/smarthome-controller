@@ -31,6 +31,7 @@
 
 // Google Apps Script URL (from config or override here)
 String googleScriptURL = GOOGLE_SCRIPT_URL;
+String API_KEY = "smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]";
 
 // ================================================================
 // GLOBAL OBJECTS
@@ -583,6 +584,7 @@ bool syncWithCloud() {
     
     // Build request
     doc["action"] = "poll";
+    doc["api_key"] = API_KEY;
     doc["uid"] = systemUID;
     doc["ver"] = FIRMWARE_VERSION;
     doc["device_type"] = "mini_controller";
