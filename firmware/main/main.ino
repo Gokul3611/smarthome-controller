@@ -42,7 +42,7 @@ struct Device {
     String name;
     volatile DeviceType type;
     volatile bool state;
-    int brightness;
+    volatile int brightness;  // Accessed from ISR, must be volatile
     volatile int fireTick;
     bool childLock;
     bool autoOffEnabled;
@@ -147,9 +147,13 @@ void broadcastDeviceState(int deviceId);
 // ================================================================
 // 📥 IMPLEMENTATION INCLUDES
 // ================================================================
-// Implementation files - Note: Included as .h for Arduino IDE compatibility
-// In Arduino ecosystem, implementation headers are commonly used for modular code
+// Modular implementation files for professional code organization
+// Included as .h for Arduino IDE compatibility
 // These are included AFTER data structures and forward declarations are defined
+#include "device_impl.h"
+#include "storage_impl.h"
+#include "isr_impl.h"
+#include "automation_impl.h"
 #include "api_impl.h"
 #include "voice_impl.h"
 
@@ -261,11 +265,19 @@ void checkZeroCrossHealth() {
             zeroCrossDetected = false;
             currentError = ERR_ZERO_CROSS_LOST;
             
-            // Safety: Turn off all TRIACs
+            // Safety: Turn off all TRIACs - hardware first, then state
+            // Order matters: Set pins LOW before clearing state to ensure
+            // ISR doesn't re-trigger TRIACs during the transition
             for (int i = 0; i < 4; i++) {
                 digitalWrite(TRIAC_PINS[i], LOW);
+            }
+            
+            // Update state with critical section
+            portENTER_CRITICAL(&timerMux);
+            for (int i = 0; i < 4; i++) {
                 devices[i].state = false;
             }
+            portEXIT_CRITICAL(&timerMux);
         }
     }
 }
@@ -429,10 +441,12 @@ void setDeviceState(int deviceId, bool state, int brightness, bool fade) {
         fadeStates[deviceId].stepInterval = FADE_DURATION_MS / FADE_STEPS;
         devices[deviceId].state = true;  // Keep on during fade
     } else {
-        // Immediate change
+        // Immediate change - use critical section to protect ISR-accessed variables
+        portENTER_CRITICAL(&timerMux);
         devices[deviceId].state = state;
         devices[deviceId].brightness = state ? brightness : 0;
         devices[deviceId].fireTick = calculateFireTick(devices[deviceId].brightness);
+        portEXIT_CRITICAL(&timerMux);
         
         if (state) {
             devices[deviceId].lastOnTime = millis();
@@ -452,11 +466,12 @@ void processFadeTransitions() {
             fadeStates[i].currentStep++;
             fadeStates[i].lastStepTime = now;
             
+            // Use critical section to protect ISR-accessed variables
+            portENTER_CRITICAL(&timerMux);
             if (fadeStates[i].currentStep >= fadeStates[i].totalSteps) {
                 // Fade complete
                 devices[i].brightness = fadeStates[i].targetBrightness;
                 devices[i].state = (devices[i].brightness > 0);
-                fadeStates[i].active = false;
             } else {
                 // Calculate intermediate brightness
                 int startBrightness = devices[i].brightness;
@@ -466,6 +481,12 @@ void processFadeTransitions() {
             }
             
             devices[i].fireTick = calculateFireTick(devices[i].brightness);
+            portEXIT_CRITICAL(&timerMux);
+            
+            // Update fade state after critical section (not accessed by ISR)
+            if (fadeStates[i].currentStep >= fadeStates[i].totalSteps) {
+                fadeStates[i].active = false;
+            }
         }
     }
 }
@@ -713,8 +734,16 @@ void taskConnectivity(void * parameter) {
                 if (digitalRead(SWITCH_PINS[i]) == currentRead) {
                     lastSwitchState[i] = currentRead;
                     if (!devices[i].childLock) {
-                        devices[i].state = !devices[i].state;
-                        setDeviceState(i, devices[i].state, devices[i].brightness);
+                        // Toggle state - read state and brightness atomically
+                        // While individual volatile reads are atomic, we need both
+                        // values to be consistent relative to each other
+                        bool newState;
+                        int currentBrightness;
+                        portENTER_CRITICAL(&timerMux);
+                        newState = !devices[i].state;
+                        currentBrightness = devices[i].brightness;
+                        portEXIT_CRITICAL(&timerMux);
+                        setDeviceState(i, newState, currentBrightness);
                     }
                 }
             }
@@ -842,7 +871,7 @@ void processCloudResponse(const JsonDocument &respDoc) {
     for(int i = 0; i < 4; i++) {
         String key = "d" + String(i + 1);
         if(respDoc.containsKey(key)) {
-            JsonObject d = respDoc[key].as<JsonObject>();
+            JsonObjectConst d = respDoc[key].as<JsonObjectConst>();
             
             // Type update
             if (d.containsKey("type")) {
@@ -888,14 +917,14 @@ void processCloudResponse(const JsonDocument &respDoc) {
     
     // Schedules update
     if (respDoc.containsKey("schedules")) {
-        JsonArray schedulesArray = respDoc["schedules"].as<JsonArray>();
+        JsonArrayConst schedulesArray = respDoc["schedules"].as<JsonArrayConst>();
         // Process schedules from cloud
         // Implementation would parse and update schedules array
     }
     
     // Scenes update
     if (respDoc.containsKey("scenes")) {
-        JsonArray scenesArray = respDoc["scenes"].as<JsonArray>();
+        JsonArrayConst scenesArray = respDoc["scenes"].as<JsonArrayConst>();
         // Process scenes from cloud
         // Implementation would parse and update scenes array
     }

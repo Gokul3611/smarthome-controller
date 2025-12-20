@@ -27,6 +27,11 @@ const int SWITCH_PINS[4] = {32, 33, 25, 26};
 // Optional Temperature Sensor (set to -1 if not available)
 #define TEMP_SENSOR_PIN -1
 
+// LED indicator pin (for OTA updates)
+#ifndef LED_BUILTIN
+#define LED_BUILTIN 2  // ESP32 built-in LED on GPIO 2
+#endif
+
 // ================================================================
 // TIMING CONFIGURATION
 // ================================================================
