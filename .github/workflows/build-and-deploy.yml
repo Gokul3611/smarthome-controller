@@ -1,0 +1,113 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-flutter-apk:
+    name: Build Flutter APK
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+      
+      - name: Flutter doctor
+        run: flutter doctor -v
+      
+      - name: Get dependencies
+        working-directory: ./frontend/flutter project/demo
+        run: flutter pub get
+      
+      - name: Build APK (Release)
+        working-directory: ./frontend/flutter project/demo
+        run: flutter build apk --release
+      
+      - name: Build APK (Debug)
+        working-directory: ./frontend/flutter project/demo
+        run: flutter build apk --debug
+      
+      - name: Get version from pubspec
+        id: version
+        working-directory: ./frontend/flutter project/demo
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+      
+      - name: Copy APKs to release folder
+        run: |
+          mkdir -p app/release app/debug
+          cp "frontend/flutter project/demo/build/app/outputs/flutter-apk/app-release.apk" \
+             "app/release/smart-home-controller-v${{ steps.version.outputs.version }}-release.apk"
+          cp "frontend/flutter project/demo/build/app/outputs/flutter-apk/app-debug.apk" \
+             "app/debug/smart-home-controller-v${{ steps.version.outputs.version }}-debug.apk"
+      
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: app/release/*.apk
+          retention-days: 90
+      
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: app/debug/*.apk
+          retention-days: 30
+
+  create-release:
+    name: Create GitHub Release
+    needs: build-flutter-apk
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download Release APK
+        uses: actions/download-artifact@v4
+        with:
+          name: release-apk
+          path: ./release
+      
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Smart Home Controller v${{ steps.version.outputs.version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            ./release/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

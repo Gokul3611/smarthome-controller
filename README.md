@@ -36,7 +36,20 @@ A complete, professional-grade smart home automation solution for controlling 4-
 
 ---
 
-## 📚 Quick Navigation
+## 🚀 Ready to Deploy?
+
+### Quick Deployment
+- ⚡ **[Step-by-Step Deployment Guide](./DEPLOY_STEPS.md)** - Complete deployment in 60 minutes
+- ✅ **[Quick Deployment Checklist](./QUICK_DEPLOY_CHECKLIST.md)** - Fast reference guide
+- 🤖 **Automated Builds** - GitHub Actions builds APK automatically on every push
+
+### Download & Install
+- 📱 **[Download Latest APK](https://github.com/Gokul3611/smarthome-controller/releases/latest)** - Ready-to-install Android app
+- 📦 **[All Releases](https://github.com/Gokul3611/smarthome-controller/releases)** - Version history
+
+---
+
+## 📚 Documentation
 
 ### For Developers
 - 🚀 [Quick Start Guide](./DEPLOYMENT.md) - 30-minute setup
