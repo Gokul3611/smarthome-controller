@@ -42,7 +42,7 @@ struct Device {
     String name;
     volatile DeviceType type;
     volatile bool state;
-    int brightness;
+    volatile int brightness;  // Accessed from ISR, must be volatile
     volatile int fireTick;
     bool childLock;
     bool autoOffEnabled;
@@ -261,11 +261,13 @@ void checkZeroCrossHealth() {
             zeroCrossDetected = false;
             currentError = ERR_ZERO_CROSS_LOST;
             
-            // Safety: Turn off all TRIACs
+            // Safety: Turn off all TRIACs - use critical section for state updates
+            portENTER_CRITICAL(&timerMux);
             for (int i = 0; i < 4; i++) {
                 digitalWrite(TRIAC_PINS[i], LOW);
                 devices[i].state = false;
             }
+            portEXIT_CRITICAL(&timerMux);
         }
     }
 }
@@ -429,10 +431,12 @@ void setDeviceState(int deviceId, bool state, int brightness, bool fade) {
         fadeStates[deviceId].stepInterval = FADE_DURATION_MS / FADE_STEPS;
         devices[deviceId].state = true;  // Keep on during fade
     } else {
-        // Immediate change
+        // Immediate change - use critical section to protect ISR-accessed variables
+        portENTER_CRITICAL(&timerMux);
         devices[deviceId].state = state;
         devices[deviceId].brightness = state ? brightness : 0;
         devices[deviceId].fireTick = calculateFireTick(devices[deviceId].brightness);
+        portEXIT_CRITICAL(&timerMux);
         
         if (state) {
             devices[deviceId].lastOnTime = millis();
@@ -452,6 +456,8 @@ void processFadeTransitions() {
             fadeStates[i].currentStep++;
             fadeStates[i].lastStepTime = now;
             
+            // Use critical section to protect ISR-accessed variables
+            portENTER_CRITICAL(&timerMux);
             if (fadeStates[i].currentStep >= fadeStates[i].totalSteps) {
                 // Fade complete
                 devices[i].brightness = fadeStates[i].targetBrightness;
@@ -466,6 +472,8 @@ void processFadeTransitions() {
             }
             
             devices[i].fireTick = calculateFireTick(devices[i].brightness);
+            portEXIT_CRITICAL(&timerMux);
+        }
         }
     }
 }
