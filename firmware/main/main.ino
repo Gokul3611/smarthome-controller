@@ -261,10 +261,14 @@ void checkZeroCrossHealth() {
             zeroCrossDetected = false;
             currentError = ERR_ZERO_CROSS_LOST;
             
-            // Safety: Turn off all TRIACs - use critical section for state updates
-            portENTER_CRITICAL(&timerMux);
+            // Safety: Turn off all TRIACs
             for (int i = 0; i < 4; i++) {
                 digitalWrite(TRIAC_PINS[i], LOW);
+            }
+            
+            // Update state with critical section
+            portENTER_CRITICAL(&timerMux);
+            for (int i = 0; i < 4; i++) {
                 devices[i].state = false;
             }
             portEXIT_CRITICAL(&timerMux);
@@ -462,7 +466,6 @@ void processFadeTransitions() {
                 // Fade complete
                 devices[i].brightness = fadeStates[i].targetBrightness;
                 devices[i].state = (devices[i].brightness > 0);
-                fadeStates[i].active = false;
             } else {
                 // Calculate intermediate brightness
                 int startBrightness = devices[i].brightness;
@@ -473,6 +476,11 @@ void processFadeTransitions() {
             
             devices[i].fireTick = calculateFireTick(devices[i].brightness);
             portEXIT_CRITICAL(&timerMux);
+            
+            // Update fade state after critical section (not accessed by ISR)
+            if (fadeStates[i].currentStep >= fadeStates[i].totalSteps) {
+                fadeStates[i].active = false;
+            }
         }
     }
 }
@@ -720,13 +728,9 @@ void taskConnectivity(void * parameter) {
                 if (digitalRead(SWITCH_PINS[i]) == currentRead) {
                     lastSwitchState[i] = currentRead;
                     if (!devices[i].childLock) {
-                        // Toggle state - read both state and brightness atomically
-                        bool newState;
-                        int currentBrightness;
-                        portENTER_CRITICAL(&timerMux);
-                        newState = !devices[i].state;
-                        currentBrightness = devices[i].brightness;
-                        portEXIT_CRITICAL(&timerMux);
+                        // Toggle state - volatile variables provide atomic read on ESP32
+                        bool newState = !devices[i].state;
+                        int currentBrightness = devices[i].brightness;
                         setDeviceState(i, newState, currentBrightness);
                     }
                 }
