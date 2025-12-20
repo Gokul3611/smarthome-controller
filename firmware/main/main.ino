@@ -147,9 +147,13 @@ void broadcastDeviceState(int deviceId);
 // ================================================================
 // 📥 IMPLEMENTATION INCLUDES
 // ================================================================
-// Implementation files - Note: Included as .h for Arduino IDE compatibility
-// In Arduino ecosystem, implementation headers are commonly used for modular code
+// Modular implementation files for professional code organization
+// Included as .h for Arduino IDE compatibility
 // These are included AFTER data structures and forward declarations are defined
+#include "device_impl.h"
+#include "storage_impl.h"
+#include "isr_impl.h"
+#include "automation_impl.h"
 #include "api_impl.h"
 #include "voice_impl.h"
 
