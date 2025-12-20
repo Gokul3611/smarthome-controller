@@ -2,6 +2,12 @@
 
 > A simplified ESP32 firmware for testing connectivity between the hardware, cloud dashboard, and mobile app using an LED instead of AC control.
 
+## ⚡ Quick Links
+
+- **[⚡ 5-Minute Quick Start](./QUICKSTART.md)** ← Start here if you're in a hurry!
+- **[📐 Wiring Guide](./WIRING.md)** - Detailed connection instructions
+- **[🧪 Testing Guide](./TESTING.md)** - Complete validation procedures
+
 ## 🎯 Purpose
 
 This mini controller is designed to:

@@ -38,6 +38,11 @@ A complete, professional-grade smart home automation solution for controlling 4-
 
 ## 📚 Quick Navigation
 
+### For Beginners
+- 🔬 **[Mini Controller](./firmware/mini-controller/README.md) - START HERE!** - Test with LED before AC
+- 📐 [Wiring Guide](./firmware/mini-controller/WIRING.md) - Simple LED setup
+- 🧪 [Testing Guide](./firmware/mini-controller/TESTING.md) - Verify everything works
+
 ### For Developers
 - 🚀 [Quick Start Guide](./DEPLOYMENT.md) - 30-minute setup
 - 📋 [Features List](./FEATURES.md) - Complete feature documentation
@@ -77,7 +82,12 @@ A complete, professional-grade smart home automation solution for controlling 4-
 ```
 smarthome-controller/
 ├── firmware/                      # ESP32 firmware code
-│   └── main/                     # Main firmware application
+│   ├── mini-controller/          # 🔬 Mini test version with LED
+│   │   ├── mini-controller.ino   # Simplified test firmware
+│   │   ├── README.md             # Complete setup guide
+│   │   ├── WIRING.md             # LED wiring instructions
+│   │   └── TESTING.md            # Testing procedures
+│   └── main/                     # Main production firmware
 ├── backend/                       # Backend services
 │   └── google-apps-script/       # ☁️ Google Apps Script backend
 │       ├── Code.gs              # Main API logic
@@ -140,6 +150,42 @@ The system uses **Google Apps Script** as the backend with **Google Sheets** as 
 - **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Step-by-step deployment guide (30 min setup)
 - **[Backend README](./backend/google-apps-script/README.md)** - Backend API and deployment
 - **[App README](./app/README.md)** - Mobile app build and distribution
+
+---
+
+## 🚀 Getting Started
+
+### 🔬 For First-Time Users: Start with Mini Controller
+
+**New to IoT or want to test safely?** Start with our mini controller!
+
+The **Mini Controller** is a simplified version that uses a **simple LED** instead of high-voltage AC control. This allows you to:
+- ✅ Test the complete system safely
+- ✅ Verify dashboard and app connectivity
+- ✅ Understand the architecture before working with AC
+- ✅ No risk of electrical shock or damage
+
+**👉 [Start Here: Mini Controller Guide](./firmware/mini-controller/README.md)**
+
+### Quick Setup (30 minutes)
+1. **Upload Mini Firmware** - Flash simplified code to ESP32
+2. **Connect LED** - Simple 1-LED + 1-resistor setup (or use built-in LED!)
+3. **Test Dashboard** - Control LED from web browser
+4. **Test App** - Control LED from mobile app
+5. **Verify Sync** - Watch real-time updates across all interfaces
+
+**Hardware needed:** Just an ESP32 board + LED + resistor (~$5)
+
+Once you've verified everything works with the mini controller, you can proceed to the full production hardware with AC control.
+
+### 🏭 For Production Deployment
+
+Ready for the full system? See:
+- **[Production Guide](./PRODUCTION_GUIDE.md)** - Complete production deployment
+- **[Hardware Guide](./hardware/README.md)** - Circuit design and PCB files
+- **[Deployment Guide](./DEPLOYMENT.md)** - Full system setup
+
+---
 
 ## Hardware Requirements
 
