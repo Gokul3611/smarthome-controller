@@ -54,7 +54,11 @@ jobs:
         id: version
         working-directory: ./frontend/flutter project/demo
         run: |
-          VERSION=$(grep '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: *//' | cut -d'+' -f1 | tr -d ' ')
+          if [ -z "$VERSION" ]; then
+            echo "Error: Could not extract version from pubspec.yaml"
+            exit 1
+          fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Version: $VERSION"
       
