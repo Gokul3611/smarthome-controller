@@ -49,6 +49,12 @@ class ApiService {
     }());
   }
 
+  /// Checks if the response body is valid JSON
+  bool _isValidJsonResponse(String body) {
+    final trimmed = body.trim();
+    return trimmed.startsWith('{') || trimmed.startsWith('[');
+  }
+
   // ==================== Authentication APIs ====================
 
   /// Authenticates user with email and password
@@ -81,8 +87,8 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
-        _logDebug('Response is not JSON: ${response.body.substring(0, 50)}');
+      if (!_isValidJsonResponse(response.body)) {
+        _logDebug('Response is not JSON: ${response.body.substring(0, response.body.length > 50 ? 50 : response.body.length)}');
         return {'success': false, 'error': 'Server error. Invalid response format.'};
       }
 
@@ -133,7 +139,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         _logDebug('Response is not JSON');
         return {'success': false, 'error': 'Server error. Invalid response format.'};
       }
@@ -175,7 +181,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         _logDebug('Devices response is not JSON');
         return [];
       }
@@ -224,7 +230,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         return false;
       }
 
@@ -271,7 +277,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         return false;
       }
 
@@ -308,7 +314,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         return false;
       }
 
@@ -346,7 +352,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         _logDebug('Schedules response is not JSON');
         return [];
       }
@@ -393,7 +399,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         return false;
       }
 
@@ -432,7 +438,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         return false;
       }
 
@@ -470,7 +476,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         _logDebug('Scenes response is not JSON');
         return [];
       }
@@ -517,7 +523,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         return false;
       }
 
@@ -556,7 +562,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         return false;
       }
 
@@ -595,7 +601,7 @@ class ApiService {
       }
 
       // Check if response is JSON
-      if (!response.body.trim().startsWith('{') && !response.body.trim().startsWith('[')) {
+      if (!_isValidJsonResponse(response.body)) {
         return false;
       }
 
