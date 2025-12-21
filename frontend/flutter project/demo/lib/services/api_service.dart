@@ -110,9 +110,6 @@ class ApiService {
     } on http.ClientException catch (e) {
       _logDebug('Client error during login: $e');
       return {'success': false, 'error': 'Network error. Please check your connection.'};
-    } on FormatException catch (e) {
-      _logDebug('JSON parse error during login: $e');
-      return {'success': false, 'error': 'Server returned invalid data. Please try again.'};
     } catch (e) {
       _logDebug('Error during login: $e');
       return {'success': false, 'error': 'An error occurred. Please try again.'};
@@ -167,9 +164,6 @@ class ApiService {
     } on http.ClientException catch (e) {
       _logDebug('Client error during signup: $e');
       return {'success': false, 'error': 'Network error. Please check your connection.'};
-    } on FormatException catch (e) {
-      _logDebug('JSON parse error during signup: $e');
-      return {'success': false, 'error': 'Server returned invalid data. Please try again.'};
     } catch (e) {
       _logDebug('Error during signup: $e');
       return {'success': false, 'error': 'An error occurred. Please try again.'};
