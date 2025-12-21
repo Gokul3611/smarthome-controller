@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'config/app_theme.dart';
 import 'pages/login_screen.dart';
+import 'pages/dashboard_page.dart';
 import 'pages/home_page.dart';
 import 'pages/devices_page.dart';
 import 'pages/connection_page.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (_) => const LoginScreen(),
+        '/dashboard': (_) => const DashboardPage(),
         '/home': (_) => const HomePage(),
         '/devices': (_) => const DevicesPage(),
         '/connection': (_) => const ConnectionPage(),

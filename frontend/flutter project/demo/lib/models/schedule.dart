@@ -1,14 +1,39 @@
+/// Schedule data model for automating device operations
+/// 
+/// This class represents a scheduled automation that can turn devices
+/// on/off at specific times on specific days of the week.
 class Schedule {
+  /// Unique identifier for the schedule
   final String id;
+  
+  /// User ID who owns this schedule
   final String userId;
+  
+  /// Device UID this schedule controls
   final String deviceUid;
+  
+  /// Channel number (for multi-channel devices)
   final int channel;
+  
+  /// User-friendly name for the schedule
   final String name;
-  final String startTime; // HH:MM format
-  final String endTime; // HH:MM format
-  final String days; // Bitmask string: "1111100" (Mon-Fri)
-  final String action; // 'on', 'off', 'set'
-  final int value; // 0-100
+  
+  /// Start time in HH:MM format (24-hour)
+  final String startTime;
+  
+  /// End time in HH:MM format (24-hour)
+  final String endTime;
+  
+  /// Days of week as bitmask string: "1111100" (Mon-Sun, 1=active, 0=inactive)
+  final String days;
+  
+  /// Action to perform: 'on', 'off', 'set'
+  final String action;
+  
+  /// Value to set (brightness/speed) - Range: 0-100
+  final int value;
+  
+  /// Whether the schedule is currently enabled
   final bool enabled;
 
   Schedule({
@@ -25,6 +50,7 @@ class Schedule {
     this.enabled = true,
   });
 
+  /// Creates a Schedule instance from JSON data
   factory Schedule.fromJson(Map<String, dynamic> json) {
     return Schedule(
       id: json['id'] ?? '',
@@ -41,6 +67,7 @@ class Schedule {
     );
   }
 
+  /// Converts the Schedule instance to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -57,11 +84,14 @@ class Schedule {
     };
   }
 
+  /// Gets a list of active day names for this schedule
+  /// 
+  /// Returns: List of day abbreviations (e.g., ['Mon', 'Tue', 'Wed'])
   List<String> getDayNames() {
-    List<String> dayNames = [];
-    List<String> allDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    final dayNames = <String>[];
+    const allDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     
-    for (int i = 0; i < days.length && i < 7; i++) {
+    for (var i = 0; i < days.length && i < 7; i++) {
       if (days[i] == '1') {
         dayNames.add(allDays[i]);
       }
@@ -71,10 +101,21 @@ class Schedule {
   }
 }
 
+/// Scene data model for grouping multiple device states
+/// 
+/// This class represents a scene that can apply predefined states
+/// to multiple devices simultaneously.
 class Scene {
+  /// Unique identifier for the scene
   final String id;
+  
+  /// User ID who owns this scene
   final String userId;
+  
+  /// User-friendly name for the scene
   final String name;
+  
+  /// List of devices and their states in this scene
   final List<SceneDevice> devices;
 
   Scene({
@@ -84,8 +125,9 @@ class Scene {
     required this.devices,
   });
 
+  /// Creates a Scene instance from JSON data
   factory Scene.fromJson(Map<String, dynamic> json) {
-    List<SceneDevice> devicesList = [];
+    var devicesList = <SceneDevice>[];
     if (json['devices'] != null && json['devices'] is List) {
       devicesList = (json['devices'] as List)
           .map((d) => SceneDevice.fromJson(d))
@@ -100,6 +142,7 @@ class Scene {
     );
   }
 
+  /// Converts the Scene instance to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -110,10 +153,21 @@ class Scene {
   }
 }
 
+/// Device configuration within a scene
+/// 
+/// This class represents the desired state of a device
+/// when a scene is activated.
 class SceneDevice {
+  /// Device UID
   final String uid;
+  
+  /// Channel number (for multi-channel devices)
   final int channel;
+  
+  /// Desired power state
   final bool state;
+  
+  /// Desired value (brightness/speed) - Range: 0-100
   final int value;
 
   SceneDevice({
@@ -123,6 +177,7 @@ class SceneDevice {
     this.value = 100,
   });
 
+  /// Creates a SceneDevice instance from JSON data
   factory SceneDevice.fromJson(Map<String, dynamic> json) {
     return SceneDevice(
       uid: json['uid'] ?? '',
@@ -132,6 +187,7 @@ class SceneDevice {
     );
   }
 
+  /// Converts the SceneDevice instance to JSON
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
