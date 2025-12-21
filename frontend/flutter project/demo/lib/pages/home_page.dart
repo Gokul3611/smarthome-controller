@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../config/app_theme.dart';
+import 'dashboard_page.dart';
 import 'devices_page.dart';
 import 'connection_page.dart';
 import 'profile_page.dart';
-import 'faq_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -81,10 +81,10 @@ class HomePage extends StatelessWidget {
                       mainAxisSpacing: 25,
                       crossAxisSpacing: 25,
                       children: [
-                        _button(context, "Devices", Icons.devices, DevicesPage()),
-                        _button(context, "Connection", Icons.wifi, ConnectionPage()),
-                        _button(context, "Profile", Icons.person, ProfilePage()),
-                        _button(context, "FAQ", Icons.help_center, FaqPage()),
+                        _button(context, "Dashboard", Icons.dashboard_rounded, const DashboardPage()),
+                        _button(context, "Devices", Icons.devices, const DevicesPage()),
+                        _button(context, "Connection", Icons.wifi, const ConnectionPage()),
+                        _button(context, "Profile", Icons.person, const ProfilePage()),
                       ],
                     ),
                   )
