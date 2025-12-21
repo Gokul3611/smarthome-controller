@@ -5,17 +5,65 @@ import '../models/device.dart';
 import '../models/schedule.dart';
 import '../models/user.dart';
 
+/// Service class for handling all API communications with the backend
+/// 
+/// This class follows the Singleton pattern to ensure only one instance
+/// exists throughout the application lifecycle.
 class ApiService {
+  // Singleton pattern
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
   ApiService._internal();
 
-  // User login
+  /// Common headers for all API requests
+  Map<String, String> get _headers => {
+        'Content-Type': 'application/json',
+      };
+
+  /// Handles HTTP errors and converts them to user-friendly messages
+  String _handleHttpError(int statusCode) {
+    switch (statusCode) {
+      case 400:
+        return 'Bad request. Please check your input.';
+      case 401:
+        return 'Authentication failed. Please login again.';
+      case 403:
+        return 'Access denied.';
+      case 404:
+        return 'Resource not found.';
+      case 500:
+        return 'Server error. Please try again later.';
+      case 503:
+        return 'Service unavailable. Please try again later.';
+      default:
+        return 'Network error occurred. Please check your connection.';
+    }
+  }
+
+  /// Logs debug information in development mode
+  void _logDebug(String message) {
+    // Only log in debug mode
+    assert(() {
+      print('[ApiService] $message');
+      return true;
+    }());
+  }
+
+  // ==================== Authentication APIs ====================
+
+  /// Authenticates user with email and password
+  /// 
+  /// Returns a Map containing:
+  /// - success: bool
+  /// - user: Map with user details (if successful)
+  /// - error: String (if failed)
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
+      _logDebug('Login attempt for: $email');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'login',
           'api_key': ApiConfig.apiKey,
@@ -25,19 +73,32 @@ class ApiService {
       ).timeout(ApiConfig.timeout);
 
       final data = jsonDecode(response.body);
+      _logDebug('Login response: ${data['success']}');
+
       return data;
+    } on http.ClientException catch (e) {
+      _logDebug('Client error during login: $e');
+      return {'success': false, 'error': 'Network error. Please check your connection.'};
     } catch (e) {
+      _logDebug('Error during login: $e');
       return {'success': false, 'error': e.toString()};
     }
   }
 
-  // User signup
+  /// Registers a new user account
+  /// 
+  /// Returns a Map containing:
+  /// - success: bool
+  /// - user: Map with user details (if successful)
+  /// - error: String (if failed)
   Future<Map<String, dynamic>> signup(
       String name, String email, String password) async {
     try {
+      _logDebug('Signup attempt for: $email');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'signup',
           'api_key': ApiConfig.apiKey,
@@ -48,42 +109,65 @@ class ApiService {
       ).timeout(ApiConfig.timeout);
 
       final data = jsonDecode(response.body);
+      _logDebug('Signup response: ${data['success']}');
+
       return data;
+    } on http.ClientException catch (e) {
+      _logDebug('Client error during signup: $e');
+      return {'success': false, 'error': 'Network error. Please check your connection.'};
     } catch (e) {
+      _logDebug('Error during signup: $e');
       return {'success': false, 'error': e.toString()};
     }
   }
 
-  // Get all devices
+  // ==================== Device APIs ====================
+
+  /// Fetches all devices for a specific user
+  /// 
+  /// Returns a List of Device objects
+  /// Returns empty list if request fails
   Future<List<Device>> getDevices(String userId) async {
     try {
+      _logDebug('Fetching devices for user: $userId');
+
       final url = Uri.parse(
           '${ApiConfig.baseUrl}?action=get_devices&api_key=${ApiConfig.apiKey}&user_id=$userId');
 
       final response = await http.get(url).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        _logDebug('Error fetching devices: ${response.statusCode}');
+        return [];
+      }
+
       final data = jsonDecode(response.body);
 
       if (data['success'] == true && data['devices'] != null) {
-        return (data['devices'] as List)
+        final devices = (data['devices'] as List)
             .map((device) => Device.fromJson(device))
             .toList();
+        _logDebug('Fetched ${devices.length} devices');
+        return devices;
       }
 
       return [];
     } catch (e) {
-      print('Error getting devices: $e');
+      _logDebug('Error getting devices: $e');
       return [];
     }
   }
 
-  // Update device name and type
-  Future<bool> updateDevice(
-      String uid, String name, String type) async {
+  /// Updates device properties (name, type)
+  /// 
+  /// Returns true if successful, false otherwise
+  Future<bool> updateDevice(String uid, String name, String type) async {
     try {
+      _logDebug('Updating device: $uid');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'update_device',
           'api_key': ApiConfig.apiKey,
@@ -94,20 +178,26 @@ class ApiService {
       ).timeout(ApiConfig.timeout);
 
       final data = jsonDecode(response.body);
+      _logDebug('Update device response: ${data['success']}');
+
       return data['success'] == true;
     } catch (e) {
-      print('Error updating device: $e');
+      _logDebug('Error updating device: $e');
       return false;
     }
   }
 
-  // Update device state
+  /// Updates device state (power, brightness/speed)
+  /// 
+  /// Returns true if successful, false otherwise
   Future<bool> updateDeviceState(
       String uid, int channel, bool state, int value) async {
     try {
+      _logDebug('Updating device state: $uid, channel: $channel, state: $state, value: $value');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'update_state',
           'api_key': ApiConfig.apiKey,
@@ -125,17 +215,21 @@ class ApiService {
       final data = jsonDecode(response.body);
       return data['success'] == true;
     } catch (e) {
-      print('Error updating device state: $e');
+      _logDebug('Error updating device state: $e');
       return false;
     }
   }
 
-  // Reset WiFi
+  /// Resets WiFi configuration for a device
+  /// 
+  /// Returns true if successful, false otherwise
   Future<bool> resetWifi(String uid) async {
     try {
+      _logDebug('Resetting WiFi for device: $uid');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'reset_wifi',
           'api_key': ApiConfig.apiKey,
@@ -144,42 +238,62 @@ class ApiService {
       ).timeout(ApiConfig.timeout);
 
       final data = jsonDecode(response.body);
+      _logDebug('Reset WiFi response: ${data['success']}');
+
       return data['success'] == true;
     } catch (e) {
-      print('Error resetting WiFi: $e');
+      _logDebug('Error resetting WiFi: $e');
       return false;
     }
   }
 
-  // Get schedules
+  // ==================== Schedule APIs ====================
+
+  /// Fetches all schedules for a specific user
+  /// 
+  /// Returns a List of Schedule objects
+  /// Returns empty list if request fails
   Future<List<Schedule>> getSchedules(String userId) async {
     try {
+      _logDebug('Fetching schedules for user: $userId');
+
       final url = Uri.parse(
           '${ApiConfig.baseUrl}?action=get_schedules&api_key=${ApiConfig.apiKey}&user_id=$userId');
 
       final response = await http.get(url).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        _logDebug('Error fetching schedules: ${response.statusCode}');
+        return [];
+      }
+
       final data = jsonDecode(response.body);
 
       if (data['success'] == true && data['schedules'] != null) {
-        return (data['schedules'] as List)
+        final schedules = (data['schedules'] as List)
             .map((schedule) => Schedule.fromJson(schedule))
             .toList();
+        _logDebug('Fetched ${schedules.length} schedules');
+        return schedules;
       }
 
       return [];
     } catch (e) {
-      print('Error getting schedules: $e');
+      _logDebug('Error getting schedules: $e');
       return [];
     }
   }
 
-  // Save schedule
+  /// Creates or updates a schedule
+  /// 
+  /// Returns true if successful, false otherwise
   Future<bool> saveSchedule(Schedule schedule) async {
     try {
+      _logDebug('Saving schedule: ${schedule.name}');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'save_schedule',
           'api_key': ApiConfig.apiKey,
@@ -188,19 +302,25 @@ class ApiService {
       ).timeout(ApiConfig.timeout);
 
       final data = jsonDecode(response.body);
+      _logDebug('Save schedule response: ${data['success']}');
+
       return data['success'] == true;
     } catch (e) {
-      print('Error saving schedule: $e');
+      _logDebug('Error saving schedule: $e');
       return false;
     }
   }
 
-  // Delete schedule
+  /// Deletes a schedule
+  /// 
+  /// Returns true if successful, false otherwise
   Future<bool> deleteSchedule(String scheduleId) async {
     try {
+      _logDebug('Deleting schedule: $scheduleId');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'delete_schedule',
           'api_key': ApiConfig.apiKey,
@@ -209,42 +329,62 @@ class ApiService {
       ).timeout(ApiConfig.timeout);
 
       final data = jsonDecode(response.body);
+      _logDebug('Delete schedule response: ${data['success']}');
+
       return data['success'] == true;
     } catch (e) {
-      print('Error deleting schedule: $e');
+      _logDebug('Error deleting schedule: $e');
       return false;
     }
   }
 
-  // Get scenes
+  // ==================== Scene APIs ====================
+
+  /// Fetches all scenes for a specific user
+  /// 
+  /// Returns a List of Scene objects
+  /// Returns empty list if request fails
   Future<List<Scene>> getScenes(String userId) async {
     try {
+      _logDebug('Fetching scenes for user: $userId');
+
       final url = Uri.parse(
           '${ApiConfig.baseUrl}?action=get_scenes&api_key=${ApiConfig.apiKey}&user_id=$userId');
 
       final response = await http.get(url).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        _logDebug('Error fetching scenes: ${response.statusCode}');
+        return [];
+      }
+
       final data = jsonDecode(response.body);
 
       if (data['success'] == true && data['scenes'] != null) {
-        return (data['scenes'] as List)
+        final scenes = (data['scenes'] as List)
             .map((scene) => Scene.fromJson(scene))
             .toList();
+        _logDebug('Fetched ${scenes.length} scenes');
+        return scenes;
       }
 
       return [];
     } catch (e) {
-      print('Error getting scenes: $e');
+      _logDebug('Error getting scenes: $e');
       return [];
     }
   }
 
-  // Save scene
+  /// Creates or updates a scene
+  /// 
+  /// Returns true if successful, false otherwise
   Future<bool> saveScene(Scene scene) async {
     try {
+      _logDebug('Saving scene: ${scene.name}');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'save_scene',
           'api_key': ApiConfig.apiKey,
@@ -253,19 +393,25 @@ class ApiService {
       ).timeout(ApiConfig.timeout);
 
       final data = jsonDecode(response.body);
+      _logDebug('Save scene response: ${data['success']}');
+
       return data['success'] == true;
     } catch (e) {
-      print('Error saving scene: $e');
+      _logDebug('Error saving scene: $e');
       return false;
     }
   }
 
-  // Activate scene
+  /// Activates a scene (applies device states)
+  /// 
+  /// Returns true if successful, false otherwise
   Future<bool> activateScene(String sceneId) async {
     try {
+      _logDebug('Activating scene: $sceneId');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'activate_scene',
           'api_key': ApiConfig.apiKey,
@@ -274,19 +420,25 @@ class ApiService {
       ).timeout(ApiConfig.timeout);
 
       final data = jsonDecode(response.body);
+      _logDebug('Activate scene response: ${data['success']}');
+
       return data['success'] == true;
     } catch (e) {
-      print('Error activating scene: $e');
+      _logDebug('Error activating scene: $e');
       return false;
     }
   }
 
-  // Delete scene
+  /// Deletes a scene
+  /// 
+  /// Returns true if successful, false otherwise
   Future<bool> deleteScene(String sceneId) async {
     try {
+      _logDebug('Deleting scene: $sceneId');
+
       final response = await http.post(
         Uri.parse(ApiConfig.baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: jsonEncode({
           'action': 'delete_scene',
           'api_key': ApiConfig.apiKey,
@@ -295,9 +447,11 @@ class ApiService {
       ).timeout(ApiConfig.timeout);
 
       final data = jsonDecode(response.body);
+      _logDebug('Delete scene response: ${data['success']}');
+
       return data['success'] == true;
     } catch (e) {
-      print('Error deleting scene: $e');
+      _logDebug('Error deleting scene: $e');
       return false;
     }
   }

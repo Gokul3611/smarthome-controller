@@ -1,18 +1,48 @@
+/// Device data model representing a smart home device
+/// 
+/// This class encapsulates all device properties including:
+/// - Unique identifier (UID)
+/// - Device name and type (light/fan)
+/// - Network information (IP, version, RSSI)
+/// - Device state (power, value/brightness/speed)
+/// - System metrics (uptime, heap memory)
+/// - Connection status
 class Device {
+  /// Unique identifier for the device (MAC address or custom ID)
   final String uid;
+  
+  /// User-friendly name for the device
   final String name;
-  final String type; // 'light' or 'fan'
+  
+  /// Device type: 'light' or 'fan'
+  final String type;
+  
+  /// IP address of the device
   final String ip;
+  
+  /// Firmware version
   final String version;
+  
+  /// Device uptime in seconds
   final int uptime;
+  
+  /// WiFi signal strength (RSSI)
   final int rssi;
+  
+  /// Available heap memory in bytes
   final int heap;
+  
+  /// Last time the device was seen/updated
   final DateTime? lastSeen;
+  
+  /// Whether the device is currently online
   final bool online;
   
-  // Device state
+  /// Device power state (on/off)
   bool power;
-  int value; // brightness/speed 0-100
+  
+  /// Brightness (for lights) or speed (for fans) - Range: 0-100
+  int value;
 
   Device({
     required this.uid,
@@ -29,6 +59,7 @@ class Device {
     this.value = 0,
   });
 
+  /// Creates a Device instance from JSON data
   factory Device.fromJson(Map<String, dynamic> json) {
     return Device(
       uid: json['uid'] ?? '',
@@ -48,6 +79,7 @@ class Device {
     );
   }
 
+  /// Converts the Device instance to JSON
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
@@ -65,6 +97,7 @@ class Device {
     };
   }
 
+  /// Creates a copy of this Device with specified fields updated
   Device copyWith({
     String? uid,
     String? name,
