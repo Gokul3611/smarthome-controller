@@ -50,8 +50,14 @@ class ApiService {
   }
 
   /// Checks if the response body is valid JSON
-  bool _isValidJsonResponse(String body) {
+  bool _isValidJsonResponse(String? body) {
+    if (body == null || body.isEmpty) {
+      return false;
+    }
     final trimmed = body.trim();
+    if (trimmed.isEmpty) {
+      return false;
+    }
     return trimmed.startsWith('{') || trimmed.startsWith('[');
   }
 
@@ -92,10 +98,15 @@ class ApiService {
         return {'success': false, 'error': 'Server error. Invalid response format.'};
       }
 
-      final data = jsonDecode(response.body);
-      _logDebug('Login response: ${data['success']}');
-
-      return data;
+      // Parse JSON response with additional safety
+      try {
+        final data = jsonDecode(response.body);
+        _logDebug('Login response: ${data['success']}');
+        return data;
+      } on FormatException catch (e) {
+        _logDebug('JSON decode failed even after validation: $e');
+        return {'success': false, 'error': 'Server returned invalid data. Please try again.'};
+      }
     } on http.ClientException catch (e) {
       _logDebug('Client error during login: $e');
       return {'success': false, 'error': 'Network error. Please check your connection.'};
@@ -140,14 +151,19 @@ class ApiService {
 
       // Check if response is JSON
       if (!_isValidJsonResponse(response.body)) {
-        _logDebug('Response is not JSON');
+        _logDebug('Signup response is not JSON');
         return {'success': false, 'error': 'Server error. Invalid response format.'};
       }
 
-      final data = jsonDecode(response.body);
-      _logDebug('Signup response: ${data['success']}');
-
-      return data;
+      // Parse JSON response with additional safety
+      try {
+        final data = jsonDecode(response.body);
+        _logDebug('Signup response: ${data['success']}');
+        return data;
+      } on FormatException catch (e) {
+        _logDebug('JSON decode failed even after validation: $e');
+        return {'success': false, 'error': 'Server returned invalid data. Please try again.'};
+      }
     } on http.ClientException catch (e) {
       _logDebug('Client error during signup: $e');
       return {'success': false, 'error': 'Network error. Please check your connection.'};
