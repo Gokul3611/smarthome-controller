@@ -260,6 +260,27 @@ class ApiService {
     }
   }
 
+  // Activate scene
+  Future<bool> activateScene(String sceneId) async {
+    try {
+      final response = await http.post(
+        Uri.parse(ApiConfig.baseUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'action': 'activate_scene',
+          'api_key': ApiConfig.apiKey,
+          'scene_id': sceneId,
+        }),
+      ).timeout(ApiConfig.timeout);
+
+      final data = jsonDecode(response.body);
+      return data['success'] == true;
+    } catch (e) {
+      print('Error activating scene: $e');
+      return false;
+    }
+  }
+
   // Delete scene
   Future<bool> deleteScene(String sceneId) async {
     try {
