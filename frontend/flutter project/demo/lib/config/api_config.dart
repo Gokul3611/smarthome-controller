@@ -1,8 +1,7 @@
 class ApiConfig {
   // Google Apps Script Backend URL
   // Replace with your deployed Apps Script web app URL
-  static const String baseUrl = 'https://script.google.com/macros/s/AKfycbwlZCdEYspQ1AF_-0UYRznaJNJLQv7mqQw1zsdSzOLnEBIMB_EtKuY4HcCfVGVR5JXjCg/exec
-';
+  static const String baseUrl = 'https://script.google.com/macros/s/AKfycbwlZCdEYspQ1AF_-0UYRznaJNJLQv7mqQw1zsdSzOLnEBIMB_EtKuY4HcCfVGVR5JXjCg/exec';
   
   // API Key (must match the one in Apps Script properties)
   static const String apiKey = 'smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]';

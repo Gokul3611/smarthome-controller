@@ -49,6 +49,18 @@ class ApiService {
     }());
   }
 
+  /// Checks if the response body is valid JSON
+  bool _isValidJsonResponse(String? body) {
+    if (body == null || body.isEmpty) {
+      return false;
+    }
+    final trimmed = body.trim();
+    if (trimmed.isEmpty) {
+      return false;
+    }
+    return trimmed.startsWith('{') || trimmed.startsWith('[');
+  }
+
   // ==================== Authentication APIs ====================
 
   /// Authenticates user with email and password
@@ -72,16 +84,35 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
-      final data = jsonDecode(response.body);
-      _logDebug('Login response: ${data['success']}');
+      _logDebug('Login response status: ${response.statusCode}');
+      _logDebug('Login response body: ${response.body.substring(0, response.body.length > 100 ? 100 : response.body.length)}');
 
-      return data;
+      // Check if response status is OK
+      if (response.statusCode != 200) {
+        return {'success': false, 'error': _handleHttpError(response.statusCode)};
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        _logDebug('Response is not JSON: ${response.body.substring(0, response.body.length > 50 ? 50 : response.body.length)}');
+        return {'success': false, 'error': 'Server error. Invalid response format.'};
+      }
+
+      // Parse JSON response with additional safety
+      try {
+        final data = jsonDecode(response.body);
+        _logDebug('Login response: ${data['success']}');
+        return data;
+      } on FormatException catch (e) {
+        _logDebug('JSON decode failed even after validation: $e');
+        return {'success': false, 'error': 'Server returned invalid data. Please try again.'};
+      }
     } on http.ClientException catch (e) {
       _logDebug('Client error during login: $e');
       return {'success': false, 'error': 'Network error. Please check your connection.'};
     } catch (e) {
       _logDebug('Error during login: $e');
-      return {'success': false, 'error': e.toString()};
+      return {'success': false, 'error': 'An error occurred. Please try again.'};
     }
   }
 
@@ -108,16 +139,34 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
-      final data = jsonDecode(response.body);
-      _logDebug('Signup response: ${data['success']}');
+      _logDebug('Signup response status: ${response.statusCode}');
 
-      return data;
+      // Check if response status is OK
+      if (response.statusCode != 200) {
+        return {'success': false, 'error': _handleHttpError(response.statusCode)};
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        _logDebug('Signup response is not JSON');
+        return {'success': false, 'error': 'Server error. Invalid response format.'};
+      }
+
+      // Parse JSON response with additional safety
+      try {
+        final data = jsonDecode(response.body);
+        _logDebug('Signup response: ${data['success']}');
+        return data;
+      } on FormatException catch (e) {
+        _logDebug('JSON decode failed even after validation: $e');
+        return {'success': false, 'error': 'Server returned invalid data. Please try again.'};
+      }
     } on http.ClientException catch (e) {
       _logDebug('Client error during signup: $e');
       return {'success': false, 'error': 'Network error. Please check your connection.'};
     } catch (e) {
       _logDebug('Error during signup: $e');
-      return {'success': false, 'error': e.toString()};
+      return {'success': false, 'error': 'An error occurred. Please try again.'};
     }
   }
 
@@ -141,6 +190,12 @@ class ApiService {
         return [];
       }
 
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        _logDebug('Devices response is not JSON');
+        return [];
+      }
+
       final data = jsonDecode(response.body);
 
       if (data['success'] == true && data['devices'] != null) {
@@ -151,6 +206,9 @@ class ApiService {
         return devices;
       }
 
+      return [];
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error getting devices: $e');
       return [];
     } catch (e) {
       _logDebug('Error getting devices: $e');
@@ -177,10 +235,22 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        return false;
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        return false;
+      }
+
       final data = jsonDecode(response.body);
       _logDebug('Update device response: ${data['success']}');
 
       return data['success'] == true;
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error updating device: $e');
+      return false;
     } catch (e) {
       _logDebug('Error updating device: $e');
       return false;
@@ -212,8 +282,20 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        return false;
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        return false;
+      }
+
       final data = jsonDecode(response.body);
       return data['success'] == true;
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error updating device state: $e');
+      return false;
     } catch (e) {
       _logDebug('Error updating device state: $e');
       return false;
@@ -237,10 +319,22 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        return false;
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        return false;
+      }
+
       final data = jsonDecode(response.body);
       _logDebug('Reset WiFi response: ${data['success']}');
 
       return data['success'] == true;
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error resetting WiFi: $e');
+      return false;
     } catch (e) {
       _logDebug('Error resetting WiFi: $e');
       return false;
@@ -267,6 +361,12 @@ class ApiService {
         return [];
       }
 
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        _logDebug('Schedules response is not JSON');
+        return [];
+      }
+
       final data = jsonDecode(response.body);
 
       if (data['success'] == true && data['schedules'] != null) {
@@ -277,6 +377,9 @@ class ApiService {
         return schedules;
       }
 
+      return [];
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error getting schedules: $e');
       return [];
     } catch (e) {
       _logDebug('Error getting schedules: $e');
@@ -301,10 +404,22 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        return false;
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        return false;
+      }
+
       final data = jsonDecode(response.body);
       _logDebug('Save schedule response: ${data['success']}');
 
       return data['success'] == true;
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error saving schedule: $e');
+      return false;
     } catch (e) {
       _logDebug('Error saving schedule: $e');
       return false;
@@ -328,10 +443,22 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        return false;
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        return false;
+      }
+
       final data = jsonDecode(response.body);
       _logDebug('Delete schedule response: ${data['success']}');
 
       return data['success'] == true;
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error deleting schedule: $e');
+      return false;
     } catch (e) {
       _logDebug('Error deleting schedule: $e');
       return false;
@@ -358,6 +485,12 @@ class ApiService {
         return [];
       }
 
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        _logDebug('Scenes response is not JSON');
+        return [];
+      }
+
       final data = jsonDecode(response.body);
 
       if (data['success'] == true && data['scenes'] != null) {
@@ -368,6 +501,9 @@ class ApiService {
         return scenes;
       }
 
+      return [];
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error getting scenes: $e');
       return [];
     } catch (e) {
       _logDebug('Error getting scenes: $e');
@@ -392,10 +528,22 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        return false;
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        return false;
+      }
+
       final data = jsonDecode(response.body);
       _logDebug('Save scene response: ${data['success']}');
 
       return data['success'] == true;
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error saving scene: $e');
+      return false;
     } catch (e) {
       _logDebug('Error saving scene: $e');
       return false;
@@ -419,10 +567,22 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        return false;
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        return false;
+      }
+
       final data = jsonDecode(response.body);
       _logDebug('Activate scene response: ${data['success']}');
 
       return data['success'] == true;
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error activating scene: $e');
+      return false;
     } catch (e) {
       _logDebug('Error activating scene: $e');
       return false;
@@ -446,10 +606,22 @@ class ApiService {
         }),
       ).timeout(ApiConfig.timeout);
 
+      if (response.statusCode != 200) {
+        return false;
+      }
+
+      // Check if response is JSON
+      if (!_isValidJsonResponse(response.body)) {
+        return false;
+      }
+
       final data = jsonDecode(response.body);
       _logDebug('Delete scene response: ${data['success']}');
 
       return data['success'] == true;
+    } on FormatException catch (e) {
+      _logDebug('JSON parse error deleting scene: $e');
+      return false;
     } catch (e) {
       _logDebug('Error deleting scene: $e');
       return false;

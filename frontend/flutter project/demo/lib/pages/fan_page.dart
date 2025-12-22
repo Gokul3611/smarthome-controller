@@ -118,83 +118,85 @@ class _FanPageState extends State<FanPage> {
 
                         // Fan Speed Section
                         _glassSection(
-                    title: "Fan Speed",
-                    child: Wrap(
-                      spacing: 12,
-                      children: [
-                        for (int i = 1; i <= 4; i++)
-                          ElevatedButton(
-                            onPressed: () => setSpeed(i),
+                          title: "Fan Speed",
+                          child: Wrap(
+                            spacing: 12,
+                            children: [
+                              for (int i = 1; i <= 4; i++)
+                                ElevatedButton(
+                                  onPressed: () => setSpeed(i),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: speed == i
+                                        ? Colors.white.withOpacity(0.35)
+                                        : Colors.white.withOpacity(0.15),
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 12),
+                                  ),
+                                  child: Text("Speed $i"),
+                                ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Controls Section
+                        _glassSection(
+                          title: "Controls",
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: startFan,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white.withOpacity(0.25),
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: const Text("Start"),
+                              ),
+                              const SizedBox(width: 20),
+                              ElevatedButton(
+                                onPressed: stopFan,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white.withOpacity(0.25),
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: const Text("Stop"),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Auto Mode button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: enableAutoMode,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: speed == i
-                                  ? Colors.white.withOpacity(0.35)
+                              backgroundColor: isAuto
+                                  ? Colors.green.withOpacity(0.4)
                                   : Colors.white.withOpacity(0.15),
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
+                                  horizontal: 40, vertical: 16),
                             ),
-                            child: Text("Speed $i"),
+                            child: const Text("Auto Mode"),
                           ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  // Controls Section
-                  _glassSection(
-                    title: "Controls",
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: startFan,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white.withOpacity(0.25),
-                            foregroundColor: Colors.white,
-                          ),
-                          child: const Text("Start"),
-                        ),
-                        const SizedBox(width: 20),
-                        ElevatedButton(
-                          onPressed: stopFan,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white.withOpacity(0.25),
-                            foregroundColor: Colors.white,
-                          ),
-                          child: const Text("Stop"),
                         ),
                       ],
                     ),
                   ),
-
-                  const SizedBox(height: 30),
-
-                  // Auto Mode button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: enableAutoMode,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isAuto
-                            ? Colors.green.withOpacity(0.4)
-                            : Colors.white.withOpacity(0.15),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 16),
-                      ),
-                      child: const Text("Auto Mode"),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
       ),
-    ),
-  );
-}
+    );
+  }
 
   // Reusable glass container UI block
   Widget _glassSection({required String title, required Widget child}) {
