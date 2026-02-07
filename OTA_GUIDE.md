@@ -4,7 +4,7 @@ Complete guide for implementing and using OTA firmware updates for the Smart Hom
 
 ---
 
-## 📡 Overview
+## Overview
 
 OTA updates allow you to update ESP32 firmware remotely without physical access to the device. This is essential for:
 - Bug fixes and security patches
@@ -14,7 +14,7 @@ OTA updates allow you to update ESP32 firmware remotely without physical access 
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```
 Developer → GitHub Release → Google Apps Script → ESP32 Device
@@ -35,7 +35,7 @@ Developer → GitHub Release → Google Apps Script → ESP32 Device
 
 ---
 
-## 🔧 ESP32 OTA Implementation
+## ESP32 OTA Implementation
 
 ### 1. Partition Scheme
 
@@ -173,7 +173,7 @@ idf.py build
 
 ---
 
-## ☁️ Backend OTA Configuration
+## Backend OTA Configuration
 
 ### Google Apps Script Implementation
 
@@ -218,7 +218,7 @@ function compareVersions(v1, v2) {
 
 ---
 
-## 📦 Hosting Firmware Binaries
+## Hosting Firmware Binaries
 
 ### Option 1: GitHub Releases (Recommended)
 
@@ -280,7 +280,7 @@ function doGet(e) {
 
 ---
 
-## 🔒 Security Best Practices
+## Security Best Practices
 
 ### 1. Firmware Signing
 
@@ -358,7 +358,7 @@ void setup() {
 
 ---
 
-## 📱 Dashboard OTA Management
+## Dashboard OTA Management
 
 Add to dashboard:
 
@@ -392,7 +392,7 @@ async function triggerOTA() {
 
 ---
 
-## 🧪 Testing OTA Updates
+## Testing OTA Updates
 
 ### Test Procedure
 
@@ -441,7 +441,7 @@ Serial.println("======================");
 
 ---
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Issue: Update Fails to Download
 
@@ -495,7 +495,7 @@ Serial.println("======================");
 
 ---
 
-## 📊 OTA Update Statistics
+## OTA Update Statistics
 
 Track in Google Sheets:
 
@@ -506,7 +506,7 @@ Track in Google Sheets:
 
 ---
 
-## 🎯 Best Practices
+## Best Practices
 
 1. **Test First**: Always test on one device before mass rollout
 2. **Gradual Rollout**: Update 10% → 50% → 100% over time
@@ -521,7 +521,7 @@ Track in Google Sheets:
 
 ---
 
-## 📞 Support
+## Support
 
 For OTA issues:
 - Check ESP32 serial output

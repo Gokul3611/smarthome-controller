@@ -1,4 +1,5 @@
 .vscode/
+.idea/
 build/
 env/
 *.bin
@@ -9,3 +10,10 @@ env/
 *.apk
 *.aab
 !app/**/.gitkeep.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+_codeql_detected_source_root
