@@ -73,11 +73,11 @@ struct Scene {
 };
 
 // ================================================================
-// 📝 USER CONFIGURATION
+// USER CONFIGURATION
 // ================================================================
-// 👇 Configure via Google Apps Script or web interface
-String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJP31g9LhRulRHTbTd6KidEiBXlxCKfKcXkiUGe961IfNZDgHuoWAIif91PrPUQnHrIQ/exec";
-String API_KEY = "smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]";
+// Set these before uploading. See DEPLOYMENT.md for details.
+String GOOGLE_SCRIPT_URL = "";  // Your Google Apps Script web app URL
+String API_KEY = "";            // Must match the API key in Apps Script properties
 String systemName = "Smart_Home_Hub";
 
 // SinricPro credentials (loaded from cloud)
