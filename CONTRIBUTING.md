@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to the Smart Home Controller project!
 
-## 📋 Repository Structure
+## Repository Structure
 
 ```
 smarthome-controller/
@@ -11,10 +11,9 @@ smarthome-controller/
 ├── firmware/             # ESP32 firmware
 ├── hardware/             # PCB designs and schematics
 ├── app/                  # Compiled APK files
-└── docs/                 # Additional documentation
 ```
 
-## 🔧 Development Setup
+## Development Setup
 
 ### Backend Development
 - Navigate to `backend/google-apps-script/`
@@ -38,7 +37,7 @@ smarthome-controller/
 - Schematics in `hardware/schematics/`
 - BOM in `hardware/bom/`
 
-## 🎯 Contribution Guidelines
+## Contribution Guidelines
 
 ### Code Style
 - Follow existing code style in each component
@@ -62,7 +61,7 @@ smarthome-controller/
 - Reference issue numbers when applicable
 - Group related changes in single commits
 
-## 🚀 Pull Request Process
+## Pull Request Process
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -73,7 +72,7 @@ smarthome-controller/
 7. Push to your branch (`git push origin feature/amazing-feature`)
 8. Open a Pull Request
 
-## 📝 Reporting Issues
+## Reporting Issues
 
 When reporting issues, please include:
 - Clear description of the problem
@@ -82,18 +81,18 @@ When reporting issues, please include:
 - Hardware/software versions
 - Error logs or screenshots
 
-## 🔐 Security
+## Security
 
 If you discover a security vulnerability, please email the maintainers privately rather than opening a public issue.
 
-## 📄 License
+## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
 
-## 💬 Questions?
+## Questions
 
 - Open an issue for feature requests or bugs
 - Check existing documentation first
 - Be respectful and constructive
 
-Thank you for contributing! 🎉
+Thank you for contributing.

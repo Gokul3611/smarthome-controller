@@ -2,7 +2,7 @@
 
 This folder contains the Android APK builds for the Smart Home Controller mobile application.
 
-## 📱 About the App
+## About the App
 
 The Smart Home Controller app is a Flutter-based mobile application that allows you to:
 - Control your ESP32-based 4-channel TRIAC smart home controller
@@ -11,7 +11,7 @@ The Smart Home Controller app is a Flutter-based mobile application that allows 
 - Manage scenes and schedules
 - View system information and statistics
 
-## 📦 APK Files
+## APK Files
 
 APK files for different versions and build variants will be stored in this directory:
 
@@ -31,7 +31,7 @@ app/
 - **Release APK:** Not yet built
 - **Debug APK:** Not yet built
 
-## 🛠️ Building the APK
+## Building the APK
 
 To build the APK from source:
 
@@ -192,7 +192,7 @@ For production releases, APKs should be signed with a release keystore:
 - Real-time status monitoring
 - HTTP and WebSocket communication
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Build Issues
 
@@ -213,18 +213,16 @@ For production releases, APKs should be signed with a release keystore:
 **Problem:** "Parse error"
 - **Solution:** Ensure APK is not corrupted and is compatible with your Android version
 
-## 🔗 Related Documentation
+## Related Documentation
 
 - Flutter Project: `frontend/flutter project/demo/`
 - [Firmware Documentation](../firmware/README.md)
-- [Installation Guide](../INSTALL.md)
 - [Main README](../README.md)
 
-## 📧 Support
+## Support
 
 For issues or questions:
 - Open an issue on [GitHub](https://github.com/Gokul3611/smarthome-controller/issues)
-- Check the [project wiki](https://github.com/Gokul3611/smarthome-controller/wiki)
 
 ---
 

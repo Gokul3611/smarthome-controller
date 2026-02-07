@@ -1,24 +1,15 @@
 # Repository Structure
 
-This professional IoT project is organized into clear, maintainable components:
+This IoT project is organized into the following directories:
 
-## 📁 Directory Layout
+## Directory Layout
 
-- **app/** - Compiled APK files for Android distribution
-- **backend/** - Google Apps Script cloud backend with REST API
-- **frontend/** - Flutter mobile application source code
-- **firmware/** - ESP32 embedded firmware for device control
-- **hardware/** - PCB designs, schematics, and bill of materials
-- **docs/** - Additional technical documentation
+- **app/** — Compiled APK files for Android distribution
+- **backend/** — Google Apps Script cloud backend with REST API
+- **frontend/** — Flutter mobile application source code
+- **firmware/** — ESP32 embedded firmware for device control
+- **hardware/** — PCB designs, schematics, and bill of materials
 
-## 🎯 Key Features
+## Documentation
 
-- Full-stack IoT solution from hardware to mobile app
-- Production-ready code with security best practices
-- Comprehensive documentation for all components
-- Professional folder structure and naming conventions
-- MIT licensed open-source project
-
-## 📚 Documentation
-
-See [README.md](../README.md) for complete system overview.
+See [README.md](../README.md) for the full system overview.
