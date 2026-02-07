@@ -1,380 +1,179 @@
-"# Smart Home Controller - Complete IoT System
+"# Smart Home Controller
 
-![Version](https://img.shields.io/badge/version-3.0-blue)
-![Platform](https://img.shields.io/badge/platform-ESP32-green)
-![Status](https://img.shields.io/badge/status-production--ready-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-orange)
-![Deployment](https://img.shields.io/badge/deployment-automated-success)
-![APK](https://img.shields.io/badge/APK-auto--build-blue)
+![Platform](https://img.shields.io/badge/platform-ESP32-green)
 
-> **Production-ready IoT smart home automation system** with ESP32 hardware, cloud backend, web dashboard, and cross-platform mobile application.
+Full-stack IoT home automation system: ESP32 firmware with 4-channel TRIAC phase-angle control, Google Apps Script cloud backend, web dashboard, and Flutter mobile app. Controls AC loads (lights, fans) via physical switches, web interface, mobile app, and Amazon Alexa voice commands.
 
-## 🚀 **[📖 Complete Deployment Guide](./DEPLOYMENT_INDEX.md)** ← Start Here to Deploy!
+Built as an internship project demonstrating hardware design, embedded firmware, cloud services, and mobile development.
 
----
+## Project Status
 
-## 🎯 Project Overview
+**Maturity**: Portfolio project / advanced prototype
+**Hardware tested**: ESP32-WROOM-32 with BT136 TRIAC modules
+**Known limitations**:
+- Google Assistant integration (SinricPro) is scaffolded but not fully wired up
+- Flutter app requires backend URL configuration before use
+- No automated test suite
 
-A complete, professional-grade smart home automation solution for controlling 4-channel AC loads with multiple control interfaces, cloud synchronization, and voice assistant integration. Built as a comprehensive internship project demonstrating full-stack IoT development.
+**System components**:
+- Hardware (PCB schematics, BOM)
+- Firmware (ESP32 C++, FreeRTOS dual-core)
+- Backend (Google Apps Script + Google Sheets)
+- Web dashboard (HTML/CSS/JS served from Apps Script)
+- Mobile app (Flutter/Dart, Android)
 
-### 🏆 Key Achievements
+## Quick Links
 
-- ✅ **Full-Stack Development**: Hardware, firmware, backend, web, and mobile
-- ✅ **Production-Ready**: Complete with documentation, testing, and deployment guides
-- ✅ **100+ Features**: Comprehensive feature set documented
-- ✅ **Professional Documentation**: 50,000+ words of technical documentation
-- ✅ **Security-First**: Built with security best practices
-- ✅ **Scalable Architecture**: Designed for growth from prototype to production
-
----
-
-## 🖼️ UI Preview
-
-### 📸 See the Dashboard in Action
-
-![Smart Home Controller Dashboard](https://github.com/user-attachments/assets/d744726f-4be5-4d46-ad67-1705a11d3b0f)
-
-*Modern glassmorphism design with real-time device control, system statistics, and professional aesthetics*
-
-**Quick Start:** Open `backend/google-apps-script/Dashboard.html` in your browser to see the UI immediately!
-
----
-
-## 🚀 Ready to Deploy?
-
-### Quick Deployment
-- ⚡ **[Step-by-Step Deployment Guide](./DEPLOY_STEPS.md)** - Complete deployment in 60 minutes
-- ✅ **[Quick Deployment Checklist](./QUICK_DEPLOY_CHECKLIST.md)** - Fast reference guide
-- 🤖 **Automated Builds** - GitHub Actions builds APK automatically on every push
-
-### Download & Install
-- 📱 **[Download Latest APK](https://github.com/Gokul3611/smarthome-controller/releases/latest)** - Ready-to-install Android app
-- 📦 **[All Releases](https://github.com/Gokul3611/smarthome-controller/releases)** - Version history
-
----
-
-## 📚 Documentation
-
-### For Developers
-- 🚀 [Quick Start Guide](./DEPLOYMENT.md) - 30-minute setup
-- 📋 [Features List](./FEATURES.md) - Complete feature documentation
-- 🔧 [Hardware Guide](./hardware/README.md) - Circuit diagrams and assembly
-- 📡 [OTA Updates](./OTA_GUIDE.md) - Firmware update procedures
-- 🔗 [System Integration](./SYSTEM_INTEGRATION.md) - How everything works together
-
-### For Production
-- 🏭 [Production Guide](./PRODUCTION_GUIDE.md) - Production deployment
-- 📦 [Handover Document](./HANDOVER.md) - Company transfer guide
-- 💰 [Cost Analysis](./hardware/bom/BOM.md) - Bill of materials
-
-### For Users
-- 📱 [Mobile App](./app/README.md) - Download and install
-- 🌐 [Web Dashboard](./backend/google-apps-script/README.md) - Access guide
-- ❓ [FAQ](./INSTALL.md) - Common questions
-
----
-
-## 🏗️ System Architecture
-
-### Components
-
-- ⚡ **Multi-core Architecture**: Time-critical TRIAC control on Core 1, network operations on Core 0
-- 🎙️ **Voice Assistants**: Amazon Alexa + Google Assistant (via SinricPro) + future Gemini AI
-- ☁️ **Cloud Integration**: Google Apps Script backend for remote control and configuration
-- 🌐 **Web Dashboard**: Full-featured control panel accessible from anywhere
-- 📱 **Flutter App Integration**: Cross-platform mobile app with real-time control
-- 🔄 **OTA Updates**: Over-the-air firmware updates with rollback protection
-- 🎬 **Scenes & Schedules**: Automation and preset device combinations
-- 🛡️ **Safety Features**: Watchdog timers, zero-cross monitoring, auto-shutoff
-- 💾 **Persistent Storage**: Configuration and state retention across reboots
-- 🎨 **Premium UI**: Glassmorphism design with minimal aesthetics
+- [Deployment Guide](./DEPLOYMENT.md) — Set up the full system
+- [Feature List](./FEATURES.md) — What is implemented
+- [Hardware Guide](./hardware/README.md) — Circuit diagrams and assembly
+- [Backend Guide](./backend/google-apps-script/README.md) — Cloud API and database
+- [Mobile App](./app/README.md) — Download and build instructions
+- [Changelog](./CHANGELOG.md) — Version history
 
 ## Repository Structure
 
 ```
 smarthome-controller/
-├── firmware/                      # ESP32 firmware code
-│   └── main/                     # Main firmware application
-├── backend/                       # Backend services
-│   └── google-apps-script/       # ☁️ Google Apps Script backend
-│       ├── Code.gs              # Main API logic
-│       ├── Database.gs          # Database helpers
-│       ├── Dashboard.html       # Web dashboard UI
-│       └── README.md            # Backend deployment guide
-├── frontend/                      # Frontend applications
-│   └── flutter project/          # Flutter mobile app source code
-│       └── demo/                 # Main Flutter application
-│           ├── lib/
-│           │   ├── config/      # API configuration
-│           │   ├── models/      # Data models
-│           │   ├── services/    # API service layer
-│           │   └── pages/       # UI pages
-│           └── pubspec.yaml
-├── hardware/                      # Hardware design files
-│   ├── pcb/                      # KiCad PCB design files
-│   ├── schematics/               # Circuit diagrams
-│   ├── bom/                      # Bill of materials
-│   └── README.md                 # Hardware documentation
-├── app/                          # 📱 Android APK builds
-│   ├── release/                  # Release APK builds
-│   ├── debug/                    # Debug APK builds
-│   └── README.md                 # App build & installation guide
-├── docs/                         # Additional documentation
-├── README.md                     # This file (overview)
-├── FEATURES.md                   # 🎯 Complete feature list
-├── DEPLOYMENT.md                 # 🚀 Deployment guide
-├── INSTALL.md                    # Installation instructions
-└── CHANGELOG.md                  # Version history
+├── firmware/                   # ESP32 firmware
+│   ├── main/                   #   Main controller (4-channel TRIAC)
+│   └── mini_controller/        #   Simplified variant
+├── backend/                    # Cloud services
+│   └── google-apps-script/     #   Apps Script backend + web dashboard
+├── frontend/                   # Mobile application
+│   └── flutter project/demo/   #   Flutter Android/iOS app
+├── hardware/                   # Hardware design files
+│   ├── pcb/                    #   KiCad PCB layout & schematic
+│   ├── schematics/             #   Circuit diagrams
+│   └── bom/                    #   Bill of materials
+├── app/                        # APK build artifacts (via GitHub Actions)
+├── README.md                   # This file
+├── FEATURES.md                 # Implemented feature list
+├── DEPLOYMENT.md               # Setup and deployment guide
+└── CHANGELOG.md                # Version history
 ```
 
-### 📱 Mobile App
+## Architecture
 
-The Android mobile app APK files are located in the [`app/`](./app/) directory. See the [App README](./app/README.md) for:
-- Download instructions
-- Build instructions from source
-- Installation guide
-- Troubleshooting
-
-### ☁️ Backend & Web Dashboard
-
-The system uses **Google Apps Script** as the backend with **Google Sheets** as the database. See the [Backend README](./backend/google-apps-script/README.md) for:
-- Backend deployment steps
-- API documentation
-- Database schema
-- Web dashboard access
-
-**Features:**
-- RESTful API for devices and apps
-- Real-time device control
-- User authentication
-- Scheduling & scenes management
-- Web dashboard with premium UI
-- Global access (works from anywhere)
-
-### 📚 Documentation
-
-- **[FEATURES.md](./FEATURES.md)** - Complete list of all 100+ features
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Step-by-step deployment guide (30 min setup)
-- **[Backend README](./backend/google-apps-script/README.md)** - Backend API and deployment
-- **[App README](./app/README.md)** - Mobile app build and distribution
-
-## Hardware Requirements
-
-### ESP32 Module
-- ESP32-WROOM-32 or compatible
-- Minimum 4MB flash
-- Dual-core operation
-
-### TRIAC Controller Hardware
-- 4x TRIAC channels (BT136 or similar)
-- Zero-cross detection circuit
-- MOC3021/3041 optocouplers
-- 5V power supply
-
-### Pin Configuration
-
-| Function | GPIO Pin | Notes |
-|----------|----------|-------|
-| Zero-Cross Detection | 13 | Rising edge interrupt |
-| TRIAC 1 | 16 | Channel 1 control |
-| TRIAC 2 | 17 | Channel 2 control |
-| TRIAC 3 | 18 | Channel 3 control |
-| TRIAC 4 | 19 | Channel 4 control |
-| Switch 1 | 32 | Physical button input |
-| Switch 2 | 33 | Physical button input |
-| Switch 3 | 25 | Physical button input |
-| Switch 4 | 26 | Physical button input |
-
-## Software Architecture
-
-### Core Separation
+### Dual-Core Design (FreeRTOS)
 
 ```
-CORE 1 (PRO_CPU) - TIME-CRITICAL:
-├── Zero-cross detection ISR (RISING edge @ GPIO13)
-├── Hardware timer ISR for phase-angle control (100µs intervals)
-├── TRIAC firing with <50µs accuracy
-├── Alexa library polling (minimal)
-└── NO blocking calls or network operations
+Core 1 (PRO_CPU) — time-critical:
+├── Zero-cross detection ISR (rising edge, GPIO 13)
+├── Hardware timer ISR for phase-angle control (100 us intervals)
+├── TRIAC firing (<50 us accuracy)
+└── No blocking calls or network operations
 
-CORE 0 (APP_CPU) - CONNECTIVITY:
+Core 0 (APP_CPU) — connectivity:
 ├── WiFi management with auto-reconnect
-├── Google Apps Script polling (2.5s interval)
-├── Voice assistant handling (Alexa + SinricPro)
+├── Google Apps Script polling (2.5 s interval)
+├── Amazon Alexa voice handling (local, via Espalexa)
 ├── Physical switch debouncing
-├── Web servers (port 80, 8080, WebSocket 81)
-├── OTA update handling
-├── Schedule execution
-├── Scene activation
+├── HTTP server (port 80 redirect, port 8080 REST API)
+├── WebSocket server (port 81, real-time state sync)
+├── OTA firmware updates
+├── Schedule and scene execution
 ├── Fade transitions
-└── Watchdog monitoring (15s timeout)
+└── Watchdog monitoring (15 s timeout)
 ```
 
 ### Data Flow
 
 ```
-Physical Switch → Debounce → Device State Update → TRIAC Control
-                                      ↓
-                            Cloud Sync / WebSocket Broadcast
-                                      ↓
-Voice Command → Alexa/Google → Device State Update → TRIAC Control
-                                      ↓
-                            Cloud Sync / WebSocket Broadcast
+Physical Switch --> Debounce --> Device State --> TRIAC Control
+                                    |
+                          Cloud Sync / WebSocket Broadcast
+                                    |
+Voice Command --> Alexa --> Device State --> TRIAC Control
 ```
+
+## Hardware Requirements
+
+### Components
+
+- ESP32-WROOM-32 (4 MB flash, dual-core)
+- 4x BT136 TRIACs with MOC3021 optocouplers
+- Zero-cross detection circuit
+- 5V power supply (2A minimum)
+- 4x physical push buttons (optional)
+
+### Pin Configuration
+
+| Function | GPIO | Notes |
+|----------|------|-------|
+| Zero-Cross Detection | 13 | Rising edge interrupt |
+| TRIAC Channel 1 | 16 | |
+| TRIAC Channel 2 | 17 | |
+| TRIAC Channel 3 | 18 | |
+| TRIAC Channel 4 | 19 | |
+| Switch 1 | 32 | Internal pull-up |
+| Switch 2 | 33 | Internal pull-up |
+| Switch 3 | 25 | Internal pull-up |
+| Switch 4 | 26 | Internal pull-up |
 
 ## Installation
 
-### Arduino IDE Setup
+### Arduino IDE
 
-1. Install ESP32 board support:
+1. Add ESP32 board support URL:
    ```
    https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
    ```
 
-2. Install required libraries:
+2. Install libraries via Library Manager:
    - WiFiManager by tzapu (v2.0.16+)
    - ArduinoJson by Benoit Blanchon (v6.x)
    - Espalexa by Christian Schwinne (v2.7.0+)
    - WebSockets by Markus Sattler (v2.4.0+)
-   - SinricPro (v2.10.0+) [for Google Assistant]
 
 3. Open `firmware/main/main.ino`
 
-4. Configure Google Apps Script URL:
+4. Set your Google Apps Script URL and API key (see [DEPLOYMENT.md](./DEPLOYMENT.md)):
    ```cpp
    String GOOGLE_SCRIPT_URL = "your_script_url_here";
+   String API_KEY = "your_api_key_here";
    ```
 
-5. Select board: `ESP32 Dev Module`
+5. Select board: ESP32 Dev Module, upload speed 921600
 
 6. Upload firmware
 
-### PlatformIO Setup
+### Initial WiFi Setup
 
-Create `platformio.ini`:
-
-```ini
-[env:esp32dev]
-platform = espressif32
-board = esp32dev
-framework = arduino
-monitor_speed = 115200
-
-lib_deps = 
-    tzapu/WiFiManager@^2.0.16
-    bblanchon/ArduinoJson@^6.21.3
-    vintlabs/Fauxmo ESP@^3.4
-    links2004/WebSockets@^2.4.0
-    sinricpro/SinricPro@^2.10.0
-
-build_flags = 
-    -DCORE_DEBUG_LEVEL=3
-    -DBOARD_HAS_PSRAM
-```
-
-## Configuration
-
-### Initial Setup
-
-1. Power on the device
-2. Connect to WiFi network: `Smart_Home_Hub`
-3. Open browser to `192.168.4.1`
+1. Power on the ESP32
+2. Connect to WiFi network `Smart_Home_Hub`
+3. Open `192.168.4.1` in a browser
 4. Select your WiFi network and enter password
-5. Device will reboot and connect
+5. Device reboots and connects
 
 ### Factory Reset
 
-Hold Switch 1 for 10 seconds to reset all settings and WiFi credentials.
+Hold Switch 1 for 10 seconds to clear WiFi credentials and settings.
 
-### Google Apps Script Backend
+## Local API
 
-Deploy the Google Apps Script to handle:
-- Device state polling
-- Remote configuration
-- OTA update distribution
-- Usage statistics
-- Flutter app API proxy
+### REST API (Port 8080)
 
-Example request format:
-```json
-{
-  "action": "poll",
-  "uid": "AA:BB:CC:DD:EE:FF",
-  "ver": 3.0,
-  "uptime": 3600,
-  "rssi": -45,
-  "heap": 180000,
-  "d1": {"s": 1, "v": 75, "t": 1, "runtime": 1800},
-  "d2": {"s": 0, "v": 100, "t": 0, "runtime": 0},
-  "d3": {"s": 1, "v": 50, "t": 2, "runtime": 900},
-  "d4": {"s": 0, "v": 100, "t": 0, "runtime": 0}
-}
-```
-
-Example response format:
-```json
-{
-  "sys_name": "Living Room Hub",
-  "ota_update": false,
-  "bin_url": "",
-  "d1": {
-    "type": "FAN",
-    "name": "Ceiling Fan",
-    "lock": false,
-    "update": true,
-    "state": 1,
-    "val": 80
-  },
-  "schedules": [],
-  "scenes": []
-}
-```
-
-## API Documentation
-
-### Local REST API (Port 8080)
-
-All endpoints return JSON responses.
-
-#### GET /status
-Get current device states
+**GET /status** — Current device states
 ```json
 {
   "devices": [
-    {
-      "id": 0,
-      "name": "Living Room Light",
-      "type": 2,
-      "state": true,
-      "brightness": 75,
-      "runtime": 3600
-    }
+    {"id": 0, "name": "Living Room Light", "type": 2, "state": true, "brightness": 75, "runtime": 3600}
   ]
 }
 ```
 
-#### POST /control
-Control a device
+**POST /control** — Control a device
 ```json
-{
-  "id": 0,
-  "state": true,
-  "brightness": 75
-}
+{"id": 0, "state": true, "brightness": 75}
 ```
 
-#### GET /info
-System information
+**GET /info** — System information
 ```json
 {
-  "name": "Living Room Hub",
-  "firmware": "3.0",
-  "mac": "AA:BB:CC:DD:EE:FF",
-  "ip": "192.168.1.100",
-  "uptime": 3600,
-  "rssi": -45,
-  "heap": 180000,
-  "cloud_connected": true
+  "name": "Living Room Hub", "firmware": "3.0", "mac": "AA:BB:CC:DD:EE:FF",
+  "ip": "192.168.1.100", "uptime": 3600, "rssi": -45, "heap": 180000
 }
 ```
 
@@ -382,152 +181,44 @@ System information
 
 Real-time device state updates:
 ```json
-{
-  "type": "device_update",
-  "id": 0,
-  "state": true,
-  "brightness": 75,
-  "name": "Living Room Light"
-}
+{"type": "device_update", "id": 0, "state": true, "brightness": 75}
 ```
 
-## Voice Assistant Setup
+## Voice Control
 
-### Amazon Alexa
+### Amazon Alexa (local network)
 
-1. Open Alexa app
-2. Go to Devices → Add Device
-3. Select "Other" → "Discover Devices"
-4. Devices will appear as configured names
+1. Open Alexa app > Devices > Add Device > Other > Discover Devices
+2. Devices appear with their configured names
+3. Supports on/off and brightness/speed commands
 
 ### Google Assistant (via SinricPro)
 
-1. Create account at sinric.pro
-2. Add devices in SinricPro dashboard
-3. Configure App Key and Secret in Google Apps Script
-4. Link "Smart Home" service in Google Home app
-5. Discover devices
-
-## Advanced Features
-
-### Scenes
-
-Create preset device combinations:
-```cpp
-Scene scene;
-scene.name = "Movie Time";
-scene.devices[0] = {0, false, 0};     // Light off
-scene.devices[1] = {1, true, 20};     // Dimmer at 20%
-```
-
-### Schedules
-
-Time-based automation:
-```cpp
-Schedule schedule;
-schedule.deviceId = 0;
-schedule.startMins = 18 * 60;         // 6:00 PM
-schedule.endMins = 23 * 60;           // 11:00 PM
-schedule.startBrightness = 0;
-schedule.endBrightness = 75;
-schedule.daysOfWeek = 0x7F;           // All days
-```
-
-### Smooth Dimming
-
-Automatic fade transitions:
-```cpp
-setDeviceState(deviceId, true, 75, true);  // Fade to 75%
-```
+**Note**: SinricPro integration is scaffolded in the firmware but not fully wired up.
+To complete it, create a SinricPro account, add devices, and configure the app key/secret.
 
 ## Safety Features
 
-- **Zero-Cross Detection**: Monitors AC waveform; shuts down if signal lost
-- **Watchdog Timers**: 15s Core 0, 5s Core 1 (time-critical)
-- **Auto-Shutoff**: Configurable timeout per device (default 1 hour)
-- **Brownout Protection**: ESP32 built-in brownout detector
-- **OTA Rollback**: Failed updates automatically rollback
-- **Memory Monitoring**: Tracks heap usage to prevent crashes
+- Zero-cross detection with auto-shutoff if AC signal is lost
+- Watchdog timers: 15 s (Core 0), 5 s (Core 1)
+- Configurable auto-off per device (default 1 hour)
+- ESP32 built-in brownout protection
+- OTA rollback on failed updates
+- Heap monitoring to prevent memory exhaustion
 
 ## Troubleshooting
 
-### Device Not Responding
-1. Check power supply (stable 5V required)
-2. Verify zero-cross signal with oscilloscope
-3. Check Serial monitor for error messages
-
-### WiFi Connection Issues
-1. Ensure 2.4GHz WiFi network
-2. Check signal strength (need >-80 dBm)
-3. Factory reset and reconfigure
-
-### Voice Control Not Working
-- **Alexa**: Ensure device is on same network, rediscover devices
-- **Google**: Verify SinricPro credentials, check cloud connection
-
-### OTA Update Failed
-1. Check internet connectivity
-2. Verify firmware binary URL is accessible
-3. Ensure sufficient flash space
-4. Review Serial logs for specific error
-
-## Development
-
-### Building from Source
-
-```bash
-git clone https://github.com/Gokul3611/smarthome-controller.git
-cd smarthome-controller/firmware/main
-# Open in Arduino IDE or PlatformIO
-```
-
-### Debugging
-
-Enable verbose logging:
-```cpp
-#define LOG_LEVEL LOG_DEBUG  // in config.h
-```
-
-Monitor Serial output at 115200 baud.
-
-### Contributing
-
-1. Fork the repository
-2. Create feature branch
-3. Make changes with proper documentation
-4. Test thoroughly on hardware
-5. Submit pull request
+| Problem | Solution |
+|---------|----------|
+| Device not responding | Check 5V power supply; verify zero-cross signal |
+| WiFi won't connect | Ensure 2.4 GHz network; check signal > -80 dBm; factory reset |
+| Alexa can't find devices | Must be on same network; rediscover in Alexa app |
+| OTA update failed | Check internet; verify binary URL; check flash space |
 
 ## License
 
-MIT License - See LICENSE file for details
+MIT License — see [LICENSE](./LICENSE) file.
 
 ## Support
 
-- **Issues**: https://github.com/Gokul3611/smarthome-controller/issues
-- **Wiki**: https://github.com/Gokul3611/smarthome-controller/wiki
-- **Email**: support@smarthome-controller.com
-
-## Changelog
-
-### v3.0 (Current)
-- Multi-core FreeRTOS architecture
-- Google Assistant integration (SinricPro)
-- WebSocket real-time updates
-- Scene and schedule support
-- Smooth fade transitions
-- Enhanced safety features
-- OTA rollback protection
-- Improved cloud communication
-- Production-ready code quality
-
-### v2.1
-- Basic TRIAC control
-- Alexa integration
-- Google Apps Script polling
-- WiFi management
-
----
-
-**Built with ❤️ for reliable smart home automation**
-" 
+- [GitHub Issues](https://github.com/Gokul3611/smarthome-controller/issues)" 

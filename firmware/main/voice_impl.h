@@ -1,6 +1,8 @@
 /**
  * Voice Assistant Implementation
- * Complete implementation for Alexa (Espalexa) and Google Assistant (SinricPro)
+ * Alexa integration via Espalexa.
+ * SinricPro (Google Assistant) support is scaffolded but requires
+ * the SinricPro library to be installed and the commented sections enabled.
  */
 
 #ifndef VOICE_IMPL_H
@@ -9,10 +11,6 @@
 #include "voice.h"
 #include "config.h"
 #include <Espalexa.h>
-
-// SinricPro includes (will be enabled when library is installed)
-// #include <SinricPro.h>
-// #include <SinricProSwitch.h>
 
 // External references
 extern Espalexa alexaManager;
@@ -157,27 +155,6 @@ void updateSinricProState(int deviceId, bool state, int brightness) {
 }
 
 // ================================================================
-// GEMINI AI INTEGRATION (Future)
-// ================================================================
-
-void initGeminiAI() {
-    // Reserved for future Gemini AI integration
-    logMessage(LOG_INFO, "Gemini AI integration: Coming soon");
-}
-
-bool processGeminiCommand(const char* command) {
-    // Process natural language commands via Gemini AI
-    logMessage(LOG_DEBUG, "Gemini command: %s", command);
-    
-    // TODO: Implement Gemini API integration
-    // - Send command to Gemini API
-    // - Parse response for device control actions
-    // - Execute actions on devices
-    
-    return false;
-}
-
-// ================================================================
 // UTILITY FUNCTIONS
 // ================================================================
 
@@ -235,15 +212,10 @@ void initVoiceAssistants() {
         logMessage(LOG_INFO, "Google Assistant: Disabled (no credentials)");
         logMessage(LOG_INFO, "Set credentials in Google Apps Script to enable");
     }
-    
-    // Initialize Gemini AI (future)
-    // initGeminiAI();
 }
 
 void handleVoiceAssistants() {
-    // Handle SinricPro events
-    // Uncomment when SinricPro library is installed
-    // SinricPro.handle();
+    // SinricPro event handling would go here if the library is installed
 }
 
 #endif // VOICE_IMPL_H

@@ -1,10 +1,10 @@
 class ApiConfig {
   // Google Apps Script Backend URL
-  // Replace with your deployed Apps Script web app URL
-  static const String baseUrl = 'https://script.google.com/macros/s/AKfycbwlZCdEYspQ1AF_-0UYRznaJNJLQv7mqQw1zsdSzOLnEBIMB_EtKuY4HcCfVGVR5JXjCg/exec';
-  
+  // Replace with your deployed Apps Script web app URL (see DEPLOYMENT.md)
+  static const String baseUrl = '';
+
   // API Key (must match the one in Apps Script properties)
-  static const String apiKey = 'smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]';
+  static const String apiKey = '';
   
   // WebSocket URL for ESP32 (if using direct connection)
   static const String wsUrl = 'ws://192.168.1.100:81';

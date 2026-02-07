@@ -1,18 +1,16 @@
 /**
- * ⚡ PRODUCTION FIRMWARE: 4-Channel Smart Home Controller v3.0
+ * PRODUCTION FIRMWARE: 4-Channel Smart Home Controller v3.0
  * ==============================================================
- * Commercial-grade firmware for ESP32-based TRIAC controller
+ * ESP32-based TRIAC controller firmware
  * 
  * Features:
  * - Multi-core FreeRTOS architecture (time-critical on Core 1, network on Core 0)
- * - Google Assistant + Amazon Alexa voice control
+ * - Amazon Alexa voice control
  * - Google Apps Script cloud integration
  * - OTA updates with rollback protection
  * - Flutter app REST API + WebSocket
  * - Scene & schedule automation
  * - Safety features & watchdog monitoring
- * 
- * Copyright (c) 2024 - Production Ready
  */
 
 #include <WiFi.h>
@@ -36,7 +34,7 @@
 #include "voice.h"
 
 // ================================================================
-// 📊 DATA STRUCTURES
+// DATA STRUCTURES
 // ================================================================
 struct Device {
     String name;
@@ -73,11 +71,11 @@ struct Scene {
 };
 
 // ================================================================
-// 📝 USER CONFIGURATION
+// USER CONFIGURATION
 // ================================================================
-// 👇 Configure via Google Apps Script or web interface
-String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJP31g9LhRulRHTbTd6KidEiBXlxCKfKcXkiUGe961IfNZDgHuoWAIif91PrPUQnHrIQ/exec";
-String API_KEY = "smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]";
+// Set these before uploading. See DEPLOYMENT.md for details.
+String GOOGLE_SCRIPT_URL = "";  // Your Google Apps Script web app URL
+String API_KEY = "";            // Must match the API key in Apps Script properties
 String systemName = "Smart_Home_Hub";
 
 // SinricPro credentials (loaded from cloud)
@@ -86,7 +84,7 @@ String sinricAppSecret = "";
 String sinricDeviceIds[4] = {"", "", "", ""};
 
 // ================================================================
-// 🌐 GLOBAL OBJECTS
+// GLOBAL OBJECTS
 // ================================================================
 Espalexa alexaManager;
 Preferences preferences;
@@ -693,7 +691,7 @@ void checkFactoryReset(bool currentState) {
 }
 
 // ================================================================
-// 🌐 CORE 0 TASK
+// CORE 0 TASK
 // ================================================================
 // ================================================================
 // 🌐 CORE 0: CONNECTIVITY TASK (APP_CPU)
@@ -931,7 +929,7 @@ void processCloudResponse(const JsonDocument &respDoc) {
 }
 
 // ================================================================
-// 🌐 API IMPLEMENTATIONS (Stubs for api.h functions)
+// API IMPLEMENTATIONS (Stubs for api.h functions)
 // ================================================================
 
 // WebSocket broadcast function
@@ -1223,11 +1221,6 @@ void setup() {
     }
     alexaManager.begin();
     logMessage(LOG_INFO, "Alexa integration initialized");
-    
-    // TODO: Initialize SinricPro for Google Assistant
-    // if (sinricAppKey.length() > 0) {
-    //     initSinricPro(sinricAppKey.c_str(), sinricAppSecret.c_str(), sinricDeviceIds);
-    // }
     
     // Initialize TRIAC control timer (Core 1)
     timer = timerBegin(1000000);  // 1MHz

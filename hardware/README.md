@@ -265,6 +265,5 @@ Hardware design licensed under CERN Open Hardware License v2.0
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: December 2024  
-**Status**: Production Ready
+**Version**: 1.0
+**Last Updated**: December 2024

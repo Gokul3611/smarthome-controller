@@ -1,11 +1,24 @@
 .vscode/
+.idea/
 build/
 env/
 *.bin
 *.log
 !firmware/main/bin/*.bin
 
+# OS files
+.DS_Store
+Thumbs.db
+
 # Android APK files (keep folder structure but ignore binaries)
 *.apk
 *.aab
 !app/**/.gitkeep.md
+
+# Backup files
+*.bak
+*.old
+*~
+
+# CodeQL
+_codeql_detected_source_root

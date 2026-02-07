@@ -31,7 +31,7 @@
 
 // Google Apps Script URL (from config or override here)
 String googleScriptURL = GOOGLE_SCRIPT_URL;
-String API_KEY = "smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]";
+String API_KEY = "";  // Set to match the API key in your Apps Script properties
 
 // ================================================================
 // GLOBAL OBJECTS
