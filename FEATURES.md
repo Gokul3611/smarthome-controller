@@ -1,433 +1,113 @@
-# Smart Home Controller - Complete System Features
+# Features
 
-This document lists all the features implemented in the Smart Home Controller system.
+Implemented features across all system components.
 
-## 🎯 System Overview
-
-A complete IoT smart home solution with:
-- **ESP32 Firmware**: 4-channel TRIAC controller with voice assistant integration
-- **Google Apps Script Backend**: Cloud API and database
-- **Web Dashboard**: Full-featured control panel
-- **Flutter Mobile App**: Cross-platform mobile application
-
----
-
-## 📱 Mobile App Features
-
-### Authentication & User Management
-- ✅ User registration (signup)
-- ✅ User login with email/password
-- ✅ Secure password hashing
-- ✅ Session management with tokens
-- ✅ Profile management
-- ✅ Forgot password flow
-
-### Device Control
-- ✅ Real-time device listing
-- ✅ Device power toggle (on/off)
-- ✅ Fan speed control (0-100%)
-- ✅ Light brightness control (0-100%)
-- ✅ Device renaming capability
-- ✅ Device type selection (Light/Fan)
-- ✅ Dynamic UI (fan controls appear only for fans)
-- ✅ Device status indicators (online/offline)
-- ✅ Multiple device support (up to 4 channels per ESP32)
-
-### Network & Connection
-- ✅ WiFi configuration interface
-- ✅ WiFi password reset (from app)
-- ✅ Device discovery on local network
-- ✅ Connection status monitoring
-- ✅ Signal strength (RSSI) display
-- ✅ IP address display
-
-### Automation
-- ✅ Schedule creation (alarm-style interface)
-- ✅ Time-based automation
-- ✅ Day-of-week selection
-- ✅ Multiple schedules per device
-- ✅ Enable/disable schedules
-- ✅ Schedule editing and deletion
-
-### Scenes
-- ✅ Scene creation (device combinations)
-- ✅ Multi-device scene support
-- ✅ Quick scene activation
-- ✅ Scene naming and management
-- ✅ Scene editing and deletion
-
-### System Information
-- ✅ Device statistics (uptime, memory, version)
-- ✅ System information page
-- ✅ FAQ section
-- ✅ Help and documentation
-
-### UI/UX
-- ✅ Premium minimal design
-- ✅ Glassmorphism effects
-- ✅ Dark theme
-- ✅ Smooth animations
-- ✅ Responsive layout
-- ✅ Material Design 3
-- ✅ Intuitive navigation
-
----
-
-## 🌐 Web Dashboard Features
-
-### Device Management
-- ✅ Real-time device grid view
-- ✅ Device power control
-- ✅ Fan speed sliders
-- ✅ Device renaming (click on device name)
-- ✅ Device type selection
-- ✅ Online/offline status indicators
-- ✅ Auto-refresh every 3 seconds
-
-### Scheduling
-- ✅ Visual schedule list
-- ✅ Add/edit/delete schedules
-- ✅ Time picker interface
-- ✅ Day selection (checkboxes)
-- ✅ Device selection dropdown
-- ✅ Schedule enable/disable
-
-### Scenes
-- ✅ Scene management interface
-- ✅ Create custom scenes
-- ✅ Quick activation
-- ✅ Scene editing
-
-### System Settings
-- ✅ WiFi reset for devices
-- ✅ Device configuration
-- ✅ User preferences
-
-### Additional Features
-- ✅ **Download App Button** - Direct link to download APK
-- ✅ Tabbed navigation (Devices, Schedules, Scenes)
-- ✅ Modal dialogs for settings
-- ✅ Responsive design (works on all devices)
-- ✅ Premium UI with glassmorphism
-- ✅ Global access (works from anywhere with internet)
-
-### Deployment
-- ✅ Hosted on Google Apps Script
-- ✅ Simple, memorable URL option
-- ✅ HTTPS by default
-- ✅ No server maintenance required
-
----
-
-## ☁️ Backend Features (Google Apps Script)
-
-### API Endpoints
-- ✅ Device polling (ESP32 checks for commands)
-- ✅ Device registration
-- ✅ State updates (from devices)
-- ✅ Device list retrieval
-- ✅ Device configuration updates
-- ✅ Schedule management (CRUD)
-- ✅ Scene management (CRUD)
-- ✅ User authentication
-- ✅ WiFi reset commands
-
-### Database (Google Sheets)
-- ✅ **Devices Sheet** - Device registry
-- ✅ **DeviceStates Sheet** - Real-time device states
-- ✅ **Schedules Sheet** - Automation schedules
-- ✅ **Scenes Sheet** - Scene configurations
-- ✅ **Users Sheet** - User accounts
-- ✅ **Commands Sheet** - Pending command queue
-
-### Features
-- ✅ RESTful API design
-- ✅ JSON request/response format
-- ✅ API key authentication
-- ✅ Auto-initialization of database
-- ✅ Command queuing system
-- ✅ 2.5s polling interval
-- ✅ Device online/offline detection
-- ✅ Automatic device registration
-
----
-
-## 🔧 ESP32 Firmware Integration Features
-
-### Hardware Control
-- ✅ 4-channel TRIAC control
-- ✅ Zero-cross detection
-- ✅ Phase-angle control
-- ✅ Microsecond timing precision
-- ✅ Multi-core architecture (FreeRTOS)
-- ✅ Physical button inputs (4 switches)
-
-### Network Features
-- ✅ WiFi connectivity
-- ✅ Auto-reconnect
-- ✅ Captive portal for setup
-- ✅ REST API server (ports 80, 8080)
-- ✅ WebSocket server (port 81)
-- ✅ Google Apps Script polling
-
-### Voice Assistants
-- ✅ Amazon Alexa integration (local)
-- ✅ Google Assistant (via SinricPro)
-- ✅ Device discovery
-- ✅ Voice commands (on/off, brightness/speed)
-
-### Advanced Features
-- ✅ OTA firmware updates
-- ✅ Rollback protection
-- ✅ Scene execution
-- ✅ Schedule execution
-- ✅ Smooth fade transitions
-- ✅ Watchdog timers
-- ✅ Safety features (auto-shutoff)
-- ✅ Persistent storage (EEPROM)
-
-### API Endpoints (Local)
-- ✅ GET /status - Device states
-- ✅ POST /control - Device control
-- ✅ GET /info - System information
-- ✅ WebSocket - Real-time updates
-
----
-
-## 🎨 User Interface Design
-
-### Design System
-- ✅ Glassmorphism effects
-- ✅ Backdrop blur
-- ✅ Gradient backgrounds
-- ✅ Smooth animations
-- ✅ Consistent color palette
-- ✅ Premium minimal aesthetic
-
-### Color Scheme
-- Primary: #FF3B30 (Red gradient)
-- Background: #1C1C1E to #2C2C2E (Dark gradient)
-- Glass: White with 8-20% opacity
-- Success: #30D158 (Green)
-- Text: #FFFFFF (White)
-
-### Components
-- ✅ Glass cards with borders
-- ✅ Rounded corners (12-22px)
-- ✅ Toggle switches
-- ✅ Range sliders
-- ✅ Modal dialogs
-- ✅ Tab navigation
-- ✅ Responsive grids
-
----
-
-## 🔐 Security Features
+## Mobile App (Flutter)
 
 ### Authentication
-- ✅ Password hashing (SHA-256)
-- ✅ Token-based authentication
-- ✅ API key validation
-- ✅ HTTPS by default (Apps Script)
+- User registration and login with email/password
+- Password hashing (SHA-256)
+- Session management with tokens
+- Profile management
+- Forgot password flow
 
-### Access Control
-- ✅ User-specific device access
-- ✅ API key protection
-- ✅ Session management
+### Device Control
+- Real-time device listing with status indicators
+- Power toggle (on/off)
+- Fan speed control (0-100%)
+- Light brightness control (0-100%)
+- Device renaming and type selection (Light/Fan)
+- Dynamic UI (fan controls appear only for fan-type devices)
+- Up to 4 channels per ESP32
 
-### Best Practices
-- ✅ No hardcoded credentials
-- ✅ Secure password storage
-- ✅ Input validation
-- ✅ Error handling
+### Automation
+- Schedule creation with alarm-style interface
+- Day-of-week selection
+- Multiple schedules per device
+- Enable/disable and delete schedules
 
----
+### Scenes
+- Create named device-combination presets
+- Quick scene activation
+- Scene editing and deletion
 
-## 📊 Performance & Scalability
+### UI
+- Dark theme with glassmorphism effects
+- Smooth animations and responsive layout
+- Material Design 3
 
-### Optimization
-- ✅ 3-second polling interval
-- ✅ Efficient database queries
-- ✅ Minimal API calls
-- ✅ Caching strategy
-- ✅ Batch operations
+## Web Dashboard
 
-### Scalability
-- ✅ Multiple devices per user
-- ✅ Multiple users support
-- ✅ Google infrastructure (Apps Script)
-- ✅ Auto-scaling backend
+### Device Management
+- Real-time device grid view with auto-refresh (3 s)
+- Power control and fan speed sliders
+- Inline device renaming
+- Device type selection
+- Online/offline status indicators
 
-### Reliability
-- ✅ Error handling
-- ✅ Retry logic
-- ✅ Timeout management
-- ✅ Offline detection
-- ✅ Watchdog monitoring
+### Scheduling and Scenes
+- Visual schedule list with add/edit/delete
+- Time picker and day selection
+- Scene management with quick activation
 
----
+### Settings
+- WiFi reset for devices
+- Device configuration
+- Tabbed navigation (Devices, Schedules, Scenes)
+- Responsive design
+- Hosted on Google Apps Script (HTTPS, no server maintenance)
 
-## 🚀 Deployment & Distribution
+## Backend (Google Apps Script)
 
-### Mobile App
-- ✅ APK build instructions
-- ✅ Release/debug variants
-- ✅ GitHub releases integration
-- ✅ Download button in dashboard
-- ✅ Version management
-
-### Web Dashboard
-- ✅ One-click deployment
-- ✅ Global CDN (Google)
-- ✅ Custom URL support
-- ✅ No hosting costs
-
-### Backend
-- ✅ Google Apps Script hosting
-- ✅ Google Sheets database
-- ✅ Zero maintenance
-- ✅ Auto-scaling
-- ✅ Free tier available
-
-### ESP32 Firmware
-- ✅ OTA updates
-- ✅ Arduino IDE compatible
-- ✅ PlatformIO support
-- ✅ Binary distribution
-
----
-
-## 📈 Future Enhancements (Brainstorming Ideas)
-
-### Suggested Additional Features
-
-1. **Energy Monitoring**
-   - Power consumption tracking
-   - Usage statistics and graphs
-   - Cost estimation
-   - Energy-saving suggestions
-
-2. **Advanced Automation**
-   - Sunrise/sunset triggers
-   - Weather-based automation
-   - Geofencing (home/away detection)
-   - If-This-Then-That (IFTTT) integration
-
-3. **Enhanced Voice Control**
-   - Gemini AI integration
-   - Natural language commands
-   - Custom voice routines
-   - Multi-language support
-
-4. **Security Features**
-   - Two-factor authentication (2FA)
-   - Activity logs
-   - Intrusion detection
-   - Security cameras integration
-
-5. **Social Features**
-   - Family/roommate sharing
-   - Guest access with time limits
-   - Multiple user profiles
-   - Parental controls
-
-6. **Smart Features**
-   - AI-based learning (predict usage patterns)
-   - Anomaly detection
-   - Maintenance alerts
-   - Firmware update notifications
-
-7. **Integration**
-   - SmartThings integration
-   - Home Assistant integration
-   - Zigbee/Z-Wave bridge
-   - MQTT support
-
-8. **UI Enhancements**
-   - Custom themes
-   - Widget support
-   - Apple Watch app
-   - Wear OS app
-
-9. **Data & Analytics**
-   - Usage graphs and charts
-   - Historical data
-   - Export to CSV/PDF
-   - Monthly reports
-
-10. **Advanced Scenes**
-    - Time-based transitions
-    - Music sync (lights dance to music)
-    - Movie mode
-    - Party mode
-
----
-
-## 📝 Documentation Status
-
-### Completed Documentation
-- ✅ Backend deployment guide
-- ✅ API documentation
-- ✅ Database schema
-- ✅ Web dashboard usage
-- ✅ APK build instructions
-- ✅ ESP32 firmware documentation
-- ✅ Installation guide
-
-### Additional Documentation Needed
-- [ ] Video tutorials
-- [ ] Troubleshooting guide
-- [ ] FAQs
-- [ ] Code comments
-- [ ] Architecture diagrams
-
----
-
-## ✅ Implementation Status
-
-### Fully Implemented
-- ✅ Google Apps Script Backend
-- ✅ Google Sheets Database
-- ✅ Web Dashboard
-- ✅ Flutter App Structure
-- ✅ API Service Layer
-- ✅ Models & Configuration
-- ✅ ESP32 Firmware (existing)
-
-### In Progress
-- 🔄 Enhanced device control UI
-- 🔄 Scheduling interface (Flutter)
-- 🔄 Scenes interface (Flutter)
-- 🔄 Integration testing
-
-### Planned
-- ⏳ Advanced automation
-- ⏳ Energy monitoring
-- ⏳ AI features
-
----
-
-## 🎯 Summary
-
-**Total Features Implemented: 100+**
-
-This smart home system includes:
-- Full-stack IoT solution
-- Cloud-based backend
-- Web dashboard
-- Mobile application
-- Hardware control
-- Voice assistant integration
-- Automation & scheduling
-- Scene management
+### API
+- RESTful JSON endpoints for device polling, registration, state updates
+- Device list retrieval and configuration updates
+- Schedule and scene CRUD
 - User authentication
-- Real-time updates
-- Premium UI/UX
+- WiFi reset commands
+- API key authentication
+- Command queuing system
 
-The system is production-ready with comprehensive documentation and deployment guides.
+### Database (Google Sheets)
+- Devices, DeviceStates, Schedules, Scenes, Users, Commands sheets
+- Auto-initialization of database structure
+- Device online/offline detection
+- Automatic device registration on first poll
 
----
+## ESP32 Firmware
 
-**Last Updated**: December 2024
-**Version**: 1.0.0
-**Status**: Active Development
+### Hardware Control
+- 4-channel TRIAC phase-angle control
+- Zero-cross detection with microsecond timing
+- Dual-core FreeRTOS architecture
+- Physical button inputs (4 switches) with debouncing
+- Smooth fade transitions between brightness levels
+
+### Networking
+- WiFi with auto-reconnect and captive portal setup
+- REST API server (ports 80, 8080)
+- WebSocket server (port 81) for real-time state sync
+- Google Apps Script cloud polling (2.5 s interval)
+- OTA firmware updates with rollback protection
+
+### Voice Control
+- Amazon Alexa integration (local network, via Espalexa)
+- Device discovery and on/off/brightness commands
+
+### Safety
+- Watchdog timers (15 s Core 0, 5 s Core 1)
+- Zero-cross monitoring with auto-shutoff
+- Configurable auto-off timer per device (default 1 hour)
+- ESP32 brownout protection
+- Heap monitoring
+
+### Persistence
+- EEPROM-based state storage across reboots
+- NTP time synchronization for schedule execution
+
+## Not Yet Implemented
+
+- Google Assistant integration via SinricPro (scaffolded, not wired up)
+- Energy monitoring / power consumption tracking
+- Multi-user device sharing
+- iOS app distribution (Flutter code exists, not tested on iOS)
