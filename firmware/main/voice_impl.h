@@ -157,27 +157,6 @@ void updateSinricProState(int deviceId, bool state, int brightness) {
 }
 
 // ================================================================
-// GEMINI AI INTEGRATION (Future)
-// ================================================================
-
-void initGeminiAI() {
-    // Reserved for future Gemini AI integration
-    logMessage(LOG_INFO, "Gemini AI integration: Coming soon");
-}
-
-bool processGeminiCommand(const char* command) {
-    // Process natural language commands via Gemini AI
-    logMessage(LOG_DEBUG, "Gemini command: %s", command);
-    
-    // TODO: Implement Gemini API integration
-    // - Send command to Gemini API
-    // - Parse response for device control actions
-    // - Execute actions on devices
-    
-    return false;
-}
-
-// ================================================================
 // UTILITY FUNCTIONS
 // ================================================================
 
@@ -235,9 +214,6 @@ void initVoiceAssistants() {
         logMessage(LOG_INFO, "Google Assistant: Disabled (no credentials)");
         logMessage(LOG_INFO, "Set credentials in Google Apps Script to enable");
     }
-    
-    // Initialize Gemini AI (future)
-    // initGeminiAI();
 }
 
 void handleVoiceAssistants() {

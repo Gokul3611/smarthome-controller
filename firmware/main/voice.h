@@ -87,23 +87,6 @@ bool onPowerLevel(const String &deviceId, int &powerLevel);
 void updateSinricProState(int deviceId, bool state, int brightness);
 
 // ================================================================
-// GEMINI AI INTEGRATION (Future)
-// ================================================================
-
-/**
- * Initialize Gemini AI integration
- * Reserved for future smart automation features
- */
-void initGeminiAI();
-
-/**
- * Process natural language command via Gemini
- * @param command - Natural language command
- * @return - Success/failure
- */
-bool processGeminiCommand(const char* command);
-
-// ================================================================
 // UTILITY FUNCTIONS
 // ================================================================
 

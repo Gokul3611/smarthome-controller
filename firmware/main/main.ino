@@ -1,18 +1,18 @@
 /**
- * ⚡ PRODUCTION FIRMWARE: 4-Channel Smart Home Controller v3.0
+ * 4-Channel Smart Home Controller Firmware v3.0
  * ==============================================================
- * Commercial-grade firmware for ESP32-based TRIAC controller
+ * ESP32-based TRIAC controller for AC load management.
  * 
  * Features:
  * - Multi-core FreeRTOS architecture (time-critical on Core 1, network on Core 0)
- * - Google Assistant + Amazon Alexa voice control
+ * - Amazon Alexa voice control (via Espalexa)
  * - Google Apps Script cloud integration
  * - OTA updates with rollback protection
  * - Flutter app REST API + WebSocket
  * - Scene & schedule automation
  * - Safety features & watchdog monitoring
  * 
- * Copyright (c) 2024 - Production Ready
+ * Note: Google Assistant (SinricPro) support is stubbed but not yet integrated.
  */
 
 #include <WiFi.h>
@@ -36,7 +36,7 @@
 #include "voice.h"
 
 // ================================================================
-// 📊 DATA STRUCTURES
+// DATA STRUCTURES
 // ================================================================
 struct Device {
     String name;
@@ -73,9 +73,9 @@ struct Scene {
 };
 
 // ================================================================
-// 📝 USER CONFIGURATION
+// USER CONFIGURATION
 // ================================================================
-// 👇 Configure via Google Apps Script or web interface
+// Configure via Google Apps Script or web interface
 String GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJP31g9LhRulRHTbTd6KidEiBXlxCKfKcXkiUGe961IfNZDgHuoWAIif91PrPUQnHrIQ/exec";
 String API_KEY = "smarthome-2024-[YourRandomStringikhdfg87y7fygdhgoesgysdygfdsy7fgdag7iufh9]";
 String systemName = "Smart_Home_Hub";
@@ -86,7 +86,7 @@ String sinricAppSecret = "";
 String sinricDeviceIds[4] = {"", "", "", ""};
 
 // ================================================================
-// 🌐 GLOBAL OBJECTS
+// GLOBAL OBJECTS
 // ================================================================
 Espalexa alexaManager;
 Preferences preferences;
@@ -106,7 +106,7 @@ struct DeviceControlMsg {
 };
 
 // ================================================================
-// 📦 GLOBAL VARIABLES
+// GLOBAL VARIABLES
 // ================================================================
 // Global device state
 Device devices[4];
@@ -132,7 +132,7 @@ struct FadeState {
 } fadeStates[4]; 
 
 // ================================================================
-// 🔧 FORWARD DECLARATIONS
+// FORWARD DECLARATIONS
 // ================================================================
 void setDeviceState(int deviceId, bool state, int brightness, bool fade = false);
 void saveDeviceConfig();
@@ -145,7 +145,7 @@ void logMessage(LogLevel level, const char* format, ...);
 void broadcastDeviceState(int deviceId); 
 
 // ================================================================
-// 📥 IMPLEMENTATION INCLUDES
+// IMPLEMENTATION INCLUDES
 // ================================================================
 // Modular implementation files for professional code organization
 // Included as .h for Arduino IDE compatibility
@@ -158,7 +158,7 @@ void broadcastDeviceState(int deviceId);
 #include "voice_impl.h"
 
 // ================================================================
-// 🛠️ UTILITY FUNCTIONS
+// UTILITY FUNCTIONS
 // ================================================================
 
 // Logging with levels
@@ -211,7 +211,7 @@ int getCurrentMinutes() {
     return timeToMinutes(timeinfo.tm_hour, timeinfo.tm_min);
 }
 // ================================================================
-// ⚡ CORE 1: TIME-CRITICAL POWER CONTROL (PRO_CPU)
+// CORE 1: TIME-CRITICAL POWER CONTROL (PRO_CPU)
 // ================================================================
 
 // Hardware timer ISR for phase angle control
@@ -283,7 +283,7 @@ void checkZeroCrossHealth() {
 }
 
 // ================================================================
-// 💾 PERSISTENCE & CONFIGURATION
+// PERSISTENCE & CONFIGURATION
 // ================================================================
 
 void saveDeviceConfig() {
@@ -573,7 +573,7 @@ void checkAutoOff() {
 }
 
 // ================================================================
-// 🔄 OTA UPDATE SYSTEM
+// OTA UPDATE SYSTEM
 // ================================================================
 
 void performOTA(String binUrl) {
@@ -693,10 +693,10 @@ void checkFactoryReset(bool currentState) {
 }
 
 // ================================================================
-// 🌐 CORE 0 TASK
+// CORE 0 TASK
 // ================================================================
 // ================================================================
-// 🌐 CORE 0: CONNECTIVITY TASK (APP_CPU)
+// CORE 0: CONNECTIVITY TASK (APP_CPU)
 // ================================================================
 void taskConnectivity(void * parameter) {
     HTTPClient http;
@@ -784,7 +784,7 @@ void taskConnectivity(void * parameter) {
 }
 
 // ================================================================
-// ☁️ CLOUD COMMUNICATION
+// CLOUD COMMUNICATION
 // ================================================================
 
 bool syncWithCloud(HTTPClient &http) {
@@ -931,7 +931,7 @@ void processCloudResponse(const JsonDocument &respDoc) {
 }
 
 // ================================================================
-// 🌐 API IMPLEMENTATIONS (Stubs for api.h functions)
+// API IMPLEMENTATIONS (Stubs for api.h functions)
 // ================================================================
 
 // WebSocket broadcast function
@@ -1224,10 +1224,8 @@ void setup() {
     alexaManager.begin();
     logMessage(LOG_INFO, "Alexa integration initialized");
     
-    // TODO: Initialize SinricPro for Google Assistant
-    // if (sinricAppKey.length() > 0) {
-    //     initSinricPro(sinricAppKey.c_str(), sinricAppSecret.c_str(), sinricDeviceIds);
-    // }
+    // SinricPro for Google Assistant is not yet integrated.
+    // See voice_impl.h for stub implementation.
     
     // Initialize TRIAC control timer (Core 1)
     timer = timerBegin(1000000);  // 1MHz
