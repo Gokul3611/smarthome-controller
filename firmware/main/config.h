@@ -1,6 +1,6 @@
 /**
- * Configuration Constants for Production Smart Home Controller
- * Version: 3.0 - Production Ready
+ * Configuration Constants for Smart Home Controller
+ * Version: 3.0
  */
 
 #ifndef CONFIG_H

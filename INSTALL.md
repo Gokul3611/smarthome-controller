@@ -459,9 +459,8 @@ Add to Arduino IDE or `platformio.ini`:
 
 - GitHub Issues: [github.com/Gokul3611/smarthome-controller/issues](https://github.com/Gokul3611/smarthome-controller/issues)
 - Documentation: See README.md
-- Community: Check Wiki for user guides
 
 ---
 
-**Last Updated:** December 2024  
+**Last Updated:** December 2024
 **Firmware Version:** 3.0
